@@ -1,1 +1,1 @@
-quixorderclient
+Quix Order Client
