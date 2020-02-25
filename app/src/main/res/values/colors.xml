@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!-- Gradient Colors -->
+    <color name="darkBlue">#3023AE</color>
+    <color name="purple">#c86dd7</color>
+
+    <!-- Login Colors #aarrggbb-->
+    <color name="loginFormDetails">#ccffffff</color>
+    <color name="loginFormDetailsLight">#1affffff</color>
+    <color name="loginFormDetailsMedium">#66ffffff</color>
+</resources>
