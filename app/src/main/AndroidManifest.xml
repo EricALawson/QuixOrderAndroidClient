@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ServerActivity"></activity>
-        <activity android:name=".OwnerActivity" />
+        <activity android:name=".OwnerActivity"
+            android:launchMode="singleInstance" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
