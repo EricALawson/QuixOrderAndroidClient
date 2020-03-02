@@ -1,9 +1,11 @@
-package com.example.quixorder;
+package com.example.quixorder.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.quixorder.R;
 
 public class ServerActivity extends AppCompatActivity {
 

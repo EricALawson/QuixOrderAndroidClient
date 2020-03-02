@@ -1,4 +1,4 @@
-package com.example.quixorder;
+package com.example.quixorder.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.quixorder.R;
 import com.example.quixorder.api.AccountService;
 import com.example.quixorder.model.Account;
 import com.google.gson.Gson;
@@ -20,13 +21,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
-    public Retrofit retrofit = new Retrofit.Builder()
+    private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://quixorderserver.azurewebsites.net/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public EditText usernameInput;
-    public EditText passwordInput;
+    private EditText usernameInput;
+    private EditText passwordInput;
 
     //Intent bManager = new Intent(LoginActivity.this, OwnerActivity.class);
 

@@ -1,15 +1,16 @@
 package com.example.quixorder.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.UUID;
 
 public class Account {
-    private final UUID id;
+    private UUID id;
     private final String type;
     private final String username;
     private final String password;
 
-    public Account(UUID id, String type, String username, String password) {
-        this.id = id;
+    public Account(String type, String username, String password) {
         this.type = type;
         this.username = username;
         this.password = password;

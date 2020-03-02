@@ -5,6 +5,7 @@ import com.example.quixorder.model.Account;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.POST;
@@ -21,5 +22,5 @@ public interface AccountService {
     Call<Account> getAccountByUsername(@Path("username") String username);
 
     @POST("account")
-    Call<List<Account>> addAccount(String type, String user, String pass);
+    Call<Account> createAccount(@Body Account account);
 }

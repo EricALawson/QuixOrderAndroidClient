@@ -1,4 +1,4 @@
-package com.example.quixorder;
+package com.example.quixorder.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.example.quixorder.R;
 
 public class TableActivity extends AppCompatActivity {
 
