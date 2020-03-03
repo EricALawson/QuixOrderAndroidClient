@@ -2,6 +2,8 @@ package com.example.quixorder.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Intent;
@@ -16,6 +18,9 @@ public class CookActivity extends AppCompatActivity {
             .baseUrl("https://quixorderserver.azurewebsites.net/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
+    private RecyclerView orderList;
+    private RecyclerView.LayoutManager orderLayoutManger;
+    private OrderListAdapter adapter;
 
 
     @Override
@@ -24,6 +29,16 @@ public class CookActivity extends AppCompatActivity {
         setContentView(R.layout.cook);
 
         findViewById(R.id.lOut).setOnClickListener(logOut);
+        initializeOrderList();
+    }
+
+    private void initializeOrderList() {
+        orderList = (RecyclerView) findViewById(R.id.orderList);
+        orderList.setHasFixedSize(true);
+
+        orderLayoutManger = new LinearLayoutManager(this);
+        orderList.setLayoutManager(orderLayoutManger);
+
 
     }
 
