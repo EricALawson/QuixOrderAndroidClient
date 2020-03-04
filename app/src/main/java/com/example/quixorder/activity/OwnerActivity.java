@@ -32,7 +32,7 @@ public class OwnerActivity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.owner);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Hello Owner!");
+        getSupportActionBar().setTitle("Daily Total");
 
         drawer = findViewById(R.id.owner_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -54,22 +54,27 @@ public class OwnerActivity extends AppCompatActivity implements NavigationView.O
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_daily_total:
+                getSupportActionBar().setTitle("Daily Total");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new DailyTotalFragment()).commit();
                 break;
             case R.id.nav_employee_activity:
+                getSupportActionBar().setTitle("Employee Activity");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new EmployeeActivityFragment()).commit();
                 break;
             case R.id.nav_edit_menu:
+                getSupportActionBar().setTitle("Edit Menu");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new EditMenuFragment()).commit();
                 break;
             case R.id.nav_add_employee:
+                getSupportActionBar().setTitle("Add Employee");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new AddEmployeeFragment()).commit();
                 break;
             case R.id.nav_assign_table:
+                getSupportActionBar().setTitle("Assign Table");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new AssignTableFragment()).commit();
                 break;

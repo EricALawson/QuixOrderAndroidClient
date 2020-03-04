@@ -6,10 +6,10 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_daily_total"
             android:icon="@drawable/ic_chart"
-            android:title="Daily Totals"/>
+            android:title="Daily Total"/>
         <item android:id="@+id/nav_employee_activity"
             android:icon="@drawable/ic_employee"
-            android:title="Employee Activities"/>
+            android:title="Employee Activity"/>
         <item android:id="@+id/nav_edit_menu"
             android:icon="@drawable/ic_restaurant_menu"
             android:title="Edit Menu"/>
@@ -18,6 +18,6 @@
             android:title="Add Employee"/>
         <item android:id="@+id/nav_assign_table"
             android:icon="@drawable/ic_assign_table"
-            android:title="Assign Tables"/>
+            android:title="Assign Table"/>
     </group>
 </menu>
