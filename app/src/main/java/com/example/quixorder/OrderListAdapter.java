@@ -1,8 +1,10 @@
 package com.example.quixorder;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.quixorder.model.MenuItem;
@@ -29,7 +31,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         // create a new view
 //        TextView v = (TextView) LayoutInflater.from(parent.getContext())
 //                .inflate(R.layout.my_text_view, parent, false);
-        View v = new TextView();
+        View v = (LinearLayout) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.order, parent, false);
         OrderViewHolder vh = new OrderViewHolder(v);
         return vh;
     }
