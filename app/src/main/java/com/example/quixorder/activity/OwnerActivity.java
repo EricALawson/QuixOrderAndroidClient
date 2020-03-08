@@ -12,10 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.quixorder.R;
-import com.example.quixorder.api.AccountService;
 import com.example.quixorder.fragment.AddEmployeeFragment;
 import com.example.quixorder.fragment.AssignTableFragment;
 import com.example.quixorder.fragment.DailyTotalFragment;

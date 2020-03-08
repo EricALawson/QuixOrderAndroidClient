@@ -16,22 +16,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.quixorder.R;
-import com.example.quixorder.api.AccountService;
 import com.example.quixorder.model.Account;
 import com.google.gson.Gson;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-    private Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://quixorderserver.azurewebsites.net/api/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
     private View view;
     private EditText usernameInput;
     private EditText passwordInput;
@@ -60,6 +48,7 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
     private OnClickListener btn_sign_upOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            /**
             AccountService accountService = retrofit.create(AccountService.class);
 
             Account account = new Account(
@@ -92,7 +81,7 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
                 public void onFailure(Call<Account> call, Throwable t) {
                     Log.e("onFailure", t.toString());
                 }
-            });
+            */
         }
     };
 
