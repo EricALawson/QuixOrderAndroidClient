@@ -17,15 +17,20 @@ import android.widget.Toast;
 
 import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 
+import java.util.Collection;
+
 public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+    private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
+
     private View view;
     private EditText usernameInput;
     private EditText passwordInput;
     private Spinner spinner;
     private ArrayAdapter<CharSequence> adapter;
-
 
     @Nullable
     @Override
@@ -48,40 +53,37 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
     private OnClickListener btn_sign_upOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            /**
-            AccountService accountService = retrofit.create(AccountService.class);
+            CollectionReference accounts = firebase.collection("accounts");
 
+            // Create Account object with text field values
             Account account = new Account(
                     spinner.getSelectedItem().toString(),
                     usernameInput.getText().toString(),
-                    passwordInput.getText().toString());
+                    passwordInput.getText().toString()
+            );
 
-            accountService.createAccount(account).enqueue(new Callback<Account>() {
+            // Query accounts collection for a username
+            Log.e("QueryAccounts", account.getUsername());
+            accounts.whereEqualTo("username", account.getUsername())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Log.e("QueryFailed", task.getException().getMessage());
+                        } else if (task.getResult().size() != 0) {
+                            Toast.makeText(getActivity(), "username already exists", Toast.LENGTH_SHORT).show();
+                        } else {
 
-                @Override
-                public void onResponse(Call<Account> call, Response<Account> response)
-                {
-                    if (response.isSuccessful()) {
-                        Account accountResponse = response.body();
-                        String content = "";
-                        content += "Code: " + response.code() + "\n";
-                        content += "Type: " + accountResponse.getType() + "\n";
-                        content += "Username: " + accountResponse.getId() + "\n";
-                        content += "Password: " + accountResponse.getPassword() + "\n";
-
-                        Log.e("onResponseSuccess.", content);
-                        Toast.makeText(getActivity().getApplicationContext(), "Created Account", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.e("onResponseFail.", new Gson().toJson(response.errorBody()));
-                        Toast.makeText(getActivity().getApplicationContext(), "Invalid Account", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Account> call, Throwable t) {
-                    Log.e("onFailure", t.toString());
-                }
-            */
+                            // Add account to accounts collection
+                            Log.e("AddAccount", account.getUsername());
+                            accounts.add(account)
+                                    .addOnFailureListener(output -> {
+                                        Log.e("AddFailed", output.getMessage());
+                                    })
+                                    .addOnSuccessListener(output -> {
+                                        Toast.makeText(getActivity(), "account created", Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    });
         }
     };
 

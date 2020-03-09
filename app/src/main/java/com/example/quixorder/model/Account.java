@@ -29,6 +29,12 @@ public class Account {
         password = "";
     }
 
+    public Account(String type, String username, String password) {
+        this.type = type;
+        this.username = username;
+        this.password = password;
+    }
+
     public @AccountType String getType() {
         return type;
     }
