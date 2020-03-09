@@ -8,15 +8,7 @@ import android.content.Intent;
 
 import com.example.quixorder.R;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class CookActivity extends AppCompatActivity {
-    public Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://quixorderserver.azurewebsites.net/api/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
