@@ -17,11 +17,9 @@ import android.widget.Toast;
 
 import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
+import com.example.quixorder.model.Table;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
-
-import java.util.Collection;
 
 public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
@@ -56,11 +54,17 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
             CollectionReference accounts = firebase.collection("accounts");
 
             // Create Account object with text field values
-            Account account = new Account(
-                    spinner.getSelectedItem().toString(),
-                    usernameInput.getText().toString(),
-                    passwordInput.getText().toString()
-            );
+            Account account;
+            String type = spinner.getSelectedItem().toString();
+            String username = usernameInput.getText().toString();
+            String password = passwordInput.getText().toString();
+
+            // Add Server Account reference field for each Table Account
+            if (type.equals("Table")) {
+                account = new Table(username, password);
+            } else {
+                account = new Account(type, username, password);
+            }
 
             // Query accounts collection for a username
             Log.e("QueryAccounts", account.getUsername());
