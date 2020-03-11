@@ -34,6 +34,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.order, parent, false);
+
         Button btnDone = v.findViewById(R.id.btnDone);
         Button btnDelay = v.findViewById(R.id.btnDelay);
         OrderViewHolder vh = new OrderViewHolder(v);
