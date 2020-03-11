@@ -8,13 +8,17 @@
     <color name="darkBlue">#3023AE</color>
     <color name="purple">#c86dd7</color>
 
-
     <!-- Toolbar Color -->
     <color name="blue">#3D55BE</color>
+
+    <!-- Spinner Color -->
+    <color name="spinnerLight">#ccffffff</color>
+
+    <!-- Graph Color -->
+    <color name="graphLight">#ccffffff</color>
 
     <!-- Login Colors #aarrggbb-->
     <color name="loginFormDetails">#ccffffff</color>
     <color name="loginFormDetailsLight">#1affffff</color>
     <color name="loginFormDetailsMedium">#66ffffff</color>
-
 </resources>

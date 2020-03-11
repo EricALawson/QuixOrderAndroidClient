@@ -4,4 +4,12 @@
     <!-- Accessibility for people with visual impairment -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- All job titles -->
+    <string-array name="types">
+        <item>Table</item>
+        <item>Server</item>
+        <item>Cook</item>
+    </string-array>/>
+
 </resources>
