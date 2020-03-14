@@ -29,7 +29,7 @@ public class Order {
             cookedTime = (Date) snapshot.get("cookedTime");
             servedTime = (Date) snapshot.get("servedTime");
             orderItems = (DocumentReference[]) snapshot.get("orderItems");
-            
+
             orderMenuItems = new MenuItem[orderItems.length];
             for (int orderItemCount = 0; orderItemCount < orderItems.length; orderItemCount++) {
                 orderMenuItems[orderItemCount] = orderItems[orderItemCount].get().getResult().toObject(MenuItem.class);
