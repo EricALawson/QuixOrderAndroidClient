@@ -13,8 +13,8 @@ import com.example.quixorder.model.Account;
 
 import java.util.ArrayList;
 
-public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ExampleViewHolder> {
-    private ArrayList<Account> tableList;
+public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ExampleViewHolder> {
+    private ArrayList<Account> serverList;
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
@@ -27,21 +27,21 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ExampleViewH
         }
     }
 
-    public TableAdapter(ArrayList<Account> tableList) {
-        this.tableList = tableList;
+    public ServerAdapter(ArrayList<Account> serverList) {
+        this.serverList = serverList;
     }
 
     @NonNull
     @Override
     public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.table_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.server_item, viewGroup, false);
         ExampleViewHolder evh = new ExampleViewHolder(view);
         return evh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder exampleViewHolder, int i) {
-        Account currentItem = tableList.get(i);
+        Account currentItem = serverList.get(i);
 
         exampleViewHolder.imageView.setImageResource(R.drawable.ic_assign_table_blk);
         exampleViewHolder.textView1.setText(currentItem.getUsername());
@@ -49,6 +49,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ExampleViewH
 
     @Override
     public int getItemCount() {
-        return tableList.size();
+        return serverList.size();
     }
 }
