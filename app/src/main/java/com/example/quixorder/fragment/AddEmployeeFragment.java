@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
+import com.example.quixorder.model.Table;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -58,7 +59,14 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
             String username = usernameInput.getText().toString();
             String password = passwordInput.getText().toString();
 
-            account = new Account(type, username, password);
+            // Create account based on type
+            switch (type) {
+                case "Table":
+                    account = new Table(username, password);
+                    break;
+                default:
+                    account = new Account(type, username, password);
+            }
 
             // Query accounts collection for a username
             Log.d("QueryAccounts", account.getUsername());

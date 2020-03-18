@@ -10,11 +10,12 @@ import android.widget.TextView;
 
 import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
+import com.example.quixorder.model.Table;
 
 import java.util.ArrayList;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ExampleViewHolder> {
-    private ArrayList<Account> tableList;
+    private ArrayList<Table> tableList;
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
@@ -27,7 +28,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ExampleViewH
         }
     }
 
-    public TableAdapter(ArrayList<Account> tableList) {
+    public TableAdapter(ArrayList<Table> tableList) {
         this.tableList = tableList;
     }
 
