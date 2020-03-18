@@ -1,5 +1,6 @@
 package com.example.quixorder.fragment;
 
+import android.content.ClipData;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,7 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
-public class AssignTableFragment extends Fragment {
+public class AssignTableFragment extends Fragment implements View.OnDragListener {
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
     private CollectionReference accounts = firebase.collection("accounts");
     private Query serverAccounts = accounts.whereEqualTo("type", "Server");
@@ -43,6 +45,10 @@ public class AssignTableFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_assign_table, container, false);
+
+        serverView = view.findViewById(R.id.serversView);
+        tableViewNull = view.findViewById(R.id.tablesView);
+        tableViewNull.setOnDragListener(this);
 
         loadServers();
         loadTables();
@@ -71,7 +77,6 @@ public class AssignTableFragment extends Fragment {
             }
 
             // Set up view of all servers
-            serverView = view.findViewById(R.id.serversView);
             serverView.setHasFixedSize(true);
             serverLayoutManager = new GridLayoutManager(getContext(), 3);
             serverAdapter = new ServerAdapter(serverList);
@@ -97,9 +102,8 @@ public class AssignTableFragment extends Fragment {
             }
 
             // Set up view of all tables
-            tableViewNull = view.findViewById(R.id.tablesView);
             tableViewNull.setHasFixedSize(true);
-            tableLayoutManagerNull = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
+            tableLayoutManagerNull = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             tableAdapterNull = new TableAdapter(tableList);
             tableViewNull.setLayoutManager(tableLayoutManagerNull);
             tableViewNull.setAdapter(tableAdapterNull);
@@ -118,7 +122,6 @@ public class AssignTableFragment extends Fragment {
                     }
 
                     // Set up view of all servers
-                    serverView = view.findViewById(R.id.serversView);
                     serverView.setHasFixedSize(true);
                     serverLayoutManager = new GridLayoutManager(getContext(), 3);
                     serverAdapter = new ServerAdapter(serverList);
@@ -144,9 +147,8 @@ public class AssignTableFragment extends Fragment {
                     }
 
                     // Set up view of all tables
-                    tableViewNull = view.findViewById(R.id.tablesView);
                     tableViewNull.setHasFixedSize(true);
-                    tableLayoutManagerNull = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, true);
+                    tableLayoutManagerNull = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                     tableAdapterNull = new TableAdapter(tableList);
                     tableViewNull.setLayoutManager(tableLayoutManagerNull);
                     tableViewNull.setAdapter(tableAdapterNull);
@@ -156,5 +158,42 @@ public class AssignTableFragment extends Fragment {
                 .addOnFailureListener(error -> {
                     Log.e("QueryFailed", error.getMessage());
                 });
+    }
+
+    @Override
+    public boolean onDrag(View view, DragEvent event) {
+        switch(event.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED:
+            case DragEvent.ACTION_DRAG_ENDED:
+                return true;
+            case DragEvent.ACTION_DROP:
+                Log.d("onDrag", "dropped");
+
+                // Get table's username
+                String tableUsername = event.getClipData().getItemAt(0).getText().toString();
+                Log.d("onDragTable", tableUsername);
+
+                // Assign table's server to null
+                accounts.whereEqualTo("username", tableUsername)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (!task.isSuccessful()) {
+                                Log.e("QueryFailed", task.getException().getMessage());
+                            } else {
+                                // Update account
+                                Log.d("QuerySuccess", tableUsername);
+                                for (DocumentSnapshot table : task.getResult().getDocuments()) {
+                                    accounts.document(table.getId())
+                                            .update(
+                                                    "server", null
+                                            );
+                                }
+
+                            }
+                        });
+
+                return true;
+        }
+        return false;
     }
 }

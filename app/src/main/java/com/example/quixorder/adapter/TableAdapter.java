@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,7 +70,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ExampleViewH
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("onTouch", "click");
-                ClipData data = ClipData.newPlainText("","");
+                ClipData data = ClipData.newPlainText("username", ((TextView)view.findViewById(R.id.textView1)).getText().toString());
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDragAndDrop(data, shadowBuilder, view, 0);
                 return true;
