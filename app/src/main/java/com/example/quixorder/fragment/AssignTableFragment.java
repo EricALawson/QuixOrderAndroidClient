@@ -77,6 +77,7 @@ public class AssignTableFragment extends Fragment {
             serverAdapter = new ServerAdapter(serverList);
             serverView.setLayoutManager(serverLayoutManager);
             serverView.setAdapter(serverAdapter);
+
         });
 
         // Live update tableAccounts

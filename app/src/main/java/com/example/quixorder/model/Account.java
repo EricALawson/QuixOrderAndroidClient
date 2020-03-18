@@ -2,8 +2,6 @@ package com.example.quixorder.model;
 
 import android.support.annotation.StringDef;
 
-import java.util.UUID;
-
 public class Account {
     private final @AccountType String type;
     private final String username;
