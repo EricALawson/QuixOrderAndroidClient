@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 public class OrderListViewModel extends ViewModel {
     private MutableLiveData<List<Order>> orderLiveData;
-    private Query orderQuery = FirebaseFirestore.getInstance().collection("orders"); //.whereEqualTo("cookedTime", null);
+    private Query orderQuery = FirebaseFirestore.getInstance().collection("orders").whereEqualTo("cookedTime", null);
 
     public OrderListViewModel() {
         super();
@@ -61,7 +61,7 @@ public class OrderListViewModel extends ViewModel {
                 Order order = new Order(snapshot);
                 orders.add(order);
             }
-            Log.d("OrderListViewModel", "Adding orders to LiveData");
+            Log.d("OrderListViewModel", "Adding orders to LiveData size = " + orders.size());
         } else {
             if (snapshots == null) {
                 Log.d("OrderListViewModel", "loaded snapshot was null");

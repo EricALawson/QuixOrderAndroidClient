@@ -16,7 +16,7 @@ public class Order {
     private Date startTime;
     private Date cookedTime;
     private Date servedTime;
-    private ArrayList<String> orderItems;
+    private ArrayList<DocumentReference> orderItems;
     private MenuItem[] orderMenuItems;
     private String server;
 
@@ -31,11 +31,11 @@ public class Order {
             startTime = (Date) snapshot.get("startTime");
             cookedTime = (Date) snapshot.get("cookedTime");
             servedTime = (Date) snapshot.get("servedTime");
-            orderItems = (ArrayList<String>) snapshot.get("orderItems");
+            orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");
 
             orderMenuItems = new MenuItem[orderItems.size()];
             for (int orderItemCount = 0; orderItemCount < orderItems.size(); orderItemCount++) {
-                DocumentReference doc = FirebaseFirestore.getInstance().document(orderItems.get(orderItemCount));
+                DocumentReference doc = orderItems.get(orderItemCount);
                 final int index = orderItemCount;
                 doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -66,7 +66,7 @@ public class Order {
         return servedTime;
     }
 
-    public List<String> getOrderItems() {
+    public List<DocumentReference> getOrderItems() {
         return orderItems;
     }
 
