@@ -20,7 +20,6 @@ import com.example.quixorder.model.Account;
 import com.example.quixorder.model.Table;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -37,7 +36,6 @@ public class AssignTableFragment extends Fragment implements View.OnDragListener
     private RecyclerView serverView;
     private RecyclerView.Adapter serverAdapter;
     private RecyclerView.LayoutManager serverLayoutManager;
-
     private RecyclerView tableViewNull;
     private RecyclerView.Adapter tableAdapterNull;
     private RecyclerView.LayoutManager tableLayoutManagerNull;
@@ -47,12 +45,13 @@ public class AssignTableFragment extends Fragment implements View.OnDragListener
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_assign_table, container, false);
 
+        // Get views
         serverView = view.findViewById(R.id.serversView);
         tableViewNull = view.findViewById(R.id.tablesView);
-        tableViewNull.setOnDragListener(this);
 
-        loadServers();
-        loadTables();
+        // Set listeners
+        tableViewNull.setOnDragListener(this);
+        loadCompleteListeners();
 
         return view;
     }
@@ -61,111 +60,81 @@ public class AssignTableFragment extends Fragment implements View.OnDragListener
     public void onStart() {
         super.onStart();
 
-        loadServersListener();
-        loadTablesListener();
+        // Set snapshot listeners
+        loadSnapshotListeners();
     }
 
-    public void loadServers() {
+    public void loadCompleteListeners() {
         // Load Servers
         serverAccounts.get()
-                // Handle success
                 .addOnSuccessListener(task -> {
-                    ArrayList<Account> serverList = new ArrayList<>();
-                    for (DocumentSnapshot server : task.getDocuments()) {
-                        Log.d("QuerySuccess", server.toString());
-                        serverList.add(server.toObject(Account.class));
-                    }
-
-                    // Set up view of all servers
-                    serverView.setHasFixedSize(true);
-                    serverLayoutManager = new GridLayoutManager(getContext(), 3);
-                    serverAdapter = new ServerAdapter(serverList);
-                    serverView.setLayoutManager(serverLayoutManager);
-                    serverView.setAdapter(serverAdapter);
+                    loadServers(task);
                 })
-
-                // Handle errors
                 .addOnFailureListener(error -> {
                     Log.e("QueryFailed", error.getMessage());
                 });
-    }
 
-    public void loadTables() {
         // Load Tables
         tableAccountsNull.get()
-                // Handle success
                 .addOnSuccessListener(task -> {
-                    ArrayList<Table> tableList = new ArrayList<>();
-                    for (DocumentSnapshot table : task.getDocuments()) {
-                        Log.d("QuerySuccess", table.toString());
-                        tableList.add(table.toObject(Table.class));
-                    }
-
-                    // Set up view of all tables
-                    tableViewNull.setHasFixedSize(true);
-                    tableLayoutManagerNull = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                    tableAdapterNull = new TableAdapter(tableList);
-                    tableViewNull.setLayoutManager(tableLayoutManagerNull);
-                    tableViewNull.setAdapter(tableAdapterNull);
+                    loadTables(task);
                 })
-
-                // Handle errors
                 .addOnFailureListener(error -> {
                     Log.e("QueryFailed", error.getMessage());
                 });
     }
 
-    public void loadServersListener() {
+    public void loadSnapshotListeners() {
         // Live update serverAccounts
         serverAccounts.addSnapshotListener(getActivity(), (query, error) -> {
-
-            // Check for errors
             if (error != null) {
                 Log.e("QueryFailed", error.getMessage());
                 return;
             }
+            loadServers(query);
 
-            // Load servers
-            ArrayList<Account> serverList = new ArrayList<>();
-            for (DocumentSnapshot server : query.getDocuments()) {
-                Log.d("QuerySuccess", server.toString());
-                serverList.add(server.toObject(Account.class));
+        });
+
+        // Live update tableAccounts
+        tableAccountsNull.addSnapshotListener(getActivity(), (query, error) -> {
+            if (error != null) {
+                Log.e("QueryFailed", error.getMessage());
+                return;
             }
-
-            // Set up view of all servers
-            serverView.setHasFixedSize(true);
-            serverLayoutManager = new GridLayoutManager(getContext(), 3);
-            serverAdapter = new ServerAdapter(serverList);
-            serverView.setLayoutManager(serverLayoutManager);
-            serverView.setAdapter(serverAdapter);
-
+            loadTables(query);
         });
     }
 
-    public void loadTablesListener() {
-        // Live update tableAccounts
-        tableAccountsNull.addSnapshotListener(getActivity(), (query, error) -> {
+    public void loadServers(QuerySnapshot task) {
+        // Get servers list
+        ArrayList<Account> serverList = new ArrayList<>();
+        for (DocumentSnapshot server : task.getDocuments()) {
+            Log.d("QuerySuccess", server.toString());
+            serverList.add(server.toObject(Account.class));
+        }
 
-            // Check for errors
-            if (error != null) {
-                Log.e("QueryFailed", error.getMessage());
-                return;
-            }
+        // Set up view of all servers
+        serverView.setHasFixedSize(true);
+        serverLayoutManager = new GridLayoutManager(getContext(), 3);
+        serverAdapter = new ServerAdapter(serverList);
+        serverView.setLayoutManager(serverLayoutManager);
+        serverView.setAdapter(serverAdapter);
+    }
 
-            // Load tables
-            ArrayList<Table> tableList = new ArrayList<>();
-            for (DocumentSnapshot table : query.getDocuments()) {
-                Log.d("QuerySuccess", table.toString());
-                tableList.add(table.toObject(Table.class));
-            }
+    public void loadTables(QuerySnapshot task) {
+        // Get tables list
+        ArrayList<Table> tableList = new ArrayList<>();
+        for (DocumentSnapshot table : task.getDocuments()) {
+            Log.d("QuerySuccess", table.toString());
+            tableList.add(table.toObject(Table.class));
+        }
 
-            // Set up view of all tables
-            tableViewNull.setHasFixedSize(true);
-            tableLayoutManagerNull = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-            tableAdapterNull = new TableAdapter(tableList);
-            tableViewNull.setLayoutManager(tableLayoutManagerNull);
-            tableViewNull.setAdapter(tableAdapterNull);
-        });
+        // Set up view of all tables
+        tableViewNull.setHasFixedSize(true);
+        tableLayoutManagerNull = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        tableAdapterNull = new TableAdapter(tableList);
+        tableViewNull.setLayoutManager(tableLayoutManagerNull);
+        tableViewNull.setAdapter(tableAdapterNull);
     }
 
     @Override
