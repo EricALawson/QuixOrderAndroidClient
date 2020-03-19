@@ -2,17 +2,21 @@ package com.example.quixorder.model;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Order {
     private String table;
     private Date startTime;
     private Date cookedTime;
     private Date servedTime;
-    private DocumentReference[] orderItems;
+    private ArrayList<String> orderItems;
     private MenuItem[] orderMenuItems;
     private String server;
 
@@ -27,11 +31,18 @@ public class Order {
             startTime = (Date) snapshot.get("startTime");
             cookedTime = (Date) snapshot.get("cookedTime");
             servedTime = (Date) snapshot.get("servedTime");
-            orderItems = (DocumentReference[]) snapshot.get("orderItems");
+            orderItems = (ArrayList<String>) snapshot.get("orderItems");
 
-            orderMenuItems = new MenuItem[orderItems.length];
-            for (int orderItemCount = 0; orderItemCount < orderItems.length; orderItemCount++) {
-                orderMenuItems[orderItemCount] = orderItems[orderItemCount].get().getResult().toObject(MenuItem.class);
+            orderMenuItems = new MenuItem[orderItems.size()];
+            for (int orderItemCount = 0; orderItemCount < orderItems.size(); orderItemCount++) {
+                DocumentReference doc = FirebaseFirestore.getInstance().document(orderItems.get(orderItemCount));
+                final int index = orderItemCount;
+                doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        orderMenuItems[index] = documentSnapshot.toObject(MenuItem.class);
+                    }
+                });
             }
 
         } else {
@@ -55,7 +66,7 @@ public class Order {
         return servedTime;
     }
 
-    public DocumentReference[] getOrderItems() {
+    public List<String> getOrderItems() {
         return orderItems;
     }
 

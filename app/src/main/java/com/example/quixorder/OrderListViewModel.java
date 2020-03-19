@@ -1,6 +1,5 @@
 package com.example.quixorder;
 
-import android.media.SoundPool;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -8,16 +7,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.quixorder.model.Order;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.local.QueryData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,32 +21,40 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 public class OrderListViewModel extends ViewModel {
-    MutableLiveData<List<Order>> orderLiveData;
-    FirebaseFirestore firebase;
+    private MutableLiveData<List<Order>> orderLiveData;
+    private Query orderQuery = FirebaseFirestore.getInstance().collection("orders"); //.whereEqualTo("cookedTime", null);
 
     public OrderListViewModel() {
         super();
-        orderLiveData = new MutableLiveData<>();
-        orderLiveData.setValue(new ArrayList<Order>());
+        //orderLiveData = new MutableLiveData<>();
+        //orderLiveData.setValue(new ArrayList<Order>());
+        orderQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                loadOrders(queryDocumentSnapshots);
+            }
+        });
     }
 
     public LiveData<List<Order>> getOrderLiveData() {
-        Log.d("OrderListViewModel", "getting orders from Firebase");
-        if(orderLiveData.getValue() == null) {
-            Query orderQuery = FirebaseFirestore.getInstance().collection("orders").whereEqualTo("cookedTime", null);
-
-            orderQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                    setLiveData(queryDocumentSnapshots);
-                }
-            });
+        if(orderLiveData == null) {
+            orderLiveData = new MutableLiveData<>();
+            orderLiveData.setValue(new ArrayList<>());
+            Log.d("OrderListViewModel", "getting orders from Firebase");
+            loadOrders();
         }
 
         return orderLiveData;
     }
 
-    private void setLiveData(QuerySnapshot snapshots) {
+    private void loadOrders() {
+        orderQuery.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            Log.d("OrderListViewModel", "loadOrders Success listener fired");
+            loadOrders(queryDocumentSnapshots);
+        });
+    }
+
+    private void loadOrders(QuerySnapshot snapshots) {
         ArrayList<Order> orders = new ArrayList<>();
         if (snapshots != null && snapshots.size() > 0) {
             for (DocumentSnapshot snapshot : snapshots.getDocuments() ) {
@@ -58,6 +62,12 @@ public class OrderListViewModel extends ViewModel {
                 orders.add(order);
             }
             Log.d("OrderListViewModel", "Adding orders to LiveData");
+        } else {
+            if (snapshots == null) {
+                Log.d("OrderListViewModel", "loaded snapshot was null");
+            } else {
+                Log.d("OrderListViewModel", "loaded snapshot size = " + snapshots.size());
+            }
         }
         orderLiveData.postValue(orders);
     }
