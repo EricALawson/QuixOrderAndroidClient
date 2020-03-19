@@ -1,9 +1,9 @@
 package com.example.quixorder.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +19,6 @@ import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
-
-import java.util.Collection;
 
 public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();

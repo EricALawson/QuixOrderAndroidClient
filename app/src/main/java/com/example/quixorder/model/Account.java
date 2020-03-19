@@ -1,8 +1,6 @@
 package com.example.quixorder.model;
 
-import android.support.annotation.StringDef;
-
-import java.util.UUID;
+import androidx.annotation.StringDef;
 
 public class Account {
     private final @AccountType String type;

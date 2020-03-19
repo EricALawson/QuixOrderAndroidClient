@@ -1,20 +1,32 @@
 package com.example.quixorder.activity;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Intent;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.quixorder.OrderListAdapter;
+import com.example.quixorder.OrderListViewModel;
 import com.example.quixorder.R;
+import com.example.quixorder.model.Order;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CookActivity extends AppCompatActivity {
     private RecyclerView orderList;
     private RecyclerView.LayoutManager orderLayoutManger;
     private OrderListAdapter adapter;
+    private OrderListViewModel viewModel;
 
 
     @Override
@@ -27,12 +39,19 @@ public class CookActivity extends AppCompatActivity {
     }
 
     private void initializeOrderList() {
-        orderList = (RecyclerView) findViewById(R.id.orderItems);
+        orderList = findViewById(R.id.orderItems);
         orderList.setHasFixedSize(true);
 
         orderLayoutManger = new LinearLayoutManager(this);
         orderList.setLayoutManager(orderLayoutManger);
-
+        adapter = new OrderListAdapter();
+        viewModel = ViewModelProviders.of(this).get(OrderListViewModel.class);
+        LiveData<List<Order>> liveData = viewModel.getOrderLiveData();
+        adapter.setOrderList(liveData.getValue());
+        liveData.observe(this, (List<Order> orders)-> {
+            adapter.setOrderList(orders);
+        });
+        orderList.setAdapter(adapter);
     }
 
 

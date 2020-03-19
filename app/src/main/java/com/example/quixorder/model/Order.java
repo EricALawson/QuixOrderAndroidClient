@@ -20,8 +20,7 @@ public class Order {
 
     }
 
-    public Order(DocumentReference orderDocument) {
-        DocumentSnapshot snapshot = orderDocument.get().getResult();
+    public Order(DocumentSnapshot snapshot) {
         if(snapshot != null && snapshot.exists()) {
             table = (String) snapshot.get("table");
             server = (String) snapshot.get("server");
