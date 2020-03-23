@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,16 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         itemTypeAdapter = new ItemTypeAdapter(itemTypeList, this);
         itemTypeView.setLayoutManager(itemTypeLayoutManager);
         itemTypeView.setAdapter(itemTypeAdapter);
+
+        // Load Menu Items based on first selected Item Type
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (!itemTypeView.isComputingLayout()) {
+                    itemTypeView.findViewHolderForAdapterPosition(0).itemView.performClick();
+                }
+            }
+        });
     }
 
     public void loadMenuItems(QuerySnapshot task) {
