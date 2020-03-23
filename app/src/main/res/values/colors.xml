@@ -23,7 +23,7 @@
     <color name="loginFormDetailsMedium">#66ffffff</color>
 
     <!-- Item Type -->
-    <color name="itemTypeUnselected1">#efe7c3</color>
+    <color name="itemTypeUnselected1">#EFEFEF</color>
     <color name="itemTypeUnselected2">#FFFFFF</color>
     <color name="itemTypeUnselectedFont">#000000</color>
     <color name="itemTypeSelected">#000000</color>
