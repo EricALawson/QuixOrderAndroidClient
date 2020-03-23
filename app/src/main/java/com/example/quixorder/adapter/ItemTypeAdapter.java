@@ -84,11 +84,11 @@ public class ItemTypeAdapter extends RecyclerView.Adapter<ItemTypeAdapter.ViewHo
             notifyItemChanged(previousItem);
             notifyItemChanged(selectedItem);
 
-            onItemTypeListener.onItemTypeClick(getAdapterPosition());
+            onItemTypeListener.onItemTypeClick(getAdapterPosition(), itemTypeList.get(getAdapterPosition()).getType());
         }
     }
 
     public interface OnItemTypeListener {
-        void onItemTypeClick(int position);
+        void onItemTypeClick(int position, String itemType);
     }
 }

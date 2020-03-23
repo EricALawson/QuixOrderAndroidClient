@@ -22,6 +22,7 @@ import com.example.quixorder.model.MenuItem;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         // Set listeners
         loadCompleteListeners();
 
+
         return view;
     }
 
@@ -61,14 +63,6 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         itemTypes.get()
                 .addOnSuccessListener(task -> {
                     loadItemTypes(task);
-                })
-                .addOnFailureListener(error -> {
-                    Log.e("QueryFailed", error.getMessage());
-                });
-
-        menuItems.get()
-                .addOnSuccessListener(task -> {
-                    loadMenuItems(task);
                 })
                 .addOnFailureListener(error -> {
                     Log.e("QueryFailed", error.getMessage());
@@ -108,7 +102,16 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
     }
 
     @Override
-    public void onItemTypeClick(int position) {
+    public void onItemTypeClick(int position, String itemType) {
         Log.d(TAG, "onItemTypeClick: clicked." + position);
+        Query menuItemQuery = menuItems.whereEqualTo("type", itemType);
+
+        menuItemQuery.get()
+                .addOnSuccessListener(task -> {
+                    loadMenuItems(task);
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("QueryFailed", error.getMessage());
+                });
     }
 }
