@@ -23,21 +23,13 @@ import java.util.ArrayList;
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> implements View.OnTouchListener {
     private ArrayList<Table> tableList;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private CardView cardView;
-        private ImageView imageView;
-        private TextView textView1;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            cardView = itemView.findViewById(R.id.cardView);
-            imageView = itemView.findViewById(R.id.imageView);
-            textView1 = itemView.findViewById(R.id.textView1);
-        }
-    }
-
     public TableAdapter(ArrayList<Table> tableList) {
         this.tableList = tableList;
+    }
+
+    @Override
+    public int getItemCount() {
+        return tableList.size();
     }
 
     @NonNull
@@ -52,14 +44,10 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Account currentItem = tableList.get(i);
 
+        // Set views
         viewHolder.imageView.setImageResource(R.drawable.ic_assign_table_blk);
         viewHolder.textView1.setText(currentItem.getUsername());
         viewHolder.cardView.setOnTouchListener(this);
-    }
-
-    @Override
-    public int getItemCount() {
-        return tableList.size();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -74,5 +62,18 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
                 return true;
         }
         return false;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private CardView cardView;
+        private ImageView imageView;
+        private TextView textView1;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            cardView = itemView.findViewById(R.id.cardView);
+            imageView = itemView.findViewById(R.id.imageView);
+            textView1 = itemView.findViewById(R.id.textView1);
+        }
     }
 }

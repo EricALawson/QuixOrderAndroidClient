@@ -18,21 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHolder> {
     private ArrayList<MenuItem> menuItemList;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private CardView cardView;
-        private ImageView imageView;
-        private TextView textView1;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            cardView = itemView.findViewById(R.id.cardView);
-            imageView = itemView.findViewById(R.id.imageView);
-            textView1 = itemView.findViewById(R.id.textView1);
-        }
-    }
-
     public MenuItemAdapter(ArrayList<MenuItem> menuItemList) {
         this.menuItemList = menuItemList;
+    }
+
+    @Override
+    public int getItemCount() {
+        return menuItemList.size();
     }
 
     @NonNull
@@ -47,12 +39,23 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         MenuItem currentItem = menuItemList.get(i);
 
+        // Set views
         viewHolder.imageView.setImageResource(R.drawable.ic_restaurant_menu_blk);
         viewHolder.textView1.setText(currentItem.getName());
     }
 
-    @Override
-    public int getItemCount() {
-        return menuItemList.size();
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private CardView cardView;
+        private ImageView imageView;
+        private TextView textView1;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            cardView = itemView.findViewById(R.id.cardView);
+            imageView = itemView.findViewById(R.id.imageView);
+            textView1 = itemView.findViewById(R.id.textView1);
+        }
     }
+
 }

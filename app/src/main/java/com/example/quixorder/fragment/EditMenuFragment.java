@@ -26,7 +26,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class EditMenuFragment extends Fragment {
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
+public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItemTypeListener {
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
     private CollectionReference itemTypes = firebase.collection("item_types");
     private CollectionReference menuItems = firebase.collection("menu_items");
@@ -84,7 +86,7 @@ public class EditMenuFragment extends Fragment {
         // Set up view of all item types
         itemTypeView.setHasFixedSize(true);
         itemTypeLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        itemTypeAdapter = new ItemTypeAdapter(itemTypeList);
+        itemTypeAdapter = new ItemTypeAdapter(itemTypeList, this);
         itemTypeView.setLayoutManager(itemTypeLayoutManager);
         itemTypeView.setAdapter(itemTypeAdapter);
     }
@@ -103,5 +105,10 @@ public class EditMenuFragment extends Fragment {
         menuItemAdapter = new MenuItemAdapter(menuItemList);
         menuItemView.setLayoutManager(menuItemLayoutManager);
         menuItemView.setAdapter(menuItemAdapter);
+    }
+
+    @Override
+    public void onItemTypeClick(int position) {
+        Log.d(TAG, "onItemTypeClick: clicked." + position);
     }
 }
