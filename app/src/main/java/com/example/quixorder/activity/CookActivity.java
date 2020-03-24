@@ -24,8 +24,6 @@ import java.util.List;
 
 public class CookActivity extends AppCompatActivity {
     private RecyclerView orderList;
-    private RecyclerView.LayoutManager orderLayoutManger;
-    private OrderListAdapter adapter;
     private OrderListViewModel viewModel;
 
 
@@ -42,16 +40,13 @@ public class CookActivity extends AppCompatActivity {
         orderList = findViewById(R.id.orderItems);
         orderList.setHasFixedSize(true);
 
-        orderLayoutManger = new LinearLayoutManager(this);
-        orderList.setLayoutManager(orderLayoutManger);
-        adapter = new OrderListAdapter();
         viewModel = ViewModelProviders.of(this).get(OrderListViewModel.class);
         LiveData<List<Order>> liveData = viewModel.getOrderLiveData();
-        adapter.setOrderList(liveData.getValue());
         liveData.observe(this, (List<Order> orders)-> {
-            adapter.setOrderList(orders);
+            orderList.setLayoutManager(new LinearLayoutManager(this));
+            orderList.setAdapter(new OrderListAdapter(orders));
+
         });
-        orderList.setAdapter(adapter);
     }
 
 

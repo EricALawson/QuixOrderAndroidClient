@@ -17,7 +17,7 @@ public class Order {
     private Date cookedTime;
     private Date servedTime;
     private ArrayList<DocumentReference> orderItems;
-    private MenuItem[] orderMenuItems;
+    private ArrayList<MenuItem> orderMenuItems;
     private String server;
 
     public Order() {
@@ -33,14 +33,16 @@ public class Order {
             servedTime = (Date) snapshot.get("servedTime");
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");
 
-            orderMenuItems = new MenuItem[orderItems.size()];
+            orderMenuItems = new ArrayList<MenuItem>();
             for (int orderItemCount = 0; orderItemCount < orderItems.size(); orderItemCount++) {
                 DocumentReference doc = orderItems.get(orderItemCount);
                 final int index = orderItemCount;
                 doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        orderMenuItems[index] = documentSnapshot.toObject(MenuItem.class);
+                        MenuItem item = documentSnapshot.toObject(MenuItem.class);
+                        Log.d("Order: MenuItem", "item created: " + item.toString());
+                        orderMenuItems.add(item);
                     }
                 });
             }
@@ -74,7 +76,7 @@ public class Order {
         return server;
     }
 
-    public MenuItem[] getOrderMenuItems() {
+    public List<MenuItem> getOrderMenuItems() {
         return orderMenuItems;
     }
 }
