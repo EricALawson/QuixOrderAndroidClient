@@ -51,7 +51,6 @@ public class AssignTableFragment extends Fragment implements View.OnDragListener
 
         // Set listeners
         tableViewNull.setOnDragListener(this);
-        loadCompleteListeners();
 
         return view;
     }
@@ -62,26 +61,6 @@ public class AssignTableFragment extends Fragment implements View.OnDragListener
 
         // Set snapshot listeners
         loadSnapshotListeners();
-    }
-
-    public void loadCompleteListeners() {
-        // Load Servers
-        serverAccounts.get()
-                .addOnSuccessListener(task -> {
-                    loadServers(task);
-                })
-                .addOnFailureListener(error -> {
-                    Log.e("QueryFailed", error.getMessage());
-                });
-
-        // Load Tables
-        tableAccountsNull.get()
-                .addOnSuccessListener(task -> {
-                    loadTables(task);
-                })
-                .addOnFailureListener(error -> {
-                    Log.e("QueryFailed", error.getMessage());
-                });
     }
 
     public void loadSnapshotListeners() {

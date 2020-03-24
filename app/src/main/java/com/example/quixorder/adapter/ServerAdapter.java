@@ -60,7 +60,6 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
 
         // Set listeners
         viewHolder.cardView.setOnDragListener(this);
-        viewHolder.loadCompleteListeners();
         viewHolder.loadSnapshotListeners();
     }
 
@@ -120,17 +119,6 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
             tableView = itemView.findViewById(R.id.tableView);
             imageView = itemView.findViewById(R.id.imageView);
             textView1 = itemView.findViewById(R.id.textView1);
-        }
-
-        public void loadCompleteListeners() {
-            // Load Tables
-            tableAccounts.get()
-                    .addOnSuccessListener(task -> {
-                        loadTables(task);
-                    })
-                    .addOnFailureListener(error -> {
-                        Log.e("QueryFailed", error.getMessage());
-                    });
         }
 
         public void loadSnapshotListeners() {
