@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import com.example.quixorder.R;
 import com.example.quixorder.adapter.ItemTypeAdapter;
 import com.example.quixorder.adapter.MenuItemAdapter;
-import com.example.quixorder.adapter.TableAdapter;
 import com.example.quixorder.model.ItemType;
 import com.example.quixorder.model.MenuItem;
 import com.google.firebase.firestore.CollectionReference;
@@ -29,7 +28,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItemTypeListener {
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
@@ -69,7 +67,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
     public void loadSnapshotListeners() {
         itemTypes.addSnapshotListener(getActivity(), (query, error) -> {
             if (error != null) {
-                Log.e(TAG, "QueryFailed:" + error.getMessage());
+                Log.e("QueryFailed:", error.getMessage());
                 return;
             }
             loadItemTypes(query);
@@ -80,7 +78,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         // Get Item Types list
         ArrayList<ItemType> itemTypeList = new ArrayList<>();
         for (DocumentSnapshot itemType : task.getDocuments()) {
-            Log.d(TAG, "QuerySuccess:" + itemType.toString());
+            Log.d("QuerySuccess:", itemType.toString());
             itemTypeList.add(itemType.toObject(ItemType.class));
         }
 
@@ -105,7 +103,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         // Get Menu Items list
         ArrayList<MenuItem> menuItemList = new ArrayList<>();
         for (DocumentSnapshot menuItem : task.getDocuments()) {
-            Log.d(TAG, "QuerySuccess:" + menuItem.toString());
+            Log.d("QuerySuccess:", menuItem.toString());
             menuItemList.add(menuItem.toObject(MenuItem.class));
         }
 
@@ -119,7 +117,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
 
     @Override
     public void onItemTypeClick(int position, String itemType) {
-        Log.d(TAG, "onItemTypeClick: clicked." + position);
+        Log.d("onItemTypeClick: ", "" + position);
         Query menuItemQuery = menuItems.whereEqualTo("type", itemType);
 
         // Load complete listener
@@ -128,7 +126,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
                     loadMenuItems(task);
                 })
                 .addOnFailureListener(error -> {
-                    Log.e(TAG, "QueryFailed:" + error.getMessage());
+                    Log.e("QueryFailed:", error.getMessage());
                 });
 
         // Remove menu item listener
@@ -139,7 +137,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         // Load snapshot listener
         menuItemsListener = menuItemQuery.addSnapshotListener(getActivity(), (query, error) -> {
             if (error != null) {
-                Log.e(TAG, "QueryFailed:" + error.getMessage());
+                Log.e("QueryFailed:", error.getMessage());
                 return;
             }
 
