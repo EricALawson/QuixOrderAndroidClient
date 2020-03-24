@@ -23,6 +23,7 @@ import com.example.quixorder.model.MenuItem;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -43,6 +44,8 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
     private RecyclerView.Adapter menuItemAdapter;
     private RecyclerView.LayoutManager menuItemLayoutManager;
 
+    private ListenerRegistration menuItemsListener;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,29 +55,32 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         itemTypeView = view.findViewById(R.id.itemTypeView);
         menuItemView = view.findViewById(R.id.menuItemView);
 
-        // Set listeners
-        loadCompleteListeners();
-
-
         return view;
     }
 
-    public void loadCompleteListeners() {
-        // Load Item Types
-        itemTypes.get()
-                .addOnSuccessListener(task -> {
-                    loadItemTypes(task);
-                })
-                .addOnFailureListener(error -> {
-                    Log.e("QueryFailed", error.getMessage());
-                });
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Set snapshot listeners
+        loadSnapshotListeners();
+    }
+
+    public void loadSnapshotListeners() {
+        itemTypes.addSnapshotListener(getActivity(), (query, error) -> {
+            if (error != null) {
+                Log.e(TAG, "QueryFailed:" + error.getMessage());
+                return;
+            }
+            loadItemTypes(query);
+        });
     }
 
     public void loadItemTypes(QuerySnapshot task) {
         // Get Item Types list
         ArrayList<ItemType> itemTypeList = new ArrayList<>();
         for (DocumentSnapshot itemType : task.getDocuments()) {
-            Log.d("QuerySuccess", itemType.toString());
+            Log.d(TAG, "QuerySuccess:" + itemType.toString());
             itemTypeList.add(itemType.toObject(ItemType.class));
         }
 
@@ -85,7 +91,6 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         itemTypeView.setLayoutManager(itemTypeLayoutManager);
         itemTypeView.setAdapter(itemTypeAdapter);
 
-        // Load Menu Items based on first selected Item Type
         new Handler().post(new Runnable() {
             @Override
             public void run() {
@@ -100,7 +105,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         // Get Menu Items list
         ArrayList<MenuItem> menuItemList = new ArrayList<>();
         for (DocumentSnapshot menuItem : task.getDocuments()) {
-            Log.d("QuerySuccess", menuItem.toString());
+            Log.d(TAG, "QuerySuccess:" + menuItem.toString());
             menuItemList.add(menuItem.toObject(MenuItem.class));
         }
 
@@ -117,12 +122,28 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         Log.d(TAG, "onItemTypeClick: clicked." + position);
         Query menuItemQuery = menuItems.whereEqualTo("type", itemType);
 
+        // Load complete listener
         menuItemQuery.get()
                 .addOnSuccessListener(task -> {
                     loadMenuItems(task);
                 })
                 .addOnFailureListener(error -> {
-                    Log.e("QueryFailed", error.getMessage());
+                    Log.e(TAG, "QueryFailed:" + error.getMessage());
                 });
+
+        // Remove menu item listener
+        if (menuItemsListener != null) {
+            menuItemsListener.remove();
+        }
+
+        // Load snapshot listener
+        menuItemsListener = menuItemQuery.addSnapshotListener(getActivity(), (query, error) -> {
+            if (error != null) {
+                Log.e(TAG, "QueryFailed:" + error.getMessage());
+                return;
+            }
+
+            loadMenuItems(query);
+        });
     }
 }
