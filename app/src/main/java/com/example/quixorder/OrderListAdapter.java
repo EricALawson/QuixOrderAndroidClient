@@ -1,8 +1,13 @@
 package com.example.quixorder;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.quixorder.model.MenuItem;
 import com.example.quixorder.model.Order;
 
 import java.util.ArrayList;
@@ -25,12 +31,11 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         TextView tableNum;
         RecyclerView orderItemList;
         Order order;
-        View root;
+        List<MenuItem> menuItems;
 
 
         public OrderViewHolder(View v) {
             super(v);
-            root = v;
             btnDone = v.findViewById(R.id.btnDone);
             btnDelay = v.findViewById(R.id.btnDelay);
             tableNum = v.findViewById(R.id.tableNumber);
@@ -41,7 +46,19 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         public void bindOrder(Order o) {
             order = o;
             tableNum.setText(order.getTable());
-            orderItemList.setAdapter(new OrderItemListAdapter(order.getOrderMenuItems()));
+            menuItems = new ArrayList<>();
+            order.getMenuItems().observe( getLifecycleOwner(), (list) -> {
+                orderItemList.setAdapter(new OrderItemListAdapter(menuItems));
+            });
+            orderItemList.setAdapter(new OrderItemListAdapter(menuItems));
+        }
+
+        private LifecycleOwner getLifecycleOwner() {
+            Context context = this.itemView.getContext();
+            while (!(context instanceof LifecycleOwner)) {
+                context = ((ContextWrapper) context).getBaseContext();
+            }
+            return (LifecycleOwner) context;
         }
     }
 

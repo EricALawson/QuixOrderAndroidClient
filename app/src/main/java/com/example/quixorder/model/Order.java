@@ -2,6 +2,8 @@ package com.example.quixorder.model;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -19,6 +21,8 @@ public class Order {
     private ArrayList<DocumentReference> orderItems;
     private ArrayList<MenuItem> orderMenuItems;
     private String server;
+    private DocumentReference menuItemRefs;
+    private MutableLiveData<List<MenuItem>> menuItems;
 
     public Order() {
 
@@ -31,6 +35,9 @@ public class Order {
             startTime = (Date) snapshot.get("startTime");
             cookedTime = (Date) snapshot.get("cookedTime");
             servedTime = (Date) snapshot.get("servedTime");
+
+            menuItemRefs = snapshot.getDocumentReference("orderItems");
+
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");
 
             orderMenuItems = new ArrayList<MenuItem>();
@@ -43,6 +50,7 @@ public class Order {
                         MenuItem item = documentSnapshot.toObject(MenuItem.class);
                         Log.d("Order: MenuItem", "item created: " + item.toString());
                         orderMenuItems.add(item);
+                        menuItems.setValue(orderMenuItems);
                     }
                 });
             }
@@ -68,15 +76,19 @@ public class Order {
         return servedTime;
     }
 
-    public List<DocumentReference> getOrderItems() {
-        return orderItems;
-    }
-
     public String getServer() {
         return server;
     }
 
-    public List<MenuItem> getOrderMenuItems() {
-        return orderMenuItems;
+    public MutableLiveData<List<MenuItem>> getMenuItems() {
+        return menuItems;
+    }
+
+//    public List<MenuItem> getOrderMenuItems() {
+//        return orderMenuItems;
+//    }
+
+    public DocumentReference getMenuItemRefs() {
+        return menuItemRefs;
     }
 }
