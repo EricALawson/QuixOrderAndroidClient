@@ -2,6 +2,7 @@ package com.example.quixorder.model;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,9 +37,11 @@ public class Order {
             cookedTime = (Date) snapshot.get("cookedTime");
             servedTime = (Date) snapshot.get("servedTime");
 
-            menuItemRefs = snapshot.getDocumentReference("orderItems");
+            //menuItemRefs = snapshot.getDocumentReference("orderItems");
 
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");
+            menuItems = new MutableLiveData<>();
+            menuItems.setValue(new ArrayList<>());
 
             orderMenuItems = new ArrayList<MenuItem>();
             for (int orderItemCount = 0; orderItemCount < orderItems.size(); orderItemCount++) {
@@ -88,7 +91,7 @@ public class Order {
 //        return orderMenuItems;
 //    }
 
-    public DocumentReference getMenuItemRefs() {
-        return menuItemRefs;
-    }
+//    public DocumentReference getMenuItemRefs() {
+//        return menuItemRefs;
+//    }
 }

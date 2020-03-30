@@ -1,5 +1,6 @@
 package com.example.quixorder;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.Men
         public void bindMenuItem(MenuItem item) {
             //TODO: Figure out image data type.
             //image.setImageBitmap();
+            Log.d("Binding MenuItem", item.toString());
             name.setText(item.getName());
         }
     }
@@ -41,6 +43,7 @@ class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.Men
     @NonNull
     @Override
     public MenuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d("OrderItemListAdapter", "onCreateViewHolder called");
         ViewGroup v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.menu_item, parent, false);
         MenuItemViewHolder vh = new MenuItemViewHolder(v);

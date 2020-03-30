@@ -4,6 +4,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -46,11 +47,13 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         public void bindOrder(Order o) {
             order = o;
             tableNum.setText(order.getTable());
-            menuItems = new ArrayList<>();
+            orderItemList.setLayoutManager(new LinearLayoutManager(this.itemView.getContext()));
+            //menuItems = new ArrayList<>();
             order.getMenuItems().observe( getLifecycleOwner(), (list) -> {
-                orderItemList.setAdapter(new OrderItemListAdapter(menuItems));
+                Log.d("OrderListAdapter", "MenuItem list change observed, size = " + list.size());
+                orderItemList.swapAdapter(new OrderItemListAdapter(list), false);
             });
-            orderItemList.setAdapter(new OrderItemListAdapter(menuItems));
+            //orderItemList.setAdapter(new OrderItemListAdapter(menuItems));
         }
 
         private LifecycleOwner getLifecycleOwner() {
