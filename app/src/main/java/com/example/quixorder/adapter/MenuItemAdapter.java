@@ -42,12 +42,14 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         // Set views
         viewHolder.imageView.setImageResource(R.drawable.ic_restaurant_menu_blk);
         viewHolder.textView1.setText(currentItem.getName());
+        viewHolder.imageView2.setImageResource(R.drawable.ic_remove_circle_blk);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView cardView;
         private ImageView imageView;
         private TextView textView1;
+        private ImageView imageView2;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +57,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
             cardView = itemView.findViewById(R.id.cardView);
             imageView = itemView.findViewById(R.id.imageView);
             textView1 = itemView.findViewById(R.id.textView1);
+            imageView2 = itemView.findViewById(R.id.imageView2);
         }
     }
 
