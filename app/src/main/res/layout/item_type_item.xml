@@ -21,5 +21,14 @@
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:duplicateParentState="true"/>
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
