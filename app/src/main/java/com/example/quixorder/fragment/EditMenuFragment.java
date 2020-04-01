@@ -30,7 +30,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 
-public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItemTypeListener, ItemTypeAdapter.OnRemoveItemTypeListener {
+public class EditMenuFragment
+        extends Fragment
+        implements ItemTypeAdapter.OnItemTypeListener, ItemTypeAdapter.OnRemoveItemTypeListener, MenuItemAdapter.OnRemoveMenuItemListener {
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
     private CollectionReference itemTypes = firebase.collection("item_types");
     private CollectionReference menuItems = firebase.collection("menu_items");
@@ -125,14 +127,28 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         // Set up view of all menu items based on selected item type
         menuItemView.setHasFixedSize(true);
         menuItemLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        menuItemAdapter = new MenuItemAdapter(menuItemList);
+        menuItemAdapter = new MenuItemAdapter(menuItemList, this);
         menuItemView.setLayoutManager(menuItemLayoutManager);
         menuItemView.setAdapter(menuItemAdapter);
     }
 
+    public void removeMenuItem(QuerySnapshot task) {
+        String menuItem = task.getDocuments().get(0).getId();
+
+        // Load delete listener
+        menuItems.document(menuItem)
+                .delete()
+                .addOnSuccessListener(removeTask -> {
+                    Log.d("RemoveSuccess", menuItem);
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("RemoveFailed", error.getMessage());
+                });
+    }
+
     @Override
     public void onItemTypeClick(int position, String itemType) {
-        Log.d("onItemTypeClick: ", "" + position);
+        Log.d("onItemTypeClick: ", "" + itemType);
         Query menuItemQuery = menuItems.whereEqualTo("type", itemType);
 
         // Load complete listener
@@ -162,7 +178,7 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
 
     @Override
     public void onRemoveItemTypeListener(int position, String itemType) {
-        Log.d("onRemoveItemTypeClick: ", itemType + position);
+        Log.d("onRemoveItemTypeClick: ", itemType);
 
         Query itemTypeQuery = itemTypes.whereEqualTo("type", itemType);
 
@@ -170,6 +186,23 @@ public class EditMenuFragment extends Fragment implements ItemTypeAdapter.OnItem
         itemTypeQuery.get()
                 .addOnSuccessListener(task -> {
                     removeItemType(task);
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("QueryFailed:", error.getMessage());
+                });
+    }
+
+
+    @Override
+    public void onRemoveMenuItemListener(int position, String itemName) {
+        Log.d("onRemoveMenuItemClick: ", itemName);
+
+        Query menuItemQuery = menuItems.whereEqualTo("name", itemName);
+
+        // Remove menu item
+        menuItemQuery.get()
+                .addOnSuccessListener(task -> {
+                    removeMenuItem(task);
                 })
                 .addOnFailureListener(error -> {
                     Log.e("QueryFailed:", error.getMessage());
