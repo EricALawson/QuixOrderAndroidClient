@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.solver.widgets.Snapshot;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.quixorder.R;
 import com.example.quixorder.adapter.ItemTypeAdapter;
@@ -33,11 +33,14 @@ import java.util.ArrayList;
 
 public class EditMenuFragment
         extends Fragment
-        implements ItemTypeAdapter.OnItemTypeListener, ItemTypeAdapter.OnRemoveItemTypeListener, MenuItemAdapter.OnRemoveMenuItemListener {
+        implements ItemTypeAdapter.OnItemTypeListener, ItemTypeAdapter.OnRemoveItemTypeListener, MenuItemAdapter.OnRemoveMenuItemListener, View.OnClickListener {
+
+    // Declare firestore variables
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
     private CollectionReference itemTypes = firebase.collection("item_types");
     private CollectionReference menuItems = firebase.collection("menu_items");
 
+    // Declare recyclerview variables
     private View view;
     private RecyclerView itemTypeView;
     private RecyclerView.Adapter itemTypeAdapter;
@@ -45,20 +48,56 @@ public class EditMenuFragment
     private RecyclerView menuItemView;
     private RecyclerView.Adapter menuItemAdapter;
     private RecyclerView.LayoutManager menuItemLayoutManager;
-
     private ListenerRegistration menuItemsListener;
 
-    private ImageView imageView;
+    // Declare add and remove item view variables
+    private View newItemType;
+    private View newMenuItem;
+    private View addItemType;
+    private View addMenuItem;
+
+    // Declare add and remove item type variables
+    private TextView itemTypeName;
+    private ImageView itemTypeAdd;
+
+    // Declare add and remove menu item variables
+    private ImageView menuItemIcon;
+    private TextView menuItemName;
+    private TextView menuItemDescription;
+    private TextView menuItemPrice;
+    private ImageView menuItemAdd;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_edit_menu, container, false);
 
-        // Get views
+        // Get recycler views for item type and menu items
         itemTypeView = view.findViewById(R.id.itemTypeView);
         menuItemView = view.findViewById(R.id.menuItemView);
-        imageView = view.findViewById(R.id.imageView);
+
+        // Get views for adding and removing item type and menu item
+        newItemType = view.findViewById(R.id.newItemType);
+        newMenuItem = view.findViewById(R.id.newMenuItem);
+        addItemType = view.findViewById(R.id.addItemType);
+        addMenuItem = view.findViewById(R.id.addMenuItem);
+
+        // Get views of elements in adding item type
+        itemTypeName = addItemType.findViewById(R.id.textView1);
+        itemTypeAdd = addItemType.findViewById(R.id.imageView1);
+
+        // Gets views of elements in adding menu item
+        menuItemIcon = addMenuItem.findViewById(R.id.imageView1);
+        menuItemName = addMenuItem.findViewById(R.id.textView1);
+        menuItemDescription = addMenuItem.findViewById(R.id.textView2);
+        menuItemPrice = addMenuItem.findViewById(R.id.textView3);
+        menuItemAdd = addMenuItem.findViewById(R.id.imageView2);
+
+        // Load click listeners
+        newItemType.setOnClickListener(this);
+        newMenuItem.setOnClickListener(this);
+        itemTypeAdd.setOnClickListener(this);
+        menuItemAdd.setOnClickListener(this);
 
         return view;
     }
@@ -211,5 +250,29 @@ public class EditMenuFragment
                 .addOnFailureListener(error -> {
                     Log.e("QueryFailed:", error.getMessage());
                 });
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.newItemType:
+                newItemType.setVisibility(View.GONE);
+                addItemType.setVisibility(View.VISIBLE);
+                break;
+            case R.id.newMenuItem:
+                Log.d("onNewMenuItemClick", "click");
+                newMenuItem.setVisibility(View.GONE);
+                addMenuItem.setVisibility(View.VISIBLE);
+                break;
+            case R.id.imageView1:
+                newItemType.setVisibility(View.VISIBLE);
+                addItemType.setVisibility(View.GONE);
+                break;
+            case R.id.imageView2:
+                Log.d("onNewMenuItemClick", "click");
+                newMenuItem.setVisibility(View.VISIBLE);
+                addMenuItem.setVisibility(View.GONE);
+                break;
+        }
     }
 }

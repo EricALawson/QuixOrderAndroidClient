@@ -79,7 +79,7 @@ public class ItemTypeAdapter extends RecyclerView.Adapter<ItemTypeAdapter.ViewHo
 
             cardView = itemView.findViewById(R.id.cardView);
             textView1 = itemView.findViewById(R.id.textView1);
-            imageView = itemView.findViewById(R.id.imageView);
+            imageView = itemView.findViewById(R.id.imageView1);
 
             // Load click listeners
             this.onItemTypeListener = onItemTypeListener;
@@ -101,9 +101,10 @@ public class ItemTypeAdapter extends RecyclerView.Adapter<ItemTypeAdapter.ViewHo
                     onItemTypeListener.onItemTypeClick(getAdapterPosition(), itemTypeList.get(getAdapterPosition()).getType());
                     break;
 
-                case R.id.imageView:
+                case R.id.imageView1:
                     // Update remove item
                     onRemoveItemTypeListener.onRemoveItemTypeListener(getAdapterPosition(), itemTypeList.get(getAdapterPosition()).getType());
+                    break;
             }
 
         }

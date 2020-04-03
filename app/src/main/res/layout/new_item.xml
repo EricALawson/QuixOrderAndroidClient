@@ -6,28 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="1dp" >
 
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="@drawable/bg_edit_menu" >
+        android:gravity="center_horizontal"
+        android:background="@drawable/bg_edit_menu"
+        android:hint="Click to Add"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Add"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:src="@drawable/ic_add_circle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="2dp"
-            android:duplicateParentState="true"/>
-
-    </LinearLayout>
 </androidx.cardview.widget.CardView>
