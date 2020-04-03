@@ -2,8 +2,6 @@ package com.example.quixorder;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,8 +17,6 @@ import android.widget.TextView;
 import com.example.quixorder.model.MenuItem;
 import com.example.quixorder.model.Order;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
@@ -48,12 +44,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             order = o;
             tableNum.setText(order.getTable());
             orderItemList.setLayoutManager(new LinearLayoutManager(this.itemView.getContext()));
-            //menuItems = new ArrayList<>();
             order.getMenuItems().observe( getLifecycleOwner(), (list) -> {
                 Log.d("OrderListAdapter", "MenuItem list change observed, size = " + list.size());
                 orderItemList.swapAdapter(new OrderItemListAdapter(list), false);
             });
-            //orderItemList.setAdapter(new OrderItemListAdapter(menuItems));
         }
 
         private LifecycleOwner getLifecycleOwner() {
@@ -69,7 +63,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         this.orderList = orders;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
@@ -78,15 +71,11 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         return vh;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
-        // - get element from your data set at this position
-        // - replace the contents of the view with that element
         holder.bindOrder(orderList.get(position));
     }
 
-    // Return the size of your data set (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return orderList.size();

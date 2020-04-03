@@ -26,8 +26,6 @@ public class OrderListViewModel extends ViewModel {
 
     public OrderListViewModel() {
         super();
-        //orderLiveData = new MutableLiveData<>();
-        //orderLiveData.setValue(new ArrayList<Order>());
         orderQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {

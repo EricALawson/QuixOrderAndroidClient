@@ -37,8 +37,6 @@ public class Order {
             cookedTime = (Date) snapshot.get("cookedTime");
             servedTime = (Date) snapshot.get("servedTime");
 
-            //menuItemRefs = snapshot.getDocumentReference("orderItems");
-
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");
             menuItems = new MutableLiveData<>();
             menuItems.setValue(new ArrayList<>());
@@ -87,11 +85,4 @@ public class Order {
         return menuItems;
     }
 
-//    public List<MenuItem> getOrderMenuItems() {
-//        return orderMenuItems;
-//    }
-
-//    public DocumentReference getMenuItemRefs() {
-//        return menuItemRefs;
-//    }
 }

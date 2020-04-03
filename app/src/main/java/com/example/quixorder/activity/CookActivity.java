@@ -1,14 +1,11 @@
 package com.example.quixorder.activity;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Intent;
@@ -19,7 +16,6 @@ import com.example.quixorder.OrderListViewModel;
 import com.example.quixorder.R;
 import com.example.quixorder.model.Order;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CookActivity extends AppCompatActivity {
