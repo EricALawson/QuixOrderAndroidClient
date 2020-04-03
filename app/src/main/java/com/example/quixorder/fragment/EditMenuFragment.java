@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.quixorder.R;
 import com.example.quixorder.adapter.ItemTypeAdapter;
@@ -47,6 +48,8 @@ public class EditMenuFragment
 
     private ListenerRegistration menuItemsListener;
 
+    private ImageView imageView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class EditMenuFragment
         // Get views
         itemTypeView = view.findViewById(R.id.itemTypeView);
         menuItemView = view.findViewById(R.id.menuItemView);
+        imageView = view.findViewById(R.id.imageView);
 
         return view;
     }
