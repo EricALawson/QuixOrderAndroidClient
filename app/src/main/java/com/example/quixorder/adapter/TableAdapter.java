@@ -20,46 +20,34 @@ import com.example.quixorder.model.Table;
 
 import java.util.ArrayList;
 
-public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ExampleViewHolder> implements View.OnTouchListener {
+public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> implements View.OnTouchListener {
     private ArrayList<Table> tableList;
-
-    public static class ExampleViewHolder extends RecyclerView.ViewHolder {
-        public CardView cardView;
-        public ImageView imageView;
-        public TextView textView1;
-
-        public ExampleViewHolder(@NonNull View itemView) {
-            super(itemView);
-            cardView = itemView.findViewById(R.id.cardView);
-            imageView = itemView.findViewById(R.id.imageView);
-            textView1 = itemView.findViewById(R.id.textView1);
-        }
-    }
 
     public TableAdapter(ArrayList<Table> tableList) {
         this.tableList = tableList;
     }
 
+    @Override
+    public int getItemCount() {
+        return tableList.size();
+    }
+
     @NonNull
     @Override
-    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.table_item, viewGroup, false);
-        ExampleViewHolder evh = new ExampleViewHolder(view);
+        ViewHolder evh = new ViewHolder(view);
         return evh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder exampleViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Account currentItem = tableList.get(i);
 
-        exampleViewHolder.imageView.setImageResource(R.drawable.ic_assign_table_blk);
-        exampleViewHolder.textView1.setText(currentItem.getUsername());
-        exampleViewHolder.cardView.setOnTouchListener(this);
-    }
-
-    @Override
-    public int getItemCount() {
-        return tableList.size();
+        // Set views
+        viewHolder.imageView.setImageResource(R.drawable.ic_assign_table_blk);
+        viewHolder.textView1.setText(currentItem.getUsername());
+        viewHolder.cardView.setOnTouchListener(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -74,5 +62,18 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ExampleViewH
                 return true;
         }
         return false;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private CardView cardView;
+        private ImageView imageView;
+        private TextView textView1;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            cardView = itemView.findViewById(R.id.cardView);
+            imageView = itemView.findViewById(R.id.imageView1);
+            textView1 = itemView.findViewById(R.id.textView1);
+        }
     }
 }
