@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quixorder.R;
 import com.example.quixorder.adapter.ItemTypeAdapter;
@@ -27,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 
@@ -43,10 +47,10 @@ public class EditMenuFragment
     // Declare recyclerview variables
     private View view;
     private RecyclerView itemTypeView;
-    private RecyclerView.Adapter itemTypeAdapter;
+    private ItemTypeAdapter itemTypeAdapter;
     private RecyclerView.LayoutManager itemTypeLayoutManager;
     private RecyclerView menuItemView;
-    private RecyclerView.Adapter menuItemAdapter;
+    private MenuItemAdapter menuItemAdapter;
     private RecyclerView.LayoutManager menuItemLayoutManager;
     private ListenerRegistration menuItemsListener;
 
@@ -57,14 +61,14 @@ public class EditMenuFragment
     private View addMenuItem;
 
     // Declare add and remove item type variables
-    private TextView itemTypeName;
+    private EditText itemTypeName;
     private ImageView itemTypeAdd;
 
     // Declare add and remove menu item variables
     private ImageView menuItemIcon;
-    private TextView menuItemName;
-    private TextView menuItemDescription;
-    private TextView menuItemPrice;
+    private EditText menuItemName;
+    private EditText menuItemDescription;
+    private EditText menuItemPrice;
     private ImageView menuItemAdd;
 
     @Nullable
@@ -145,20 +149,6 @@ public class EditMenuFragment
         });
     }
 
-    public void removeItemType(QuerySnapshot task) {
-        String itemType = task.getDocuments().get(0).getId();
-
-        // Load delete listener
-        itemTypes.document(itemType)
-                .delete()
-                .addOnSuccessListener(removeTask -> {
-                    Log.d("RemoveSuccess", itemType);
-                })
-                .addOnFailureListener(error -> {
-                   Log.e("RemoveFailed", error.getMessage());
-                });
-    }
-
     public void loadMenuItems(QuerySnapshot task) {
         // Get Menu Items list
         ArrayList<MenuItem> menuItemList = new ArrayList<>();
@@ -173,6 +163,42 @@ public class EditMenuFragment
         menuItemAdapter = new MenuItemAdapter(menuItemList, this);
         menuItemView.setLayoutManager(menuItemLayoutManager);
         menuItemView.setAdapter(menuItemAdapter);
+    }
+
+    public void addItemType(ItemType itemType) {
+        // Add item type to item types collection
+        itemTypes.add(itemType)
+                .addOnSuccessListener(result -> {
+                    Toast.makeText(getContext(), "Item type created", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("AddFailed", error.getMessage());
+                });
+    }
+
+    public void addMenuItem(MenuItem menuItem) {
+        // Add menu item to menu items collection
+        menuItems.add(menuItem)
+                .addOnSuccessListener(result -> {
+                    Toast.makeText(getContext(), "Menu item created", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("AddFailed", error.getMessage());
+                });
+    }
+
+    public void removeItemType(QuerySnapshot task) {
+        String itemType = task.getDocuments().get(0).getId();
+
+        // Load delete listener
+        itemTypes.document(itemType)
+                .delete()
+                .addOnSuccessListener(removeTask -> {
+                    Log.d("RemoveSuccess", itemType);
+                })
+                .addOnFailureListener(error -> {
+                   Log.e("RemoveFailed", error.getMessage());
+                });
     }
 
     public void removeMenuItem(QuerySnapshot task) {
@@ -219,8 +245,73 @@ public class EditMenuFragment
         });
     }
 
+    public void onAddItemTypeClick() {
+        Log.d("onAddItemTypeClick", "click");
+        if (validateForm(getEditTextViews((ViewGroup) addItemType))) {
+            // Create ItemType object with text fields
+            ItemType itemType = new ItemType(itemTypeName.getText().toString());
+
+            // Query item types collection for existing item type
+            itemTypes.whereEqualTo("type", itemType.getType())
+                    .get()
+                    .addOnSuccessListener(task -> {
+                        if (task.getDocuments().size() != 0) {
+                            Toast.makeText(getContext(), "This item type already exists", Toast.LENGTH_SHORT).show();
+                        } else {
+                            addItemType(itemType);
+
+                            // Update views
+                            newItemType.setVisibility(View.VISIBLE);
+                            addItemType.setVisibility(View.GONE);
+                            clearForm((ViewGroup) addItemType);
+                        }
+                    })
+                    .addOnFailureListener(error -> {
+                        Log.e("QueryFailed", error.getMessage());
+                    });
+        } else {
+            Toast.makeText(getContext(), "There is an invalid field", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onAddMenuItemClick() {
+        Log.d("onAddMenuItemClick", "click");
+        if (validateForm(getEditTextViews((ViewGroup) addMenuItem))) {
+            Log.d("Test", itemTypeAdapter.getSelectedItem().getType());
+
+            // Create MenuItem object with text fields
+            MenuItem menuItem = new MenuItem(
+                    menuItemDescription.getText().toString(),
+                    "urlCode",
+                    menuItemName.getText().toString(),
+                    Double.parseDouble(menuItemPrice.getText().toString()),
+                    itemTypeAdapter.getSelectedItem().getType());
+
+            // Query menu items collection for existing menu item
+            menuItems.whereEqualTo("name", menuItem.getName())
+                    .get()
+                    .addOnSuccessListener(task -> {
+                        if(task.getDocuments().size() != 0) {
+                            Toast.makeText(getContext(), "This menu item already exists", Toast.LENGTH_SHORT).show();
+                        } else {
+                            addMenuItem(menuItem);
+
+                            // Update views
+                            newMenuItem.setVisibility(View.VISIBLE);
+                            addMenuItem.setVisibility(View.GONE);
+                            clearForm((ViewGroup) addMenuItem);
+                        }
+                    })
+                    .addOnFailureListener(error -> {
+                        Log.e("QueryFailed", error.getMessage());
+                    });
+        } else {
+            Toast.makeText(getContext(), "There is an invalid field", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
-    public void onRemoveItemTypeListener(int position, String itemType) {
+    public void onRemoveItemTypeClick(int position, String itemType) {
         Log.d("onRemoveItemTypeClick: ", itemType);
 
         Query itemTypeQuery = itemTypes.whereEqualTo("type", itemType);
@@ -235,9 +326,8 @@ public class EditMenuFragment
                 });
     }
 
-
     @Override
-    public void onRemoveMenuItemListener(int position, String itemName) {
+    public void onRemoveMenuItemClick(int position, String itemName) {
         Log.d("onRemoveMenuItemClick: ", itemName);
 
         Query menuItemQuery = menuItems.whereEqualTo("name", itemName);
@@ -256,23 +346,66 @@ public class EditMenuFragment
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.newItemType:
+                Log.d("onNewItemTypeClick", "click");
                 newItemType.setVisibility(View.GONE);
                 addItemType.setVisibility(View.VISIBLE);
                 break;
+
             case R.id.newMenuItem:
                 Log.d("onNewMenuItemClick", "click");
                 newMenuItem.setVisibility(View.GONE);
                 addMenuItem.setVisibility(View.VISIBLE);
                 break;
+
             case R.id.imageView1:
-                newItemType.setVisibility(View.VISIBLE);
-                addItemType.setVisibility(View.GONE);
+                // Update new item type
+                onAddItemTypeClick();
                 break;
+
             case R.id.imageView2:
-                Log.d("onNewMenuItemClick", "click");
-                newMenuItem.setVisibility(View.VISIBLE);
-                addMenuItem.setVisibility(View.GONE);
+                // Update new menu item
+                onAddMenuItemClick();
                 break;
+        }
+    }
+
+    public ArrayList<EditText> getEditTextViews(ViewGroup group) {
+        ArrayList<EditText> views = new ArrayList<>();
+        for (int i = 0; i < group.getChildCount(); i++) {
+            View view = group.getChildAt(i);
+            if (view instanceof ViewGroup) {
+                views.addAll(getEditTextViews((ViewGroup) view));
+                continue;
+            }
+            if (view instanceof EditText) {
+                views.add((EditText) view);
+            }
+        }
+
+        return views;
+    }
+
+    public boolean validateForm(ArrayList<EditText> views) {
+        for (EditText view : views) {
+            if (view.getText().toString().equals("")) {
+                Log.d("validateForm", "false");
+                return false;
+            }
+        }
+        Log.d("validateForm", "true");
+        return true;
+    }
+
+    public void clearForm(ViewGroup group) {
+        for (int i = 0; i < group.getChildCount(); i++) {
+            View view = group.getChildAt(i);
+            if (view instanceof ViewGroup) {
+                clearForm((ViewGroup) view);
+                continue;
+            }
+            if (view instanceof EditText) {
+                ((EditText) view).getText().clear();
+            }
         }
     }
 }

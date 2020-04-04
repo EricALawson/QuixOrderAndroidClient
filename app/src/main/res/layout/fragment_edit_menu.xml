@@ -23,7 +23,7 @@
                 android:visibility="visible" />
 
             <include
-                layout="@layout/item_type_item"
+                layout="@layout/add_item_type"
                 android:id="@+id/addItemType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:layout_gravity="center"
                 android:visibility="visible" />
 
-            <include layout="@layout/menu_item_item"
+            <include layout="@layout/add_menu_item"
                 android:id="@+id/addMenuItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

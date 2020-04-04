@@ -77,12 +77,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         public void onClick(View view) {
             switch(view.getId()) {
                 case R.id.imageView2:
-                    onRemoveMenuItemListener.onRemoveMenuItemListener(getAdapterPosition(), menuItemList.get(getAdapterPosition()).getName());
+                    onRemoveMenuItemListener.onRemoveMenuItemClick(getAdapterPosition(), menuItemList.get(getAdapterPosition()).getName());
             }
         }
     }
 
     public interface OnRemoveMenuItemListener {
-        void onRemoveMenuItemListener(int position, String itemName);
+        void onRemoveMenuItemClick(int position, String itemName);
     }
 }

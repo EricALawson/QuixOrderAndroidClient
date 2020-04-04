@@ -34,6 +34,10 @@ public class ItemTypeAdapter extends RecyclerView.Adapter<ItemTypeAdapter.ViewHo
         return itemTypeList.size();
     }
 
+    public ItemType getSelectedItem() {
+        return itemTypeList.get(selectedItem);
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -103,7 +107,7 @@ public class ItemTypeAdapter extends RecyclerView.Adapter<ItemTypeAdapter.ViewHo
 
                 case R.id.imageView1:
                     // Update remove item
-                    onRemoveItemTypeListener.onRemoveItemTypeListener(getAdapterPosition(), itemTypeList.get(getAdapterPosition()).getType());
+                    onRemoveItemTypeListener.onRemoveItemTypeClick(getAdapterPosition(), itemTypeList.get(getAdapterPosition()).getType());
                     break;
             }
 
@@ -115,6 +119,6 @@ public class ItemTypeAdapter extends RecyclerView.Adapter<ItemTypeAdapter.ViewHo
     }
 
     public interface OnRemoveItemTypeListener {
-        void onRemoveItemTypeListener(int position, String itemType);
+        void onRemoveItemTypeClick(int position, String itemType);
     }
 }
