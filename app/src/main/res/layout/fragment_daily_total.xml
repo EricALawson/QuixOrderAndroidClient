@@ -54,7 +54,7 @@
         </FrameLayout>
 
         <Button
-            android:id="@+id/dateRangeButton"
+            android:id="@+id/datePickerButton"
             android:layout_height="46dp"
             android:layout_width="wrap_content"
             android:padding="8dp"
@@ -62,7 +62,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="@color/spinnerLight"
-            android:hint="Choose date range" />
+            android:text="Choose Earliest Date" />
 
     </LinearLayout>
 
