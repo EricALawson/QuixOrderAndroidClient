@@ -16,7 +16,10 @@ import android.widget.TextView;
 
 import com.example.quixorder.model.MenuItem;
 import com.example.quixorder.model.Order;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
@@ -28,7 +31,6 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         TextView tableNum;
         RecyclerView orderItemList;
         Order order;
-        List<MenuItem> menuItems;
 
 
         public OrderViewHolder(View v) {
@@ -37,7 +39,12 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             btnDelay = v.findViewById(R.id.btnDelay);
             tableNum = v.findViewById(R.id.tableNumber);
             orderItemList = v.findViewById(R.id.orderItemList);
-
+            btnDone.setOnClickListener(view -> {
+                if (order != null) {
+                    DocumentReference docRef = FirebaseFirestore.getInstance().collection("orders").document(order.getDocumentId());
+                    docRef.update("cookedTime",  new Date());
+                }
+            });
         }
 
         public void bindOrder(Order o) {

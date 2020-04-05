@@ -22,8 +22,8 @@ public class Order {
     private ArrayList<DocumentReference> orderItems;
     private ArrayList<MenuItem> orderMenuItems;
     private String server;
-    private DocumentReference menuItemRefs;
     private MutableLiveData<List<MenuItem>> menuItems;
+    private String documentId;
 
     public Order() {
 
@@ -40,6 +40,8 @@ public class Order {
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");
             menuItems = new MutableLiveData<>();
             menuItems.setValue(new ArrayList<>());
+
+            documentId = snapshot.getId();
 
             orderMenuItems = new ArrayList<MenuItem>();
             for (int orderItemCount = 0; orderItemCount < orderItems.size(); orderItemCount++) {
@@ -59,6 +61,10 @@ public class Order {
         } else {
             Log.e("Bad DocumentReference", "Can't create Order object from document reference in constructor");
         }
+    }
+
+    public String getDocumentId() {
+        return documentId;
     }
 
     public String getTable() {
