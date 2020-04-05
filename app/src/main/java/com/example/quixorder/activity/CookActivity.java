@@ -11,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.content.Intent;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.quixorder.OrderListAdapter;
+import com.example.quixorder.adapter.OrderListAdapter;
 import com.example.quixorder.OrderListViewModel;
 import com.example.quixorder.R;
 import com.example.quixorder.model.Order;

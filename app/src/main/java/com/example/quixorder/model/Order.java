@@ -37,6 +37,7 @@ public class Order {
             cookedTime = (Date) snapshot.get("cookedTime");
             servedTime = (Date) snapshot.get("servedTime");
 
+            //noinspection unchecked
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");
             menuItems = new MutableLiveData<>();
             menuItems.setValue(new ArrayList<>());
@@ -46,15 +47,11 @@ public class Order {
             orderMenuItems = new ArrayList<MenuItem>();
             for (int orderItemCount = 0; orderItemCount < orderItems.size(); orderItemCount++) {
                 DocumentReference doc = orderItems.get(orderItemCount);
-                final int index = orderItemCount;
-                doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        MenuItem item = documentSnapshot.toObject(MenuItem.class);
-                        Log.d("Order: MenuItem", "item created: " + item.toString());
-                        orderMenuItems.add(item);
-                        menuItems.setValue(orderMenuItems);
-                    }
+                doc.get().addOnSuccessListener(documentSnapshot -> {
+                    MenuItem item = documentSnapshot.toObject(MenuItem.class);
+                    Log.d("Order: MenuItem", "item created: " + item.toString());
+                    orderMenuItems.add(item);
+                    menuItems.setValue(orderMenuItems);
                 });
             }
 

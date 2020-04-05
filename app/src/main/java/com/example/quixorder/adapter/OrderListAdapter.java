@@ -1,5 +1,6 @@
-package com.example.quixorder;
+package com.example.quixorder.adapter;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.quixorder.model.MenuItem;
+import com.example.quixorder.R;
 import com.example.quixorder.model.Order;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,7 +34,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         Order order;
 
 
-        public OrderViewHolder(View v) {
+        OrderViewHolder(View v) {
             super(v);
             btnDone = v.findViewById(R.id.btnDone);
             btnDelay = v.findViewById(R.id.btnDelay);
@@ -47,7 +48,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             });
         }
 
-        public void bindOrder(Order o) {
+        void bindOrder(Order o) {
             order = o;
             tableNum.setText(order.getTable());
             orderItemList.setLayoutManager(new LinearLayoutManager(this.itemView.getContext()));
@@ -70,12 +71,12 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         this.orderList = orders;
     }
 
+    @NonNull
     @Override
     public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.order, parent, false);
-        OrderViewHolder vh = new OrderViewHolder(v);
-        return vh;
+        return new OrderViewHolder(v);
     }
 
     @Override

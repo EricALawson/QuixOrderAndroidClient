@@ -1,5 +1,7 @@
 package com.example.quixorder.model;
 
+import androidx.annotation.NonNull;
+
 public class MenuItem {
     private final String description;
     private final String image;
@@ -43,6 +45,7 @@ public class MenuItem {
         return type;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "MenuItem{" +
