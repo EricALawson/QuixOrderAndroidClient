@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
+import com.example.quixorder.model.Table;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -53,14 +54,22 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
             CollectionReference accounts = firebase.collection("accounts");
 
             // Create Account object with text field values
-            Account account = new Account(
-                    spinner.getSelectedItem().toString(),
-                    usernameInput.getText().toString(),
-                    passwordInput.getText().toString()
-            );
+            Account account;
+            String type = spinner.getSelectedItem().toString();
+            String username = usernameInput.getText().toString();
+            String password = passwordInput.getText().toString();
+
+            // Create account based on type
+            switch (type) {
+                case "Table":
+                    account = new Table(username, password);
+                    break;
+                default:
+                    account = new Account(type, username, password);
+            }
 
             // Query accounts collection for a username
-            Log.e("QueryAccounts", account.getUsername());
+            Log.d("QueryAccounts", account.getUsername());
             accounts.whereEqualTo("username", account.getUsername())
                     .get()
                     .addOnCompleteListener(task -> {
@@ -71,7 +80,7 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
                         } else {
 
                             // Add account to accounts collection
-                            Log.e("AddAccount", account.getUsername());
+                            Log.d("AddAccount", account.getUsername());
                             accounts.add(account)
                                     .addOnFailureListener(output -> {
                                         Log.e("AddFailed", output.getMessage());

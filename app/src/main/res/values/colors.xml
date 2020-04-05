@@ -21,4 +21,11 @@
     <color name="loginFormDetails">#ccffffff</color>
     <color name="loginFormDetailsLight">#1affffff</color>
     <color name="loginFormDetailsMedium">#66ffffff</color>
+
+    <!-- Item Type -->
+    <color name="itemTypeUnselected1">#EFEFEF</color>
+    <color name="itemTypeUnselected2">#FFFFFF</color>
+    <color name="itemTypeUnselectedFont">#222222</color>
+    <color name="itemTypeSelected">#222222</color>
+    <color name="itemTypeSelectedFont">#FFFFFF</color>
 </resources>

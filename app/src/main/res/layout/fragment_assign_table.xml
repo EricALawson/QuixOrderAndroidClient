@@ -2,13 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_red_light">
+    android:background="@drawable/bg_login">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Assign Tables Fragment"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/darker_gray"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/serversView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tablesView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:padding="4dp"
+            android:layout_weight="9"
+            android:scrollbars="horizontal" />
+
+    </LinearLayout>
 
 </RelativeLayout>
