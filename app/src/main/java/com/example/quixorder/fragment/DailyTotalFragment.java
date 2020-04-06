@@ -15,9 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.quixorder.R;
-import com.example.quixorder.model.Order;
+import com.example.quixorder.model.Payment;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,12 +29,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSelectedListener, View.OnClickListener, DatePickerDialog.OnDateSetListener {
     // Declare firestore variables
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
-    private CollectionReference orders = firebase.collection("orders");
+    private CollectionReference payments = firebase.collection("Payment");
 
     // Declare views
     private View view;
@@ -42,11 +43,17 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
     private Spinner frequencySpinner;
     private ArrayAdapter<CharSequence> frequencyAdapter;
     private Button datePicker;
-    private ListenerRegistration ordersListener;
+    private ListenerRegistration paymentListener;
+
+    // Declare other views
+    private TextView textView1;
 
     // Declare calendar variables
     private Calendar startCalendar;
     int startYear, startMonth, startDay;
+
+    // Declare payments
+    private List<Payment> paymentList;
 
     @Nullable
     @Override
@@ -56,6 +63,9 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
         // Set up views
         frequencySpinner = view.findViewById(R.id.frequencySpinner);
         datePicker = view.findViewById(R.id.datePickerButton);
+
+        // Declare other views
+        textView1 = view.findViewById(R.id.textView1);
 
         // Create frequency picker
         frequencyAdapter = ArrayAdapter.createFromResource(this.getActivity(), R.array.frequencies, android.R.layout.simple_spinner_item);
@@ -74,12 +84,43 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
         return view;
     }
 
-    public void loadOrders(QuerySnapshot task) {
-        // Get Orders list
-        ArrayList<Order> orderList = new ArrayList<>();
-        for (DocumentSnapshot order: task.getDocuments()) {
-            Log.d("QuerySuccess", order.toString());
+    public void loadPayments(QuerySnapshot task) {
+        // Get Payments list
+        paymentList = new ArrayList<>();
+        for (DocumentSnapshot payment: task.getDocuments()) {
+            Log.d("QuerySuccess", payment.toString());
+            paymentList.add(payment.toObject(Payment.class));
         }
+
+        // Set up view of all payments based on frequency
+        loadTotal();
+        loadGraph();
+    }
+
+    public void loadTotal() {
+        double total = sumTotal(paymentList);
+        Log.d("loadTotal", "" + total);
+
+        textView1.setText(String.format("%.2f", total));
+    }
+
+    public void loadGraph() {
+        String frequency = frequencySpinner.getSelectedItem().toString();
+        Log.d("loadPaymentsGraph", "SelectedFrequency:" + frequency);
+        if (paymentList != null) {
+            Log.d("loadPaymentsGraph", "paymentListSize:" + paymentList.size());
+
+
+        }
+    }
+
+    public double sumTotal(List<Payment> paymentList) {
+        double total = 0;
+        for (Payment payment: paymentList) {
+            total += payment.getTotal();
+        }
+
+        return total;
     }
 
     @Override
@@ -114,7 +155,6 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
         startCalendar.set(Calendar.MONTH, month);
         startCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String startDateString = DateFormat.getDateInstance(DateFormat.FULL).format(startCalendar.getTime());
-        Log.d("test", "" + startCalendar.getTimeInMillis() / 1000);
         Log.d("onDateSet", "startDate:" + startDateString);
 
         // Get current date
@@ -126,28 +166,29 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
         String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(currentCalendar.getTime());
         Log.d("onDateSet", "currentDate:" + currentDateString);
 
-        // Remove orders listener
-        if (ordersListener != null) {
-            ordersListener.remove();
+        // Remove payment listener
+        if (paymentListener != null) {
+            paymentListener.remove();
         }
 
-        // Update orders snapshot listener
-        Query ordersQuery = orders
-                .whereGreaterThanOrEqualTo("servedTime", startCalendar.getTime())
-                .whereLessThanOrEqualTo("servedTime", currentCalendar.getTime());
-        ordersListener = ordersQuery.addSnapshotListener(getActivity(), (query, error) -> {
+        // Update payment snapshot listener
+        Query paymentsQuery = payments
+                .whereGreaterThanOrEqualTo("receivedTime", startCalendar.getTime())
+                .whereLessThanOrEqualTo("receivedTime", currentCalendar.getTime());
+        paymentListener = paymentsQuery.addSnapshotListener(getActivity(), (query, error) -> {
            if (error != null) {
                Log.e("QueryFailed", error.getMessage());
                return;
            }
 
-           loadOrders(query);
+           loadPayments(query);
         });
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        Log.d("onItemSelected", frequencySpinner.getSelectedItem().toString());
+        loadGraph();
     }
 
     @Override
