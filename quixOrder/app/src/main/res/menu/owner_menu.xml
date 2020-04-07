@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_chart"
+            android:icon="@drawable/ic_chart"
+            android:title="Daily Totals"/>
+        <item android:id="@+id/nav_employee"
+            android:icon="@drawable/ic_employee"
+            android:title="Employee Activities"/>
+    </group>
+
+    <item android:title="Manage">
+        <menu>
+            <item android:id="@+id/nav_restaurant_menu"
+                android:icon="@drawable/ic_restaurant_menu"
+                android:title="Edit Menu"/>
+            <item android:id="@+id/nav_add_employee"
+                android:icon="@drawable/ic_add_employee"
+                android:title="Add Employee"/>
+            <item android:id="@+id/nav_assign_table"
+                android:icon="@drawable/ic_assign_table"
+                android:title="Assign Tables"/>
+        </menu>
+    </item>
+</menu>
