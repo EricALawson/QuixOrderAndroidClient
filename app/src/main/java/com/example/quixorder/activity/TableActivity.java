@@ -4,21 +4,52 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.quixorder.fragment.MenuFragment;
 import com.example.quixorder.R;
+import com.example.quixorder.adapter.MenuAdapter;
+//import com.example.quixorder.fragment.MenuFragment;
+import com.example.quixorder.model.MenuItem;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableActivity extends AppCompatActivity {
+
+    //MenuItemContent db = new MenuItemContent();
+    MenuFragment.OnListFragmentInteractionListener listen;
+
+    private FirebaseFirestore fb;
+    List<MenuItem> db = new ArrayList<MenuItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        for (int i = 1; i <= 10; i++) {
+            MenuItem x = new MenuItem("", "ItemPic", "Item " + (i+1), Double.valueOf(i), "drink");
+            db.add(x);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.table);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        //arrayList = new ArrayList();
+        GridLayoutManager manager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(manager);
+
+        MenuAdapter ad = new MenuAdapter( db, TableActivity.this, listen);
+        recyclerView.setAdapter(ad);
 
         findViewById(R.id.lOut).setOnClickListener(logOut);
     }
