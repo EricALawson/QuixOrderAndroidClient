@@ -56,7 +56,7 @@
 
     </LinearLayout>
 
-    <com.jjoe64.graphview.GraphView
+    <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/graphView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -66,9 +66,9 @@
         app:layout_constraintEnd_toStartOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintTop_toBottomOf="@id/constraint"
-        app:layout_constraintBottom_toTopOf="@id/totalLayout">
+        app:layout_constraintBottom_toTopOf="@id/totalLayout" >
 
-    </com.jjoe64.graphview.GraphView>
+    </com.github.mikephil.charting.charts.BarChart>
 
     <LinearLayout
         android:id="@+id/totalLayout"

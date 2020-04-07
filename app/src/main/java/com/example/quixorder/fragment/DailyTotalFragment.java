@@ -19,6 +19,20 @@ import android.widget.TextView;
 
 import com.example.quixorder.R;
 import com.example.quixorder.model.Payment;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +40,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,18 +54,21 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
     // Declare views
     private View view;
 
-    // Declare filter views
+    // Declare filter variables
     private Spinner frequencySpinner;
     private ArrayAdapter<CharSequence> frequencyAdapter;
     private Button datePicker;
     private ListenerRegistration paymentListener;
+
+    // Declare graph variables
+    private BarChart graphView;
 
     // Declare other views
     private TextView textView1;
 
     // Declare calendar variables
     private Calendar startCalendar;
-    int startYear, startMonth, startDay;
+    private int startYear, startMonth, startWeek, startDay;
 
     // Declare payments
     private List<Payment> paymentList;
@@ -63,8 +81,7 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
         // Set up views
         frequencySpinner = view.findViewById(R.id.frequencySpinner);
         datePicker = view.findViewById(R.id.datePickerButton);
-
-        // Declare other views
+        graphView = view.findViewById(R.id.graphView);
         textView1 = view.findViewById(R.id.textView1);
 
         // Create frequency picker
@@ -75,11 +92,38 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
 
         // Create date range picker
         startCalendar = Calendar.getInstance();
+        startYear = startCalendar.get(Calendar.YEAR);
+        startMonth = startCalendar.get(Calendar.MONTH);
+        startWeek = startCalendar.get(Calendar.WEEK_OF_YEAR);
+        startDay = startCalendar.get(Calendar.DAY_OF_MONTH);
         startCalendar.set(Calendar.HOUR_OF_DAY, 0);
         startCalendar.set(Calendar.MINUTE, 0);
         startCalendar.set(Calendar.SECOND, 0);
         startCalendar.set(Calendar.MILLISECOND, 0);
         datePicker.setOnClickListener(this);
+
+        // Set graph view settings
+        graphView.setExtraBottomOffset(10);
+
+        // xAxis settings
+        XAxis xAxis = graphView.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(20);
+
+        // yAxis settings
+        YAxis yAxisLeft = graphView.getAxisLeft();
+        yAxisLeft.setStartAtZero(true);
+        yAxisLeft.setTextSize(20);
+
+        // Disable settings
+        YAxis yAxisRight = graphView.getAxisRight();
+        yAxisRight.setEnabled(false);
+        Legend legend = graphView.getLegend();
+        legend.setEnabled(false);
+        Description description = graphView.getDescription();
+        description.setEnabled(false);
 
         return view;
     }
@@ -92,29 +136,150 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
             paymentList.add(payment.toObject(Payment.class));
         }
 
-        // Set up view of all payments based on frequency
-        loadTotal();
-        loadGraph();
-    }
-
-    public void loadTotal() {
-        double total = sumTotal(paymentList);
+        // Set up view of all payments
+        double total = sumTotal();
         Log.d("loadTotal", "" + total);
-
         textView1.setText(String.format("%.2f", total));
     }
 
     public void loadGraph() {
         String frequency = frequencySpinner.getSelectedItem().toString();
-        Log.d("loadPaymentsGraph", "SelectedFrequency:" + frequency);
-        if (paymentList != null) {
-            Log.d("loadPaymentsGraph", "paymentListSize:" + paymentList.size());
+        Log.d("loadPaymentsGraph", "selectedFrequency:" + frequency);
 
-
+        // Check if payment list created
+        if (paymentList == null) {
+            Log.d("loadPaymentsGraph", "no data loaded");
+            return;
         }
+        Log.d("loadPaymentsGraph", "paymentListSize:" + paymentList.size());
+
+        // Load data
+        graphView.setData(getData(frequency));
+        graphView.invalidate();
     }
 
-    public double sumTotal(List<Payment> paymentList) {
+    public BarData getData(String frequency) {
+
+        List<BarEntry> totals = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.setTime(this.startCalendar.getTime());
+
+        float x = 0;
+        float total = 0;
+
+        switch(frequency) {
+            case "Daily":
+                for (Payment payment: paymentList) {
+                    Calendar currentCalendar = payment.getCalendar();
+                    while (startCalendar.get(Calendar.DAY_OF_YEAR) != currentCalendar.get(Calendar.DAY_OF_YEAR)) {
+                        // Update day label and its total payment
+                        totals.add(new BarEntry(x, total));
+                        labels.add(DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(startCalendar.getTime()));
+
+                        // Refresh counters for remaining days
+                        x += 1;
+                        total = 0;
+                        startCalendar.add(Calendar.DAY_OF_YEAR, 1);
+                    }
+                    // Add to total when matching day
+                    total += payment.getTotal();
+                }
+
+                // Update last entry
+                totals.add(new BarEntry(x, total));
+                labels.add(DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(startCalendar.getTime()));
+
+                break;
+
+            case "Weekly":
+                startCalendar.add(Calendar.DAY_OF_MONTH, Calendar.MONDAY - startCalendar.get(Calendar.DAY_OF_WEEK));
+                for (Payment payment: paymentList) {
+                    Calendar currentCalendar = payment.getCalendar();
+                    while (startCalendar.get(Calendar.WEEK_OF_YEAR) != currentCalendar.get(Calendar.WEEK_OF_YEAR)) {
+                        // Update day label and its total payment
+                        totals.add(new BarEntry(x, total));
+                        labels.add(DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(startCalendar.getTime()));
+
+                        // Refresh counters for remaining days
+                        x += 1;
+                        total = 0;
+                        startCalendar.add(Calendar.WEEK_OF_YEAR, 1);
+                    }
+                    // Add to total when matching day
+                    total += payment.getTotal();
+                }
+
+                // Update last entry
+                totals.add(new BarEntry(x, total));
+                labels.add(DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(startCalendar.getTime()));
+                break;
+
+            case "Monthly":
+                for (Payment payment: paymentList) {
+                    Calendar currentCalendar = payment.getCalendar();
+                    while (startCalendar.get(Calendar.MONTH) != currentCalendar.get(Calendar.MONTH)) {
+                        // Update day label and its total payment
+                        totals.add(new BarEntry(x, total));
+                        labels.add("" + (startCalendar.get(Calendar.MONTH) + 1) + "/" + startCalendar.get(Calendar.YEAR));
+
+                        // Refresh counters for remaining days
+                        x += 1;
+                        total = 0;
+                        startCalendar.add(Calendar.MONTH, 1);
+                    }
+                    // Add to total when matching day
+                    total += payment.getTotal();
+                }
+
+                // Update last entry
+                totals.add(new BarEntry(x, total));
+                labels.add("" + (startCalendar.get(Calendar.MONTH) + 1) + "/" + startCalendar.get(Calendar.YEAR));
+                break;
+
+            case "Yearly":
+                for (Payment payment: paymentList) {
+                    Calendar currentCalendar = payment.getCalendar();
+                    while (startCalendar.get(Calendar.YEAR) != currentCalendar.get(Calendar.YEAR)) {
+                        // Update day label and its total payment
+                        totals.add(new BarEntry(x, total));
+                        labels.add("" + startCalendar.get(Calendar.YEAR));
+
+                        // Refresh counters for remaining days
+                        x += 1;
+                        total = 0;
+                        startCalendar.add(Calendar.YEAR, 1);
+                    }
+                    // Add to total when matching day
+                    total += payment.getTotal();
+                }
+
+                // Update last entry
+                totals.add(new BarEntry(x, total));
+                labels.add("" + startCalendar.get(Calendar.YEAR));
+                break;
+        }
+
+        // Formatter
+        ValueFormatter formatter = new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                if (value > labels.size() - 1) {
+                    return "";
+                }
+                return labels.get((int) value);
+            }
+        };
+        graphView.getXAxis().setValueFormatter(formatter);
+
+        // Return data
+        BarData data = new BarData(new BarDataSet(totals, "BarDataSet"));
+        data.setValueTextSize(20);
+        return data;
+    }
+
+    public double sumTotal() {
         double total = 0;
         for (Payment payment: paymentList) {
             total += payment.getTotal();
@@ -134,10 +299,6 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
     }
 
     public void onDatePickerClick() {
-        startYear = startCalendar.get(Calendar.YEAR);;
-        startMonth = startCalendar.get(Calendar.MONTH);;
-        startDay = startCalendar.get(Calendar.DAY_OF_MONTH);;
-
         // Set date picker to currently selected date
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(),
@@ -154,6 +315,10 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
         startCalendar.set(Calendar.YEAR, year);
         startCalendar.set(Calendar.MONTH, month);
         startCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        startYear = startCalendar.get(Calendar.YEAR);
+        startMonth = startCalendar.get(Calendar.MONTH);
+        startWeek = startCalendar.get(Calendar.WEEK_OF_YEAR);
+        startDay = startCalendar.get(Calendar.DAY_OF_MONTH);
         String startDateString = DateFormat.getDateInstance(DateFormat.FULL).format(startCalendar.getTime());
         Log.d("onDateSet", "startDate:" + startDateString);
 
@@ -174,7 +339,8 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
         // Update payment snapshot listener
         Query paymentsQuery = payments
                 .whereGreaterThanOrEqualTo("receivedTime", startCalendar.getTime())
-                .whereLessThanOrEqualTo("receivedTime", currentCalendar.getTime());
+                .whereLessThanOrEqualTo("receivedTime", currentCalendar.getTime())
+                .orderBy("receivedTime", Query.Direction.ASCENDING);
         paymentListener = paymentsQuery.addSnapshotListener(getActivity(), (query, error) -> {
            if (error != null) {
                Log.e("QueryFailed", error.getMessage());
@@ -182,6 +348,7 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
            }
 
            loadPayments(query);
+           loadGraph();
         });
     }
 
