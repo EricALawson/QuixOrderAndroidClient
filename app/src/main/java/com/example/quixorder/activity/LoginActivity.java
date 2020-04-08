@@ -15,10 +15,12 @@ import com.example.quixorder.model.Account;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
+
 
     public EditText usernameInput;
     public EditText passwordInput;
@@ -27,6 +29,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
+        //some fix for firestore changes to timestamps.
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        firebase.setFirestoreSettings(settings);
 
         findViewById(R.id.btn_login).setOnClickListener(btn_loginOnClickListener);
         //findViewById(R.id.lOut).setOnClickListener(logOut);

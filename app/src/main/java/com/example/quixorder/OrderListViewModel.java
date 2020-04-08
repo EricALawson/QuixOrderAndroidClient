@@ -23,25 +23,10 @@ import javax.annotation.Nullable;
 
 public class OrderListViewModel extends ViewModel {
     private MutableLiveData<List<Order>> orderLiveData;
-    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private Query orderQuery;
 
     public OrderListViewModel() {
         super();
-
-        //some fix for firestore changes to timestamps.
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        firestore.setFirestoreSettings(settings);
-
-        orderQuery = firestore.collection("orders").whereEqualTo("cookedTime", null);
-        orderQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                loadOrders(queryDocumentSnapshots);
-            }
-        });
     }
 
     public LiveData<List<Order>> getOrderLiveData() {
@@ -80,5 +65,13 @@ public class OrderListViewModel extends ViewModel {
         orderLiveData.postValue(orders);
     }
 
-
+    public void setQuery(Query listQuery) {
+        orderQuery = listQuery;
+        orderQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                loadOrders(queryDocumentSnapshots);
+            }
+        });
+    }
 }

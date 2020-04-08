@@ -31,9 +31,12 @@ public class Order {
         if(snapshot != null && snapshot.exists()) {
             table = (String) snapshot.get("table");
             server = (String) snapshot.get("server");
-            startTime = snapshot.getTimestamp("startTime").toDate();
-            servedTime = snapshot.getTimestamp("servedTime").toDate();
-            cookedTime = snapshot.getTimestamp("cookedTime").toDate();
+            Timestamp startTS = snapshot.getTimestamp("startTime");
+            if (startTS != null) startTime = startTS.toDate();
+            Timestamp servedTS = snapshot.getTimestamp("servedTime");
+            if (servedTime != null) servedTime = servedTS.toDate();
+            Timestamp cookedTS = snapshot.getTimestamp("cookedTime");
+            if (cookedTime != null) cookedTime = cookedTS.toDate();
 
             //noinspection unchecked
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");

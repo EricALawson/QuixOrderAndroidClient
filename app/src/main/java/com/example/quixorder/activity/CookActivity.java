@@ -15,12 +15,14 @@ import com.example.quixorder.adapter.OrderListAdapter;
 import com.example.quixorder.OrderListViewModel;
 import com.example.quixorder.R;
 import com.example.quixorder.model.Order;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 public class CookActivity extends AppCompatActivity {
     private RecyclerView orderList;
     private OrderListViewModel viewModel;
+    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
 
     @Override
@@ -37,6 +39,7 @@ public class CookActivity extends AppCompatActivity {
         orderList.setHasFixedSize(true);
 
         viewModel = ViewModelProviders.of(this).get(OrderListViewModel.class);
+        viewModel.setQuery( firestore.collection("orders").whereEqualTo("status", "cooking") );
         LiveData<List<Order>> liveData = viewModel.getOrderLiveData();
         liveData.observe(this, (List<Order> orders)-> {
             orderList.setLayoutManager(new LinearLayoutManager(this));
