@@ -1,14 +1,27 @@
 package com.example.quixorder.activity;
 
+import androidx.lifecycle.LiveData;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Intent;
+import androidx.lifecycle.ViewModelProviders;
 
+import com.example.quixorder.OrderListAdapter;
+import com.example.quixorder.OrderListViewModel;
 import com.example.quixorder.R;
+import com.example.quixorder.model.Order;
+
+import java.util.List;
 
 public class CookActivity extends AppCompatActivity {
+    private RecyclerView orderList;
+    private OrderListViewModel viewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +29,20 @@ public class CookActivity extends AppCompatActivity {
         setContentView(R.layout.cook);
 
         findViewById(R.id.lOut).setOnClickListener(logOut);
+        initializeOrderList();
+    }
 
+    private void initializeOrderList() {
+        orderList = findViewById(R.id.orderItems);
+        orderList.setHasFixedSize(true);
+
+        viewModel = ViewModelProviders.of(this).get(OrderListViewModel.class);
+        LiveData<List<Order>> liveData = viewModel.getOrderLiveData();
+        liveData.observe(this, (List<Order> orders)-> {
+            orderList.setLayoutManager(new LinearLayoutManager(this));
+            orderList.setAdapter(new OrderListAdapter(orders));
+
+        });
     }
 
 
@@ -25,54 +51,8 @@ public class CookActivity extends AppCompatActivity {
         @Override
         public void onClick(View view)
         {
-            //setContentView(R.layout.login);
-            //Intent main = new Intent(CookActivity.this, LoginActivity.class);
-            //getLogout();
             startActivity(new Intent(CookActivity.this, LoginActivity.class));
-            //finish();
-
-
         }
     };
-
-    /*private void getLogout()
-    {
-
-        String p = "1234567";
-        AlertDialog.Builder sure = new AlertDialog.Builder(CookActivity.this);
-        final EditText pass = new EditText(CookActivity.this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        pass.setLayoutParams(lp);
-        sure.setView(pass);
-
-        sure.setTitle("Logout?");
-        sure.setMessage("Enter Password");
-
-        sure.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                if(pass.getText().toString().toUpperCase().equals(p.toLowerCase()))
-                {
-                    startActivity(new Intent(CookActivity.this, LoginActivity.class));
-                    finish();
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(), "Wrong Password!", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
-        sure.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        });
-        sure.show();
-
-    }*/
 
 }
