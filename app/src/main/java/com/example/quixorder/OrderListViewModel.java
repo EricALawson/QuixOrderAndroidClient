@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -22,10 +23,19 @@ import javax.annotation.Nullable;
 
 public class OrderListViewModel extends ViewModel {
     private MutableLiveData<List<Order>> orderLiveData;
-    private Query orderQuery = FirebaseFirestore.getInstance().collection("orders").whereEqualTo("cookedTime", null);
+    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private Query orderQuery;
 
     public OrderListViewModel() {
         super();
+
+        //some fix for firestore changes to timestamps.
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        firestore.setFirestoreSettings(settings);
+
+        orderQuery = firestore.collection("orders").whereEqualTo("cookedTime", null);
         orderQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {

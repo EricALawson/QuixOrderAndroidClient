@@ -2,13 +2,11 @@ package com.example.quixorder.model;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,9 +31,9 @@ public class Order {
         if(snapshot != null && snapshot.exists()) {
             table = (String) snapshot.get("table");
             server = (String) snapshot.get("server");
-            startTime = (Date) snapshot.get("startTime");
-            cookedTime = (Date) snapshot.get("cookedTime");
-            servedTime = (Date) snapshot.get("servedTime");
+            startTime = snapshot.getTimestamp("startTime").toDate();
+            servedTime = snapshot.getTimestamp("servedTime").toDate();
+            cookedTime = snapshot.getTimestamp("cookedTime").toDate();
 
             //noinspection unchecked
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");

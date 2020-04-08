@@ -46,13 +46,6 @@ public class CookActivity extends AppCompatActivity {
     }
 
 
-    private OnClickListener logOut = new OnClickListener() {
-
-        @Override
-        public void onClick(View view)
-        {
-            startActivity(new Intent(CookActivity.this, LoginActivity.class));
-        }
-    };
+    private OnClickListener logOut = view -> startActivity(new Intent(CookActivity.this, LoginActivity.class));
 
 }

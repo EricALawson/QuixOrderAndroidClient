@@ -1,11 +1,5 @@
 package com.example.quixorder.adapter;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.util.Log;
@@ -15,6 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.quixorder.R;
 import com.example.quixorder.model.Order;
 import com.google.firebase.firestore.DocumentReference;
@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Date;
 import java.util.List;
 
-public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
+public class ServerOrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
     private List<Order> orderList;
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
@@ -43,7 +43,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             btnDone.setOnClickListener(view -> {
                 if (order != null) {
                     DocumentReference docRef = FirebaseFirestore.getInstance().collection("orders").document(order.getDocumentId());
-                    docRef.update("cookedTime",  new Date());
+                    docRef.update("cookedTime", new Date());
                 }
             });
         }
@@ -52,7 +52,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             order = o;
             tableNum.setText(order.getTable());
             orderItemList.setLayoutManager(new LinearLayoutManager(this.itemView.getContext()));
-            order.getMenuItems().observe( getLifecycleOwner(), (list) -> {
+            order.getMenuItems().observe(getLifecycleOwner(), (list) -> {
                 Log.d("OrderListAdapter", "MenuItem list change observed, size = " + list.size());
                 orderItemList.swapAdapter(new OrderItemListAdapter(list), false);
             });
@@ -67,20 +67,20 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         }
     }
 
-    public OrderListAdapter(List<Order> orders) {
+    public ServerOrderListAdapter(List<Order> orders) {
         this.orderList = orders;
     }
 
     @NonNull
     @Override
-    public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public OrderListAdapter.OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.cook_order, parent, false);
-        return new OrderViewHolder(v);
+        return new OrderListAdapter.OrderViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(OrderViewHolder holder, int position) {
+    public void onBindViewHolder(OrderListAdapter.OrderViewHolder holder, int position) {
         holder.bindOrder(orderList.get(position));
     }
 
