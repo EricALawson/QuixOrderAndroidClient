@@ -20,4 +20,9 @@
         <item>Yearly</item>
     </string-array>
 
+    <!-- All employees with tasks -->
+    <string-array name="employeeTypes">
+        <item>Server</item>
+        <item>Cook</item>
+    </string-array>
 </resources>
