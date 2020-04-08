@@ -22,6 +22,7 @@ public class Order {
     private String server;
     private MutableLiveData<List<MenuItem>> menuItems;
     private String documentId;
+    private String status;
 
     public Order() {
 
@@ -29,8 +30,9 @@ public class Order {
 
     public Order(DocumentSnapshot snapshot) {
         if(snapshot != null && snapshot.exists()) {
-            table = (String) snapshot.get("table");
-            server = (String) snapshot.get("server");
+            table = snapshot.getString("table");
+            server = snapshot.getString("server");
+            status = snapshot.getString("status");
             Timestamp startTS = snapshot.getTimestamp("startTime");
             if (startTS != null) startTime = startTS.toDate();
             Timestamp servedTS = snapshot.getTimestamp("servedTime");
@@ -89,4 +91,5 @@ public class Order {
         return menuItems;
     }
 
+    public String getStatus() { return status; }
 }
