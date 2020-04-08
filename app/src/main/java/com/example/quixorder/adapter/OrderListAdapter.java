@@ -21,6 +21,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
@@ -43,7 +44,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             btnDone.setOnClickListener(view -> {
                 if (order != null) {
                     DocumentReference docRef = FirebaseFirestore.getInstance().collection("orders").document(order.getDocumentId());
-                    docRef.update("cookedTime",  new Date());
+                    HashMap<String, Object> data = new HashMap<>();
+                    data.put("cookedTime", new Date());
+                    data.put("status", "ready to serve");
+                    docRef.update(data);
                 }
             });
         }

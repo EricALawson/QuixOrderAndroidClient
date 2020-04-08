@@ -21,14 +21,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-public class ServerOrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderViewHolder> {
+public class ServerOrderListAdapter extends RecyclerView.Adapter<ServerOrderListAdapter.OrderViewHolder> {
     private List<Order> orderList;
 
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
         Button btnDone;
-        Button btnDelay;
         TextView tableNum;
         RecyclerView orderItemList;
         Order order;
@@ -37,13 +37,15 @@ public class ServerOrderListAdapter extends RecyclerView.Adapter<OrderListAdapte
         OrderViewHolder(View v) {
             super(v);
             btnDone = v.findViewById(R.id.btnDone);
-            btnDelay = v.findViewById(R.id.btnDelay);
             tableNum = v.findViewById(R.id.tableNumber);
             orderItemList = v.findViewById(R.id.orderItemList);
             btnDone.setOnClickListener(view -> {
                 if (order != null) {
                     DocumentReference docRef = FirebaseFirestore.getInstance().collection("orders").document(order.getDocumentId());
-                    docRef.update("cookedTime", new Date());
+                    HashMap<String, Object> data = new HashMap<>();
+                    data.put("servedTime", new Date());
+                    data.put("status", "served");
+                    docRef.update(data);
                 }
             });
         }
@@ -53,7 +55,7 @@ public class ServerOrderListAdapter extends RecyclerView.Adapter<OrderListAdapte
             tableNum.setText(order.getTable());
             orderItemList.setLayoutManager(new LinearLayoutManager(this.itemView.getContext()));
             order.getMenuItems().observe(getLifecycleOwner(), (list) -> {
-                Log.d("OrderListAdapter", "MenuItem list change observed, size = " + list.size());
+                Log.d("ServerOrderListAdapter", "MenuItem list change observed, size = " + list.size());
                 orderItemList.swapAdapter(new OrderItemListAdapter(list), false);
             });
         }
@@ -73,14 +75,14 @@ public class ServerOrderListAdapter extends RecyclerView.Adapter<OrderListAdapte
 
     @NonNull
     @Override
-    public OrderListAdapter.OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ServerOrderListAdapter.OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.cook_order, parent, false);
-        return new OrderListAdapter.OrderViewHolder(v);
+                .inflate(R.layout.server_order, parent, false);
+        return new ServerOrderListAdapter.OrderViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(OrderListAdapter.OrderViewHolder holder, int position) {
+    public void onBindViewHolder(ServerOrderListAdapter.OrderViewHolder holder, int position) {
         holder.bindOrder(orderList.get(position));
     }
 
