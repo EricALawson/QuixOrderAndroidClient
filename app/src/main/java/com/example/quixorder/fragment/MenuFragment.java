@@ -2,19 +2,29 @@ package com.example.quixorder.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 //import com.example.quixorder.dummy.MenuItemContent;
 import com.example.quixorder.R;
+import com.example.quixorder.activity.TableActivity;
+import com.example.quixorder.adapter.MenuAdapter;
 import com.example.quixorder.model.MenuItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -33,9 +43,9 @@ public class MenuFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
-    //private ArrayList pics =
+    ArrayList items = new ArrayList<MenuItem>();
 
-    CollectionReference menuPics = firebase.collection("menu_item");
+    //CollectionReference menuPics = firebase.collection("menu_items");
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -63,9 +73,22 @@ public class MenuFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.table_menu_item, container, false);
+
+       /* firebase.collection("menu_items").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        items.add(document.toObject(MenuItem.class));
+                        Log.d("Good", document.getId() + " => " + document.getData());
+                    }
+                } else {
+                    Log.d("Bad", "Error getting documents: ", task.getException());
+                }
+            }
+        });*/
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -76,7 +99,7 @@ public class MenuFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //recyclerView.setAdapter(new MyMenuAdapter(MenuItemContent.ITEMS, MenuFragment.this, mListener, );
+            //recyclerView.setAdapter(new MenuAdapter(items,  mListener));
         }
         return view;
     }
