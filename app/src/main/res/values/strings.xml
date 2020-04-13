@@ -10,6 +10,19 @@
         <item>Table</item>
         <item>Server</item>
         <item>Cook</item>
-    </string-array>/>
+    </string-array>
 
+    <!-- All time filters -->
+    <string-array name="frequencies">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+
+    <!-- All employees with tasks -->
+    <string-array name="employeeTypes">
+        <item>Server</item>
+        <item>Cook</item>
+    </string-array>
 </resources>

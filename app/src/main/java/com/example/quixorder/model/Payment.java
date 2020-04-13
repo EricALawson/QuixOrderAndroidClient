@@ -1,42 +1,47 @@
 package com.example.quixorder.model;
 
-import androidx.annotation.NonNull;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
 
-public class Payment
-{
-    private final String id;
-    private final Order orderNum;
-    private final String pay;
+import java.util.Calendar;
+import java.util.Date;
+
+public class Payment {
+    private final DocumentReference orderID;
+    private final Date receivedTime;
     private final double total;
+    private final String type;
 
-    public Payment(String id, Order oNum, String pType, double tot)
-    {
-        this.id = id;
-        this.orderNum = oNum;
-        this.pay = pType;
-        this.total = tot;
+    public Payment() {
+        orderID = null;
+        receivedTime = null;
+        total = 0;
+        type = "";
     }
 
-    public String getId() {
-        return id;
+    public DocumentReference getOrderID() {
+        return orderID;
     }
 
-    public String getPaymentType() {
-        return pay;
+    public Date getReceivedTime() {
+        return receivedTime;
     }
 
-    public Order getOrder() {
-        return orderNum;
+    public Calendar getCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(getReceivedTime());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
     }
 
     public double getTotal() {
         return total;
     }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "Payment: "+this.id+" Order: "+this.orderNum;
+    public String getType() {
+        return type;
     }
 }
-
