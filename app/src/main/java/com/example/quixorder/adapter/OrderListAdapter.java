@@ -50,6 +50,14 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
                     docRef.update(data);
                 }
             });
+            btnDelay.setOnClickListener(view -> {
+                HashMap<String, Object> delay = new HashMap<>();
+                delay.put("order", order.getDocumentId());
+                delay.put("status", "not viewed");
+                delay.put("time", new Date());
+                delay.put("table", order.getTable());
+                FirebaseFirestore.getInstance().collection("order_delays").add(delay);
+            });
         }
 
         void bindOrder(Order o) {
