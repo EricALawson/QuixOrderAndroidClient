@@ -49,12 +49,15 @@ public class TableActivity extends AppCompatActivity {
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
     CollectionReference fdList;
     List<MenuItem> db = new ArrayList<MenuItem>();
+    private String account_name;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        account_name = getIntent().getStringExtra("username");
+
         setContentView(R.layout.table);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         //recyclerView.setHasFixedSize(true);

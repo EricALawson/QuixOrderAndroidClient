@@ -67,16 +67,16 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
                                     switch(act.getType()) {
                                         case "Owner":
-                                            startActivity(new Intent(LoginActivity.this, OwnerActivity.class));
+                                            startActivity(new Intent(LoginActivity.this, OwnerActivity.class).putExtra("username", act.getUsername()) );
                                             break;
                                         case "Customer":
-                                            startActivity(new Intent(LoginActivity.this, TableActivity.class));
+                                            startActivity(new Intent(LoginActivity.this, TableActivity.class).putExtra("username", act.getUsername()) );
                                             break;
                                         case "Server":
-                                            startActivity(new Intent(LoginActivity.this, ServerActivity.class));
+                                            startActivity(new Intent(LoginActivity.this, ServerActivity.class).putExtra("username", act.getUsername()) );
                                             break;
                                         case "Cook":
-                                            startActivity(new Intent(LoginActivity.this, CookActivity.class));
+                                            startActivity(new Intent(LoginActivity.this, CookActivity.class).putExtra("username", act.getUsername()) );
                                             break;
                                         default:
                                             Log.e("Login Failed", "Account type not recognized: " + act.getType());
