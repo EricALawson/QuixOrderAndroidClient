@@ -29,7 +29,10 @@ import com.example.quixorder.model.MenuItem;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
@@ -39,6 +42,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.xml.transform.Result;
 
 public class TableActivity extends AppCompatActivity {
@@ -86,6 +90,24 @@ public class TableActivity extends AppCompatActivity {
         //fdList = fb.collection("menu_items");
 
         findViewById(R.id.lOut).setOnClickListener(logOut);
+
+        fb.collection("order_delays")
+                .whereEqualTo("table", account_name)
+                .whereEqualTo("status", "not viewed")
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+            List<DocumentSnapshot> snaps = queryDocumentSnapshots.getDocuments();
+            if (snaps.size() > 0) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Your order has been delayed",
+                        Toast.LENGTH_LONG
+                ).show();
+
+                for (DocumentSnapshot snap : snaps) {
+                    snap.getReference().update("status", "viewed");
+                }
+            }
+        });
     }
 
         private View.OnClickListener logOut = new View.OnClickListener() {
