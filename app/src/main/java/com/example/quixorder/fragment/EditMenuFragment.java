@@ -88,19 +88,22 @@ public class EditMenuFragment
 
         // Get views of elements in adding item type
         itemTypeName = addItemType.findViewById(R.id.textView1);
-        itemTypeAdd = addItemType.findViewById(R.id.imageView1);
+        itemTypeAdd = addItemType.findViewById(R.id.itemTypeImageView1);
 
         // Gets views of elements in adding menu item
-        menuItemIcon = addMenuItem.findViewById(R.id.imageView1);
+        menuItemIcon = addMenuItem.findViewById(R.id.menuItemImageView1);
         menuItemName = addMenuItem.findViewById(R.id.textView1);
         menuItemDescription = addMenuItem.findViewById(R.id.textView2);
         menuItemPrice = addMenuItem.findViewById(R.id.textView3);
-        menuItemAdd = addMenuItem.findViewById(R.id.imageView2);
+        menuItemAdd = addMenuItem.findViewById(R.id.menuItemImageView2);
 
-        // Load click listeners
+        // Load click listeners for trying to add new items
         newItemType.setOnClickListener(this);
         newMenuItem.setOnClickListener(this);
+
+        // Load click listeners in views of new items
         itemTypeAdd.setOnClickListener(this);
+        menuItemIcon.setOnClickListener(this);
         menuItemAdd.setOnClickListener(this);
 
         return view;
@@ -245,6 +248,10 @@ public class EditMenuFragment
         });
     }
 
+    public void onMenuItemImageClick() {
+        Log.d("onMenuItemImageClick", "click");
+    }
+
     public void onAddItemTypeClick() {
         Log.d("onAddItemTypeClick", "click");
         if (validateForm(getEditTextViews((ViewGroup) addItemType))) {
@@ -357,12 +364,17 @@ public class EditMenuFragment
                 addMenuItem.setVisibility(View.VISIBLE);
                 break;
 
-            case R.id.imageView1:
+            case R.id.itemTypeImageView1:
                 // Update new item type
                 onAddItemTypeClick();
                 break;
 
-            case R.id.imageView2:
+            case R.id.menuItemImageView1:
+                // Add new menu item image
+                onMenuItemImageClick();
+                break;
+
+            case R.id.menuItemImageView2:
                 // Update new menu item
                 onAddMenuItemClick();
                 break;
