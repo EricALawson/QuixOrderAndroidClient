@@ -102,7 +102,7 @@ public class EmployeeActivityFragment extends Fragment implements AdapterView.On
         // Set up view of all task list
         taskView.setHasFixedSize(true);
         taskLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        taskAdapter = new TaskAdapter(orderList);
+        taskAdapter = new TaskAdapter(orderList, employeeTypeSpinner.getSelectedItem().toString());
         taskView.setLayoutManager(taskLayoutManager);
         taskView.setAdapter(taskAdapter);
     }
