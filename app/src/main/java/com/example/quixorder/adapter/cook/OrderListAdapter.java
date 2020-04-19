@@ -1,4 +1,4 @@
-package com.example.quixorder.adapter;
+package com.example.quixorder.adapter.cook;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -60,7 +60,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             });
         }
 
-        void bindOrder(Order o) {
+        public void bindOrder(Order o) {
             order = o;
             tableNum.setText(order.getTable());
             orderItemList.setLayoutManager(new LinearLayoutManager(this.itemView.getContext()));

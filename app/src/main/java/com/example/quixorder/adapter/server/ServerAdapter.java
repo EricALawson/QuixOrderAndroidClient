@@ -1,4 +1,4 @@
-package com.example.quixorder.adapter;
+package com.example.quixorder.adapter.server;
 
 import android.app.Activity;
 
@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.quixorder.R;
+import com.example.quixorder.adapter.TableAdapter;
 import com.example.quixorder.model.Account;
 import com.example.quixorder.model.Table;
 import com.google.firebase.firestore.CollectionReference;

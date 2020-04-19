@@ -1,4 +1,4 @@
-package com.example.quixorder.adapter;
+package com.example.quixorder.adapter.cook;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import com.example.quixorder.model.MenuItem;
 
 import java.util.List;
 
-class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.MenuItemViewHolder> {
+public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.MenuItemViewHolder> {
     private List<MenuItem> items;
 
     public OrderItemListAdapter(List<MenuItem> orderMenuItems) {

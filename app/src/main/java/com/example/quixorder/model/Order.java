@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.quixorder.adapter.server.IServerTask;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Order {
+public class Order implements IServerTask {
     private String table;
     private Date startTime;
     private Date cookedTime;
@@ -92,4 +93,9 @@ public class Order {
     }
 
     public String getStatus() { return status; }
+
+    @Override
+    public int getType() {
+        return IServerTask.ORDER;
+    }
 }

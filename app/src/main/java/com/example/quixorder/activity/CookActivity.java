@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Intent;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.quixorder.adapter.OrderListAdapter;
 import com.example.quixorder.OrderListViewModel;
+import com.example.quixorder.adapter.cook.OrderListAdapter;
 import com.example.quixorder.R;
 import com.example.quixorder.model.Order;
 import com.google.firebase.firestore.FirebaseFirestore;
