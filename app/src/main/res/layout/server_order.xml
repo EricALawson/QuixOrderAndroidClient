@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/server_order"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    style="@style/OrderHolder">
 
-    android:id="@+id/order"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/orderControl"
@@ -21,6 +19,7 @@
 
         <TextView
             android:id="@+id/tableNumber"
+            style="@style/WhiteText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -29,6 +28,7 @@
 
         <Button
             android:id="@+id/btnDone"
+            style="@style/GradientButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

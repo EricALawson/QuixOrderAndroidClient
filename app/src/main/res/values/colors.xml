@@ -14,8 +14,7 @@
     <color name="darkText">#442244</color>
     <color name="lavender">#B9BFEF</color>
     <color name="darkLavender">#8B74AD</color>
-    <color name="buttonShadow">#ff000000</color>
-    <color name="shadowTransparent">#55000000</color>
+    <color name="blueOrderBackground">#7953A9</color>
 
     <!--Text Colors-->
     <color name="white">#ccffffff</color>

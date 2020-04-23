@@ -5,14 +5,17 @@
     android:id="@+id/cook_order"
     style="@style/OrderHolder"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:layout_margin="10dp"
+    >
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/orderControl"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:gravity="top"
 
         app:layout_constraintBottom_toTopOf="@+id/orderItemList"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,37 +25,55 @@
         <TextView
             android:id="@+id/tableNumber"
             style="@style/WhiteText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Table Number"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="left"
+            android:padding="10dp"
+            android:text="Table"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnDelay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnDelay"
             style="@style/GradientButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Delayed" />
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Delayed"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnDone"
+            app:layout_constraintStart_toEndOf="@+id/tableNumber" />
 
         <Button
             android:id="@+id/btnDone"
             style="@style/GradientButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Done" />
+            android:text="Done"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnDelay" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/orderItemList"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/orderControl">
+        app:layout_constraintTop_toBottomOf="@+id/orderControl"
+        android:layout_margin="5dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 

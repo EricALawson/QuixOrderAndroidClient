@@ -26,6 +26,6 @@
 
     <style name="OrderHolder">
         <item name="android:elevation">10dp</item>
-        <item name="android:background">@color/lavender</item>
+        <item name="android:background">@color/blueOrderBackground</item>
     </style>
 </resources>
