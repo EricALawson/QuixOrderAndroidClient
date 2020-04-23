@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cook_order"
+    style="@style/OrderHolder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:id="@+id/orderControl"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
         app:layout_constraintBottom_toTopOf="@+id/orderItemList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,6 +21,7 @@
 
         <TextView
             android:id="@+id/tableNumber"
+            style="@style/WhiteText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -26,6 +30,7 @@
 
         <Button
             android:id="@+id/btnDelay"
+            style="@style/GradientButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -33,6 +38,7 @@
 
         <Button
             android:id="@+id/btnDone"
+            style="@style/GradientButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

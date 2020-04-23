@@ -5,5 +5,27 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:buttonStyle">@style/GradientButton</item>
+        <item name="buttonStyle">@style/GradientButton</item>
+    </style>
+
+    <style name="GradientButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_gradient</item>
+        <item name="android:radius">50dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:padding"> 10dp</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/darkText</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <style name="WhiteText" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="OrderHolder">
+        <item name="android:elevation">10dp</item>
+        <item name="android:background">@color/lavender</item>
     </style>
 </resources>

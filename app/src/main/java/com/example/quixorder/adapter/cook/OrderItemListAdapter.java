@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,8 +35,7 @@ public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdap
         }
 
         void bindMenuItem(MenuItem item) {
-            //TODO: Figure out image data type.
-            //image.setImageBitmap();
+            Picasso.get().load(item.getImage()).into(image);
             Log.d("Binding MenuItem", item.toString());
             name.setText(item.getName());
         }
@@ -45,7 +45,7 @@ public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdap
     @Override
     public MenuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("OrderItemListAdapter", "onCreateViewHolder called");
-        ViewGroup v = (LinearLayout) LayoutInflater.from(parent.getContext())
+        ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.menu_item, parent, false);
 
         return new MenuItemViewHolder(v);
