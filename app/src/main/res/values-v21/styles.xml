@@ -9,7 +9,7 @@
         <item name="buttonStyle">@style/GradientButton</item>
     </style>
 
-    <style name="GradientButton" parent="Widget.AppCompat.Button">
+    <style name="GradientButton" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/button_gradient</item>
         <item name="android:radius">50dp</item>
         <item name="android:layout_margin">5dp</item>
