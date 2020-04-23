@@ -75,12 +75,8 @@
         app:layout_constraintEnd_toStartOf="@id/guidelineRight"
         android:weightSum="1">
 
-        <FrameLayout
-            style="@style/SpinnerFrame"
-            app:layout_constraintStart_toStartOf="@id/parent" >
-            <Spinner
-                style="@style/Spinner"
-                android:id="@+id/spinner_type" />
+        <FrameLayout style="@style/SpinnerFrame">
+            <Spinner style="@style/Spinner" android:id="@+id/spinner_type" />
         </FrameLayout>
 
         <Button
