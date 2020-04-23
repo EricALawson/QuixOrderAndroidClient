@@ -6,12 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="1dp">
 
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:background="@drawable/bg_edit_menu">
+        android:background="@drawable/bg_item"
+        android:padding="4dp">
 
         <ImageView
             android:id="@+id/menuItemImageView1"

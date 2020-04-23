@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:background="@drawable/bg_edit_menu">
+        android:background="@drawable/bg_item">
 
         <ImageView
             android:id="@+id/imageView1"

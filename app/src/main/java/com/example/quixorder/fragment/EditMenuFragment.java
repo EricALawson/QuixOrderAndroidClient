@@ -416,6 +416,7 @@ public class EditMenuFragment
 
     @Override
     public void onClick(View view) {
+        Log.d("test", Integer.toString(view.getId()));
         switch(view.getId()) {
             case R.id.newItemType:
                 Log.d("onNewItemTypeClick", "click");
