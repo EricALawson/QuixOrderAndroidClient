@@ -51,7 +51,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         viewHolder.textView1.setText(currentItem.getName());
         viewHolder.textView2.setText(currentItem.getDescription());
         viewHolder.textView3.setText("$" + currentItem.getPrice());
-        viewHolder.imageView2.setImageResource(R.drawable.ic_remove_circle_blk);
+        viewHolder.imageView2.setImageResource(R.drawable.ic_remove_circle_dk);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

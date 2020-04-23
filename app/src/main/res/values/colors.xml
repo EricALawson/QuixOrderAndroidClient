@@ -32,15 +32,10 @@
     <color name="loginFormDetailsLight">#1affffff</color>
     <color name="loginFormDetailsMedium">#66ffffff</color>
 
-    <!-- Item Type -->
-    <color name="itemUnselected_lightPurple">#d8c7ff</color>
-    <color name="itemUnselected_lighterPurple">#e8deff</color>
-    <color name="itemUnselectedFont_darkGray">#222222</color>
-    <color name="itemSelected_darkPurple">#1d1033</color>
-    <color name="itemSelectedFont_white">#FFFFFF</color>
+    <!-- Item and Add/Remove Button Colors -->
+    <color name="lightPurple">#d8c7ff</color>
+    <color name="lighterPurple">#e8deff</color>
+    <color name="darkGray">#222222</color>
+    <color name="darkPurple">#1d1033</color>
 
-    <!-- Add and Remove button colors -->
-    <color name="add_purple">#c86dd7</color>
-    <color name="removeUnselected_darkPurple">#1d1033</color>
-    <color name="removeSelected_lightPurple">#d8c7ff</color>
 </resources>

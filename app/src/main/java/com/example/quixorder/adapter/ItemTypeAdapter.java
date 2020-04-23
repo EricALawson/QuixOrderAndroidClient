@@ -55,13 +55,13 @@ public class ItemTypeAdapter extends RecyclerView.Adapter<ItemTypeAdapter.ViewHo
         int fontColor;
         int removeColor;
         if (i == selectedItem) {
-            backgroundColor = R.color.itemSelected_darkPurple;
-            fontColor = R.color.itemSelectedFont_white;
-            removeColor = R.drawable.ic_remove_circle_wht;
+            backgroundColor = R.color.darkPurple;
+            fontColor = R.color.white;
+            removeColor = R.drawable.ic_remove_circle_lt;
         } else {
-            backgroundColor = (i % 2 == 0) ? R.color.itemUnselected_lightPurple : R.color.itemUnselected_lighterPurple;
-            fontColor = R.color.itemUnselectedFont_darkGray;
-            removeColor = R.drawable.ic_remove_circle_blk;
+            backgroundColor = (i % 2 == 0) ? R.color.lightPurple : R.color.lighterPurple;
+            fontColor = R.color.darkGray;
+            removeColor = R.drawable.ic_remove_circle_dk;
         }
 
         // Set views
