@@ -30,34 +30,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/guidelineLeft" >
 
-        <FrameLayout
-            android:id="@+id/employeeTypeFrameLayout"
-            android:layout_width="114dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/spinnerLight" >
-
-            <Spinner
-                android:id="@+id/employeeTypeSpinner"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent" />
-
+        <FrameLayout style="@style/SpinnerFrame" android:id="@+id/employeeTypeFrameLayout">
+            <Spinner style="@style/Spinner" android:id="@+id/employeeTypeSpinner" />
         </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/employeeListFrameLayout"
+        <FrameLayout style="@style/SpinnerFrame" android:id="@+id/employeeListFrameLayout"
             android:layout_width="200dp"
             android:layout_height="46dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/spinnerLight" >
-
-            <Spinner
-                android:id="@+id/employeeListSpinner"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent" />
-
+            android:layout_marginEnd="16dp" >
+            <Spinner style="@style/Spinner" android:id="@+id/employeeListSpinner" />
         </FrameLayout>
 
     </LinearLayout>
