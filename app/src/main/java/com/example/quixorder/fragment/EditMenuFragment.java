@@ -20,7 +20,6 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quixorder.R;
@@ -38,9 +37,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Document;
-
-import java.net.URI;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;

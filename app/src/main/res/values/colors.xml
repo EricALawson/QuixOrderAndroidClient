@@ -25,7 +25,7 @@
     <color name="spinnerLight">#ccffffff</color>
 
     <!-- Graph Color -->
-    <color name="graphLight">#ccffffff</color>
+    <color name="graphLight">#ffffff</color>
 
     <!-- Login Colors #aarrggbb-->
     <color name="loginFormDetails">#ccffffff</color>
