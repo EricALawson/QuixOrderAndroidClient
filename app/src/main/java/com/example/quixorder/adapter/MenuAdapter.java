@@ -2,7 +2,6 @@ package com.example.quixorder.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -10,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quixorder.R;
+import com.example.quixorder.activity.TableActivity;
 import com.example.quixorder.fragment.MenuFragment.OnListFragmentInteractionListener;
 //import com.example.quixorder.R;
 //import com.example.quixorder.dummy.DummyContent.DummyItem;
@@ -35,18 +36,11 @@ import java.util.List;
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     private FirebaseFirestore fb;
     private final List<MenuItem> mValues;
-    //CollectionReference fdList = fb.collection("menu_items");
-    //private final Context c;
-    //private final ArrayList<String> menuNames;
-    // private final ArrayList menuPics;
     private final OnListFragmentInteractionListener mListener;
 
-    public MenuAdapter(List<MenuItem> items/*, Context here*/, OnListFragmentInteractionListener listener){/* ArrayList name,*/// ArrayList imgs) {
+    public MenuAdapter(List<MenuItem> items/*, Context here*/, OnListFragmentInteractionListener listener){
         mValues = items;
-        //c = here;
         mListener = listener;
-        //menuNames = name;
-        //menuPics = imgs;
     }
 
     @Override
@@ -63,14 +57,18 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         //holder.itemName.setText(mValues.get(position).getName());
        // holder.priceView.setText(String.valueOf(mValues.get(position).getPrice()));
         holder.bindMenuItem(mValues.get(position));
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+
+        holder.itemPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
+                //if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     //mListener.onListFragmentInteraction(holder.mItem);
-                }
+                // Add menu item to order
+
+                    Toast.makeText(v.getContext(), "Clicked at "+position, Toast.LENGTH_SHORT).show();
+               // }
             }
         });
     }
@@ -107,22 +105,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             Picasso.get().load(item.getImage()).into(itemPic);
             priceView.setText("$"+String.valueOf(item.getPrice()));
         }
-
-       /* public Bitmap getBitmapFromURL(String src) {
-            try {
-                URL url = new URL(src);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-//                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                return myBitmap;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }*/
-
     }
 }
 
