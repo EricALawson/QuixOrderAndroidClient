@@ -42,7 +42,6 @@ public class ServerActivity extends AppCompatActivity {
     private void initializeOrderList() {
         orderList = findViewById(R.id.orderItems);
         orderList.setHasFixedSize(true);
-        orderList.addItemDecoration(new DividerItemDecoration(orderList.getContext(), DividerItemDecoration.VERTICAL));
 
         viewModel = ViewModelProviders.of(this).get(ServerTaskViewModel.class);
         viewModel.setOrderQuery( firestore.collection("orders").whereEqualTo("server", account_name).whereEqualTo("status", "ready to serve") );
