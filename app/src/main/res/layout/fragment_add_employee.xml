@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="24dp"
+        app:layout_constraintGuide_percent="0.25"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -20,86 +20,78 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="24dp"
+        app:layout_constraintGuide_percent="0.75"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"
         />
 
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_marginTop="80dp"
-        android:src="@drawable/ic_add_employee"
-        app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/guidelineTop"
+        android:src="@drawable/ic_add_employee"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/guidelineTop"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        android:paddingBottom="10dp"
+        android:text=" | New User"
+        android:textSize="50dp"
+        android:textColor="@color/white"
+        />
 
     <EditText
+        style="@style/EditTextUsername"
         android:id="@+id/username"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/et_bg"
-        android:hint="Username"
-        android:textColorHint="@color/loginFormDetails"
-        android:padding="16dp"
         app:layout_constraintEnd_toStartOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintTop_toBottomOf="@id/icon"
         />
 
     <EditText
+        style="@style/EditTextPassword"
         android:id="@+id/password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:inputType="textPassword"
-        android:background="@drawable/et_bg"
-        android:hint="Password"
-        android:textColorHint="@color/loginFormDetails"
-        android:padding="16dp"
-        android:drawableRight="@drawable/ic_eye"
         app:layout_constraintEnd_toStartOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintTop_toBottomOf="@id/username"
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/password"
         app:layout_constraintStart_toEndOf="@id/guidelineLeft"
-        app:layout_constraintEnd_toStartOf="@id/guidelineRight">
+        app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+        android:weightSum="1">
 
-        <FrameLayout
-            android:layout_width="114dp"
-            android:layout_height="46dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/spinnerLight"
-            app:layout_constraintStart_toStartOf="@id/parent">
-
-            <Spinner
-                android:id="@+id/spinner_type"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent" />
-
+        <FrameLayout style="@style/SpinnerFrame">
+            <Spinner style="@style/Spinner" android:id="@+id/spinner_type" />
         </FrameLayout>
 
         <Button
             android:id="@+id/btn_sign_up"
-            android:layout_width="228dp"
-            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/btn_bg"
+            app:layout_constraintEnd_toStartOf="@id/spinner_type"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/password"
             android:text="Sign Up"
-            android:textAllCaps="false"
-            android:textColor="@color/loginFormDetailsMedium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/spinner_type" />
+            />
 
     </LinearLayout>
 

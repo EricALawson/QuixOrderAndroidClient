@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "817610044218-hhdp9ndi5079f106qtj8p0fl8614kr9v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quixorder",
+            "certificate_hash": "c9d609bdf5f6e3ac90217fd5ab4fca92784d0253"
+          }
+        },
+        {
           "client_id": "817610044218-044fi5ekjnmtn65o8fhodkrlm4kc9d73.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

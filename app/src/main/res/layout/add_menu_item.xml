@@ -6,25 +6,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="1dp">
 
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:background="@drawable/bg_edit_menu">
+        android:background="@drawable/bg_item"
+        android:padding="4dp">
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/menuItemImageView1"
             android:src="@drawable/ic_insert_photo"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_width="225dp"
+            android:layout_height="225dp" />
+
+        <LinearLayout
+            android:layout_width="225dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/menuItemImageView1">
+
+            <Button
+                android:id="@+id/menuItemUploadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Select Image"
+                android:textSize="24sp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageView1"
-            android:layout_toRightOf="@id/imageView1"
-            android:layout_alignTop="@id/imageView1"
+            android:layout_toEndOf="@id/menuItemImageView1"
+            android:layout_toRightOf="@id/menuItemImageView1"
+            android:layout_alignTop="@id/menuItemImageView1"
             android:orientation="vertical">
 
             <EditText
@@ -42,7 +55,15 @@
                 android:layout_height="wrap_content"
                 android:hint="Description"
                 android:textColor="@android:color/black"
-                android:textSize="20sp" />
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                android:hint="URL"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -76,10 +97,10 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/menuItemImageView2"
                 android:src="@drawable/ic_add_circle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="right"
                 android:layout_below="@id/textView3"
                 android:padding="2dp"

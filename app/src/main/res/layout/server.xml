@@ -28,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/et_bg"
+        android:background="@drawable/bg_edit_text"
         android:hint="Server"
         android:inputType="textEmailAddress"
         android:padding="16dp"

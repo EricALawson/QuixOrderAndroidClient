@@ -7,7 +7,7 @@
 
     <!-- All job titles -->
     <string-array name="types">
-        <item>Table</item>
+        <item>Customer</item>
         <item>Server</item>
         <item>Cook</item>
     </string-array>

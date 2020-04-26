@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.quixorder.R;
 import com.example.quixorder.model.MenuItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -42,11 +43,15 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.ViewHo
         MenuItem currentItem = menuItemList.get(i);
 
         // Set views
-        viewHolder.imageView.setImageResource(R.drawable.ic_restaurant_menu_blk);
+        Picasso.get()
+                .load(currentItem.getImage())
+                .placeholder(R.drawable.ic_insert_photo)
+                .error(R.drawable.ic_broken_photo)
+                .into(viewHolder.imageView);
         viewHolder.textView1.setText(currentItem.getName());
         viewHolder.textView2.setText(currentItem.getDescription());
         viewHolder.textView3.setText("$" + currentItem.getPrice());
-        viewHolder.imageView2.setImageResource(R.drawable.ic_remove_circle_blk);
+        viewHolder.imageView2.setImageResource(R.drawable.ic_remove_circle_dk);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

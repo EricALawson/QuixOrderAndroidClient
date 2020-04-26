@@ -1,5 +1,8 @@
 package com.example.quixorder.fragment;
 
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,11 +16,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.quixorder.FormEditor;
 import com.example.quixorder.R;
 import com.example.quixorder.adapter.ItemTypeAdapter;
 import com.example.quixorder.adapter.MenuItemAdapter;
@@ -29,10 +34,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class EditMenuFragment
@@ -41,8 +49,10 @@ public class EditMenuFragment
 
     // Declare firestore variables
     private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
+    private StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploads");
     private CollectionReference itemTypes = firebase.collection("item_types");
     private CollectionReference menuItems = firebase.collection("menu_items");
+
 
     // Declare recyclerview variables
     private View view;
@@ -66,10 +76,16 @@ public class EditMenuFragment
 
     // Declare add and remove menu item variables
     private ImageView menuItemIcon;
+    private Button menuItemUploadButton;
     private EditText menuItemName;
     private EditText menuItemDescription;
+    private EditText menuItemURL;
     private EditText menuItemPrice;
     private ImageView menuItemAdd;
+
+    // Image variables
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri uri;
 
     @Nullable
     @Override
@@ -88,19 +104,24 @@ public class EditMenuFragment
 
         // Get views of elements in adding item type
         itemTypeName = addItemType.findViewById(R.id.textView1);
-        itemTypeAdd = addItemType.findViewById(R.id.imageView1);
+        itemTypeAdd = addItemType.findViewById(R.id.itemTypeImageView1);
 
         // Gets views of elements in adding menu item
-        menuItemIcon = addMenuItem.findViewById(R.id.imageView1);
+        menuItemIcon = addMenuItem.findViewById(R.id.menuItemImageView1);
+        menuItemUploadButton = addMenuItem.findViewById(R.id.menuItemUploadButton);
         menuItemName = addMenuItem.findViewById(R.id.textView1);
         menuItemDescription = addMenuItem.findViewById(R.id.textView2);
+        menuItemURL = addMenuItem.findViewById(R.id.textView5);
         menuItemPrice = addMenuItem.findViewById(R.id.textView3);
-        menuItemAdd = addMenuItem.findViewById(R.id.imageView2);
+        menuItemAdd = addMenuItem.findViewById(R.id.menuItemImageView2);
 
-        // Load click listeners
+        // Load click listeners for trying to add new items
         newItemType.setOnClickListener(this);
         newMenuItem.setOnClickListener(this);
+
+        // Load click listeners in views of new items
         itemTypeAdd.setOnClickListener(this);
+        menuItemUploadButton.setOnClickListener(this);
         menuItemAdd.setOnClickListener(this);
 
         return view;
@@ -205,14 +226,57 @@ public class EditMenuFragment
         String menuItem = task.getDocuments().get(0).getId();
 
         // Load delete listener
-        menuItems.document(menuItem)
-                .delete()
+        menuItems.document(menuItem).delete()
                 .addOnSuccessListener(removeTask -> {
                     Log.d("RemoveSuccess", menuItem);
                 })
                 .addOnFailureListener(error -> {
                     Log.e("RemoveFailed", error.getMessage());
                 });
+    }
+
+    public void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver contentResolver = getContext().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    public void uploadFile() {
+        StorageReference fileReference = storageReference.child(System.currentTimeMillis()
+        + "." + getFileExtension(uri));
+
+        fileReference.putFile(uri)
+                .addOnSuccessListener(task -> {
+                    task.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                        menuItemURL.setText(uri.toString());
+                    });
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("UploadFailed", error.getMessage());
+                });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            uri = data.getData();
+            Picasso.get()
+                    .load(uri)
+                    .placeholder(R.drawable.ic_insert_photo)
+                    .error(R.drawable.ic_broken_photo)
+                    .into(menuItemIcon);
+            uploadFile();
+        }
     }
 
     @Override
@@ -245,9 +309,14 @@ public class EditMenuFragment
         });
     }
 
+    public void onMenuItemImageClick() {
+        Log.d("onMenuItemImageClick", "click");
+        openFileChooser();
+    }
+
     public void onAddItemTypeClick() {
         Log.d("onAddItemTypeClick", "click");
-        if (validateForm(getEditTextViews((ViewGroup) addItemType))) {
+        if (FormEditor.validateForm(FormEditor.getEditTextViews((ViewGroup) addItemType))) {
             // Create ItemType object with text fields
             ItemType itemType = new ItemType(itemTypeName.getText().toString());
 
@@ -263,7 +332,7 @@ public class EditMenuFragment
                             // Update views
                             newItemType.setVisibility(View.VISIBLE);
                             addItemType.setVisibility(View.GONE);
-                            clearForm((ViewGroup) addItemType);
+                            FormEditor.clearForm((ViewGroup) addItemType);
                         }
                     })
                     .addOnFailureListener(error -> {
@@ -276,13 +345,13 @@ public class EditMenuFragment
 
     public void onAddMenuItemClick() {
         Log.d("onAddMenuItemClick", "click");
-        if (validateForm(getEditTextViews((ViewGroup) addMenuItem))) {
+        if (FormEditor.validateForm(FormEditor.getEditTextViews((ViewGroup) addMenuItem))) {
             Log.d("Test", itemTypeAdapter.getSelectedItem().getType());
 
             // Create MenuItem object with text fields
             MenuItem menuItem = new MenuItem(
                     menuItemDescription.getText().toString(),
-                    "urlCode",
+                    menuItemURL.getText().toString(),
                     menuItemName.getText().toString(),
                     Double.parseDouble(menuItemPrice.getText().toString()),
                     itemTypeAdapter.getSelectedItem().getType());
@@ -299,7 +368,8 @@ public class EditMenuFragment
                             // Update views
                             newMenuItem.setVisibility(View.VISIBLE);
                             addMenuItem.setVisibility(View.GONE);
-                            clearForm((ViewGroup) addMenuItem);
+                            menuItemIcon.setImageResource(R.drawable.ic_insert_photo);
+                            FormEditor.clearForm((ViewGroup) addMenuItem);
                         }
                     })
                     .addOnFailureListener(error -> {
@@ -344,6 +414,7 @@ public class EditMenuFragment
 
     @Override
     public void onClick(View view) {
+        Log.d("test", Integer.toString(view.getId()));
         switch(view.getId()) {
             case R.id.newItemType:
                 Log.d("onNewItemTypeClick", "click");
@@ -357,55 +428,20 @@ public class EditMenuFragment
                 addMenuItem.setVisibility(View.VISIBLE);
                 break;
 
-            case R.id.imageView1:
+            case R.id.itemTypeImageView1:
                 // Update new item type
                 onAddItemTypeClick();
                 break;
 
-            case R.id.imageView2:
+            case R.id.menuItemUploadButton:
+                // Add new menu item image
+                onMenuItemImageClick();
+                break;
+
+            case R.id.menuItemImageView2:
                 // Update new menu item
                 onAddMenuItemClick();
                 break;
-        }
-    }
-
-    public ArrayList<EditText> getEditTextViews(ViewGroup group) {
-        ArrayList<EditText> views = new ArrayList<>();
-        for (int i = 0; i < group.getChildCount(); i++) {
-            View view = group.getChildAt(i);
-            if (view instanceof ViewGroup) {
-                views.addAll(getEditTextViews((ViewGroup) view));
-                continue;
-            }
-            if (view instanceof EditText) {
-                views.add((EditText) view);
-            }
-        }
-
-        return views;
-    }
-
-    public boolean validateForm(ArrayList<EditText> views) {
-        for (EditText view : views) {
-            if (view.getText().toString().equals("")) {
-                Log.d("validateForm", "false");
-                return false;
-            }
-        }
-        Log.d("validateForm", "true");
-        return true;
-    }
-
-    public void clearForm(ViewGroup group) {
-        for (int i = 0; i < group.getChildCount(); i++) {
-            View view = group.getChildAt(i);
-            if (view instanceof ViewGroup) {
-                clearForm((ViewGroup) view);
-                continue;
-            }
-            if (view instanceof EditText) {
-                ((EditText) view).getText().clear();
-            }
         }
     }
 }
