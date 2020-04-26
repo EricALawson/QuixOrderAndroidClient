@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/table_menu"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:name="com.example.quixorder.activity.TableActivity"
+        android:layout_width="379dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:fillViewport="true"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:context=".activity.TableActivity"
+        tools:listitem="@layout/table_menu_item" />
+</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,7 @@ public class Order {
     private Date cookedTime;
     private Date servedTime;
     private ArrayList<DocumentReference> orderItems;
-    private ArrayList<MenuItem> orderMenuItems;
+    public ArrayList<MenuItem> orderMenuItems;
     private String server;
     private MutableLiveData<List<MenuItem>> menuItems;
     private String documentId;
@@ -86,6 +86,8 @@ public class Order {
     public String getServer() {
         return server;
     }
+
+    public List<MenuItem> getOrderItems(){ return orderMenuItems; }
 
     public MutableLiveData<List<MenuItem>> getMenuItems() {
         return menuItems;
