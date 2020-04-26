@@ -4,6 +4,7 @@
     android:id="@+id/server_order"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="5dp"
     style="@style/OrderHolder">
 
 
@@ -31,14 +32,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Served" />
-
+            android:text="Served"
+            />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/orderItemList"
         android:layout_width="0dp"
+        android:background="@color/darkOverlay"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/orderControl">

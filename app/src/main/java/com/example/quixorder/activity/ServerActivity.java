@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +42,7 @@ public class ServerActivity extends AppCompatActivity {
     private void initializeOrderList() {
         orderList = findViewById(R.id.orderItems);
         orderList.setHasFixedSize(true);
+        orderList.addItemDecoration(new DividerItemDecoration(orderList.getContext(), DividerItemDecoration.VERTICAL));
 
         viewModel = ViewModelProviders.of(this).get(ServerTaskViewModel.class);
         viewModel.setOrderQuery( firestore.collection("orders").whereEqualTo("server", account_name).whereEqualTo("status", "ready to serve") );

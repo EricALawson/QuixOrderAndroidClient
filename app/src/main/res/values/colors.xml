@@ -15,6 +15,7 @@
     <color name="lavender">#B9BFEF</color>
     <color name="darkLavender">#8B74AD</color>
     <color name="blueOrderBackground">#7953A9</color>
+    <color name="darkOverlay">#33442244</color>
 
     <!--Text Colors-->
     <color name="white">#ccffffff</color>
