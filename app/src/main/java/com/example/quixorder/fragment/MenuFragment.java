@@ -52,7 +52,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class MenuFragment extends Fragment {
+public class MenuFragment extends Fragment implements MenuAdapter.OnAddMenuItemListener {
 
    // private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
 
@@ -151,7 +151,7 @@ public class MenuFragment extends Fragment {
                         db.add(document.toObject(MenuItem.class));
                         //order.add(document.toObject(MenuItem.class));
                         Log.d("Good", document.getId() + " => " + document.getData());
-                        ad = new MenuAdapter(db, mListener);
+                        ad = new MenuAdapter(db, mListener, MenuFragment.this::onAddMenuItemClick);
                         //ad2 = new CheckoutAdapter(order, cListen);
                         //orderView.setAdapter(ad2);
                         recyclerView.setAdapter(ad);
@@ -298,6 +298,12 @@ public class MenuFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onAddMenuItemClick(int position, MenuItem item) {
+        Toast.makeText(getContext(), "Clicked at "+position, Toast.LENGTH_SHORT).show();
+        ((TableActivity)getActivity()).order.add(item);
     }
 
     /**

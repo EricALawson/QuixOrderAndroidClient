@@ -37,10 +37,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     private FirebaseFirestore fb;
     private final List<MenuItem> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private final OnAddMenuItemListener onAddMenuItemListener;
 
-    public MenuAdapter(List<MenuItem> items/*, Context here*/, OnListFragmentInteractionListener listener){
+    public MenuAdapter(List<MenuItem> items/*, Context here*/, OnListFragmentInteractionListener listener, OnAddMenuItemListener onAddMenuItemListener){
         mValues = items;
         mListener = listener;
+        this.onAddMenuItemListener = onAddMenuItemListener;
     }
 
     @Override
@@ -66,8 +68,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
                     // fragment is attached to one) that an item has been selected.
                     //mListener.onListFragmentInteraction(holder.mItem);
                 // Add menu item to order
-
-                    Toast.makeText(v.getContext(), "Clicked at "+position, Toast.LENGTH_SHORT).show();
+                    onAddMenuItemListener.onAddMenuItemClick(position, mValues.get(position));
                // }
             }
         });
@@ -105,6 +106,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             Picasso.get().load(item.getImage()).into(itemPic);
             priceView.setText("$"+String.valueOf(item.getPrice()));
         }
+    }
+
+    public interface OnAddMenuItemListener {
+        void onAddMenuItemClick(int position, MenuItem item);
     }
 }
 

@@ -169,7 +169,8 @@ public class CheckoutFragment extends Fragment //implements View.OnClickListener
 
         order = v.findViewById(R.id.checkoutList);
         //check.add(new MenuItem("mouth watering beef street tacos","https://dinnerthendessert.com/wp-content/uploads/2019/03/Carne-Asada-Tacos-500x500.jpg", "Taco", 4.99,/* 1,*/ "Entree"));
-        check.add(new MenuItem("mouth watering beef street tacos","https://dinnerthendessert.com/wp-content/uploads/2019/03/Carne-Asada-Tacos-500x500.jpg", "Taco", 4.99, "Entree"));
+        check = ((TableActivity)getActivity()).order;
+            //check.add(new MenuItem("mouth watering beef street tacos","https://dinnerthendessert.com/wp-content/uploads/2019/03/Carne-Asada-Tacos-500x500.jpg", "Taco", 4.99, "Entree"));
 
         ad = new CheckoutAdapter(check, listener);
         order.setAdapter(ad);

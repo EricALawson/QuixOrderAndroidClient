@@ -64,7 +64,7 @@ public class TableActivity extends AppCompatActivity implements NavigationView.O
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
     //CollectionReference fdList;
     //List<MenuItem> db = new ArrayList<MenuItem>();
-    List<MenuItem> order = new ArrayList<MenuItem>();
+    public List<MenuItem> order = new ArrayList<MenuItem>();
 
 
     @Override
