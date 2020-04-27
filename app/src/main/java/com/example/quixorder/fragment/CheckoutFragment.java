@@ -77,6 +77,7 @@ public class CheckoutFragment extends Fragment //implements View.OnClickListener
         //private Button pay;
         private int mColumnCount = 1;
         List<MenuItem> check = new ArrayList<MenuItem>();
+        List<Integer> quantities = new ArrayList<Integer>();
         // private CollectionReference itemTypes = firebase.collection("item_types");
         // private CollectionReference menuItems = firebase.collection("menu_items");
         DocumentReference d = firebase.collection("orders").document("Ioy7CfhnnslBKGMgEVQG");
@@ -166,12 +167,11 @@ public class CheckoutFragment extends Fragment //implements View.OnClickListener
             }
         });*/
 
-
         order = v.findViewById(R.id.checkoutList);
-        //check.add(new MenuItem("mouth watering beef street tacos","https://dinnerthendessert.com/wp-content/uploads/2019/03/Carne-Asada-Tacos-500x500.jpg", "Taco", 4.99,/* 1,*/ "Entree"));
-        check.add(new MenuItem("mouth watering beef street tacos","https://dinnerthendessert.com/wp-content/uploads/2019/03/Carne-Asada-Tacos-500x500.jpg", "Taco", 4.99, "Entree"));
+        check = ((TableActivity)getActivity()).order;
+        quantities = ((TableActivity)getActivity()).quantities;
 
-        ad = new CheckoutAdapter(check, listener);
+        ad = new CheckoutAdapter(check, quantities, listener);
         order.setAdapter(ad);
         order.setLayoutManager(new LinearLayoutManager(this.getContext()));
 

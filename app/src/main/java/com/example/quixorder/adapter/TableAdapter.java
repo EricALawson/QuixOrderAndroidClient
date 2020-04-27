@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.quixorder.R;
@@ -45,7 +44,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
         Account currentItem = tableList.get(i);
 
         // Set views
-        viewHolder.imageView.setImageResource(R.drawable.ic_assign_table_blk);
         viewHolder.textView1.setText(currentItem.getUsername());
         viewHolder.cardView.setOnTouchListener(this);
     }
@@ -66,13 +64,11 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView cardView;
-        private ImageView imageView;
         private TextView textView1;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.cardView);
-            imageView = itemView.findViewById(R.id.imageView1);
             textView1 = itemView.findViewById(R.id.textView1);
         }
     }

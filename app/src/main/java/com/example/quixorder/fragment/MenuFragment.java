@@ -52,7 +52,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class MenuFragment extends Fragment {
+public class MenuFragment extends Fragment implements MenuAdapter.OnAddMenuItemListener {
 
    // private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
 
@@ -151,7 +151,7 @@ public class MenuFragment extends Fragment {
                         db.add(document.toObject(MenuItem.class));
                         //order.add(document.toObject(MenuItem.class));
                         Log.d("Good", document.getId() + " => " + document.getData());
-                        ad = new MenuAdapter(db, mListener);
+                        ad = new MenuAdapter(db, mListener, MenuFragment.this::onAddMenuItemClick);
                         //ad2 = new CheckoutAdapter(order, cListen);
                         //orderView.setAdapter(ad2);
                         recyclerView.setAdapter(ad);
@@ -298,6 +298,26 @@ public class MenuFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onAddMenuItemClick(int position, MenuItem item) {
+        Toast.makeText(getContext(), "Clicked at "+position, Toast.LENGTH_SHORT).show();
+        List<MenuItem> order = ((TableActivity)getActivity()).order;
+        List<Integer> quantities = ((TableActivity) getActivity()).quantities;
+
+        // Check for duplicate and update
+        int i;
+        for (i = 0; i < order.size(); i++) {
+            if (order.get(i).getName().equals(item.getName())) {
+                quantities.set(i, quantities.get(i) + 1);
+                break;
+            }
+        }
+        if (order.size() == 0 || i == order.size()) {
+            order.add(item);
+            quantities.add(1);
+        }
     }
 
     /**

@@ -37,14 +37,16 @@ import java.util.List;
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHolder>{
 
     private List<MenuItem> mValues = new ArrayList<MenuItem>();
+    private List<Integer> mQuantities = new ArrayList<>();
     //OnRemoveMenuItemListener mListener;
     private final CheckoutInteractionListener mListener;
     private double subtotal = 20.00;
 
 
 
-    public CheckoutAdapter(List<MenuItem> items/*, Context here*/, CheckoutInteractionListener listener){/* ArrayList name,*/// ArrayList imgs) {
+    public CheckoutAdapter(List<MenuItem> items, List<Integer> quantities/*, Context here*/, CheckoutInteractionListener listener){/* ArrayList name,*/// ArrayList imgs) {
         mValues = items;
+        mQuantities = quantities;
         mListener = listener;
         for(int i = 0; i < mValues.size()-1; i++) {
             subtotal += this.mValues.get(i).getPrice();
@@ -64,8 +66,8 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         //holder.mItem = mValues.get(position);
         //holder.itemName.setText(mValues.get(position).getName());
         // holder.priceView.setText(String.valueOf(mValues.get(position).getPrice()));
-        holder.bindMenuItem(mValues.get(position));
-        holder.removeIcon.setImageResource(R.drawable.ic_remove_circle_blk);
+        holder.bindMenuItem(mValues.get(position), mQuantities.get(position));
+        holder.removeIcon.setImageResource(R.drawable.ic_remove_circle_dk);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +106,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         public final ImageView removeIcon;
         public final ImageView addIcon;
         public final TextView priceView;
+        public final TextView qtyView;
         public double total = 0.00;
         public TextView totalView;
 
@@ -115,13 +118,15 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             priceView = (TextView) view.findViewById(R.id.price);
             totalView = (TextView) view.findViewById(R.id.sub);
             addIcon = (ImageView) view.findViewById(R.id.add);
+            qtyView = (TextView) view.findViewById(R.id.qty);
             removeIcon = (ImageView) view.findViewById(R.id.remove);
             //totalView.setText("$"+total);
         }
 
-        public void bindMenuItem(MenuItem item) {
+        public void bindMenuItem(MenuItem item, int qty) {
             //String pic = item.getImage();
             itemName.setText(item.getName());
+            qtyView.setText(Integer.toString(qty));
             Picasso.get().load(item.getImage()).into(itemPic);
             priceView.setText("$" + String.valueOf(item.getPrice()));
         }
