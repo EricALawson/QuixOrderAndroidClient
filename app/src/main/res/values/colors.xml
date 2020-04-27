@@ -8,8 +8,6 @@
     <color name="darkBlue">#3023AE</color>
     <color name="purple">#c86dd7</color>
 
-
-
     <!-- gradient button colors -->
     <color name="darkText">#442244</color>
     <color name="lavender">#B9BFEF</color>
@@ -18,7 +16,7 @@
 
     <!--Text Colors-->
     <color name="white">#ccffffff</color>
-
+    <color name="black">#ff000000</color>
 
     <!-- Toolbar Color -->
     <color name="blue">#3D55BE</color>
@@ -27,17 +25,17 @@
     <color name="spinnerLight">#ccffffff</color>
 
     <!-- Graph Color -->
-    <color name="graphLight">#ccffffff</color>
+    <color name="graphLight">#ffffff</color>
 
     <!-- Login Colors #aarrggbb-->
     <color name="loginFormDetails">#ccffffff</color>
     <color name="loginFormDetailsLight">#1affffff</color>
     <color name="loginFormDetailsMedium">#66ffffff</color>
 
-    <!-- Item Type -->
-    <color name="itemTypeUnselected1">#EFEFEF</color>
-    <color name="itemTypeUnselected2">#FFFFFF</color>
-    <color name="itemTypeUnselectedFont">#222222</color>
-    <color name="itemTypeSelected">#222222</color>
-    <color name="itemTypeSelectedFont">#FFFFFF</color>
+    <!-- Item and Add/Remove Button Colors -->
+    <color name="lightPurple">#d8c7ff</color>
+    <color name="lighterPurple">#e8deff</color>
+    <color name="darkGray">#222222</color>
+    <color name="darkPurple">#1d1033</color>
+
 </resources>

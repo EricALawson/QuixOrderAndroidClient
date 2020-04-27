@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:background="@drawable/bg_edit_menu"
+        android:background="@drawable/bg_add_item"
         android:hint="Click to Add"
         android:textSize="30sp"
         android:textStyle="bold" />

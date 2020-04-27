@@ -47,18 +47,28 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         viewHolder.taskName.setText("Task " + (i + 1));
 
         if (type.equals("Server")) {
-            startTime = currentItem.getCookedTime().getTime();
-            endTime = currentItem.getServedTime().getTime();
+            if (currentItem.getCookedTime() != null && currentItem.getServedTime() != null) {
+                startTime = currentItem.getCookedTime().getTime();
+                endTime = currentItem.getServedTime().getTime();
+            }
         } else if (type.equals("Cook")){
-            startTime = currentItem.getStartTime().getTime();
-            endTime = currentItem.getCookedTime().getTime();
+            if (currentItem.getStartTime() != null && currentItem.getCookedTime() != null) {
+                startTime = currentItem.getStartTime().getTime();
+                endTime = currentItem.getCookedTime().getTime();
+            }
         }
 
         totalTime = endTime - startTime;
 
-        viewHolder.startTime.setText(toDate(startTime));
-        viewHolder.endTime.setText(toDate(endTime));
-        viewHolder.totalTime.setText(toTime(totalTime));
+        if (totalTime != 0) {
+            viewHolder.startTime.setText(toDate(startTime));
+            viewHolder.endTime.setText(toDate(endTime));
+            viewHolder.totalTime.setText(toTime(totalTime));
+        } else {
+            viewHolder.startTime.setText(toDate(startTime));
+            viewHolder.endTime.setText("incomplete");
+            viewHolder.totalTime.setText("incomplete");
+        }
     }
 
     public String toTime(long time) {
