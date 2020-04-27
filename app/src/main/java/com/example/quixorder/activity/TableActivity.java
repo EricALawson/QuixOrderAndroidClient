@@ -65,6 +65,7 @@ public class TableActivity extends AppCompatActivity implements NavigationView.O
     //CollectionReference fdList;
     //List<MenuItem> db = new ArrayList<MenuItem>();
     public List<MenuItem> order = new ArrayList<MenuItem>();
+    public List<Integer> quantities = new ArrayList<Integer>();
 
 
     @Override

@@ -303,7 +303,21 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnAddMenuItemL
     @Override
     public void onAddMenuItemClick(int position, MenuItem item) {
         Toast.makeText(getContext(), "Clicked at "+position, Toast.LENGTH_SHORT).show();
-        ((TableActivity)getActivity()).order.add(item);
+        List<MenuItem> order = ((TableActivity)getActivity()).order;
+        List<Integer> quantities = ((TableActivity) getActivity()).quantities;
+
+        // Check for duplicate and update
+        int i;
+        for (i = 0; i < order.size(); i++) {
+            if (order.get(i).getName().equals(item.getName())) {
+                quantities.set(i, quantities.get(i) + 1);
+                break;
+            }
+        }
+        if (order.size() == 0 || i == order.size()) {
+            order.add(item);
+            quantities.add(1);
+        }
     }
 
     /**
