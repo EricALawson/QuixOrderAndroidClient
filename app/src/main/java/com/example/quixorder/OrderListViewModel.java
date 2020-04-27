@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -22,16 +23,10 @@ import javax.annotation.Nullable;
 
 public class OrderListViewModel extends ViewModel {
     private MutableLiveData<List<Order>> orderLiveData;
-    private Query orderQuery = FirebaseFirestore.getInstance().collection("orders").whereEqualTo("cookedTime", null);
+    private Query orderQuery;
 
     public OrderListViewModel() {
         super();
-        orderQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                loadOrders(queryDocumentSnapshots);
-            }
-        });
     }
 
     public LiveData<List<Order>> getOrderLiveData() {
@@ -70,5 +65,13 @@ public class OrderListViewModel extends ViewModel {
         orderLiveData.postValue(orders);
     }
 
-
+    public void setQuery(Query listQuery) {
+        orderQuery = listQuery;
+        orderQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                loadOrders(queryDocumentSnapshots);
+            }
+        });
+    }
 }

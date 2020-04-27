@@ -1,4 +1,4 @@
-package com.example.quixorder;
+package com.example.quixorder.adapter.cook;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,15 +7,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.quixorder.R;
 import com.example.quixorder.model.MenuItem;
 
 import java.util.List;
 
-class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.MenuItemViewHolder> {
+public class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.MenuItemViewHolder> {
     private List<MenuItem> items;
 
     public OrderItemListAdapter(List<MenuItem> orderMenuItems) {
@@ -26,15 +28,14 @@ class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.Men
         ImageView image;
         TextView name;
 
-        public MenuItemViewHolder(@NonNull View itemView) {
+        MenuItemViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.imageView);
             name = itemView.findViewById(R.id.menuItemName);
         }
 
-        public void bindMenuItem(MenuItem item) {
-            //TODO: Figure out image data type.
-            //image.setImageBitmap();
+        void bindMenuItem(MenuItem item) {
+            Picasso.get().load(item.getImage()).into(image);
             Log.d("Binding MenuItem", item.toString());
             name.setText(item.getName());
         }
@@ -44,10 +45,10 @@ class OrderItemListAdapter extends RecyclerView.Adapter<OrderItemListAdapter.Men
     @Override
     public MenuItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("OrderItemListAdapter", "onCreateViewHolder called");
-        ViewGroup v = (LinearLayout) LayoutInflater.from(parent.getContext())
+        ViewGroup v = (ViewGroup) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.menu_item, parent, false);
-        MenuItemViewHolder vh = new MenuItemViewHolder(v);
-        return vh;
+
+        return new MenuItemViewHolder(v);
     }
 
     @Override

@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.quixorder.R;
-import com.example.quixorder.adapter.ServerAdapter;
+import com.example.quixorder.adapter.server.ServerAdapter;
 import com.example.quixorder.adapter.TableAdapter;
 import com.example.quixorder.model.Account;
 import com.example.quixorder.model.Table;
