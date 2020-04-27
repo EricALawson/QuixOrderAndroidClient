@@ -7,6 +7,8 @@
     <!-- Gradient Colors -->
     <color name="darkBlue">#3023AE</color>
     <color name="purple">#c86dd7</color>
+    <color name="cyan">#09F3DD</color>
+    <color name="tableTheme">#535053</color>
 
     <!-- gradient button colors -->
     <color name="darkText">#442244</color>
