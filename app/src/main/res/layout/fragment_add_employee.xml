@@ -35,19 +35,22 @@
         android:id="@+id/icon"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        app:layout_constraintStart_toStartOf="@id/guidelineLeft"
         app:layout_constraintBottom_toTopOf="@id/guidelineTop"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
         android:src="@drawable/ic_add_employee"
         />
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/guidelineTop"
-        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
         android:paddingBottom="10dp"
-        android:text=" | New User"
-        android:textSize="50dp"
+        android:text="New User"
+        android:textSize="40dp"
         android:textColor="@color/white"
         />
 
@@ -56,7 +59,7 @@
         android:id="@+id/username"
         app:layout_constraintEnd_toStartOf="@id/guidelineRight"
         app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-        app:layout_constraintTop_toBottomOf="@id/icon"
+        app:layout_constraintTop_toBottomOf="@id/title"
         />
 
     <EditText
