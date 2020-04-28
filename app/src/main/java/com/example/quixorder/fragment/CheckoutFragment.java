@@ -60,7 +60,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckoutFragment extends Fragment //implements View.OnClickListener
+public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQuantityListener, CheckoutAdapter.OnRemoveQuantityListener //implements View.OnClickListener
 
     {//implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -171,7 +171,7 @@ public class CheckoutFragment extends Fragment //implements View.OnClickListener
         check = ((TableActivity)getActivity()).order;
         quantities = ((TableActivity)getActivity()).quantities;
 
-        ad = new CheckoutAdapter(check, quantities, listener);
+        ad = new CheckoutAdapter(check, quantities, listener, this, this);
         order.setAdapter(ad);
         order.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -291,6 +291,29 @@ public class CheckoutFragment extends Fragment //implements View.OnClickListener
 
         });
     }
+
+        @Override
+        public void onAddQuantityClick(int position, int quantity) {
+            Log.d("onAddQuantityClick", "" + position);
+            quantities.set(position, quantity);
+            ad = new CheckoutAdapter(check, quantities, listener, this, this);
+            order.setAdapter(ad);
+            order.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        }
+
+        @Override
+        public void onRemoveQuantityClick(int position, int quantity) {
+            Log.d("onRemoveQuantityClick", "" + position);
+            if (quantity != 0) {
+                quantities.set(position, quantity);
+            } else {
+                check.remove(position);
+                quantities.remove(position);
+            }
+            ad = new CheckoutAdapter(check, quantities, listener, this, this);
+            order.setAdapter(ad);
+            order.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        }
 
    /* @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -2,10 +2,6 @@ package com.example.quixorder.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +13,8 @@ import com.example.quixorder.fragment.CheckoutFragment.CheckoutInteractionListen
 //import com.example.quixorder.R;
 //import com.example.quixorder.dummy.DummyContent.DummyItem;
 import com.example.quixorder.model.MenuItem;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,12 +31,17 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
     private final CheckoutInteractionListener mListener;
     private double subtotal = 20.00;
 
+    // Click listeners
+    private OnAddQuantityListener mOnAddQuantityListener;
+    private OnRemoveQuantityListener mOnRemoveQuantityListener;
 
 
-    public CheckoutAdapter(List<MenuItem> items, List<Integer> quantities/*, Context here*/, CheckoutInteractionListener listener){/* ArrayList name,*/// ArrayList imgs) {
+    public CheckoutAdapter(List<MenuItem> items, List<Integer> quantities/*, Context here*/, CheckoutInteractionListener listener, OnAddQuantityListener onAddQuantityListener, OnRemoveQuantityListener onRemoveQuantityListener){/* ArrayList name,*/// ArrayList imgs) {
         mValues = items;
         mQuantities = quantities;
         mListener = listener;
+        mOnAddQuantityListener = onAddQuantityListener;
+        mOnRemoveQuantityListener = onRemoveQuantityListener;
         for(int i = 0; i < mValues.size()-1; i++) {
             subtotal += this.mValues.get(i).getPrice();
         }
@@ -57,7 +51,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
     public CheckoutAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.order_item, parent, false);
-        return new CheckoutAdapter.ViewHolder(view);
+        return new CheckoutAdapter.ViewHolder(view, mOnAddQuantityListener, mOnRemoveQuantityListener);
     }
 
     @Override
@@ -99,7 +93,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView itemName;
         public final ImageView itemPic;
@@ -110,7 +104,11 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         public double total = 0.00;
         public TextView totalView;
 
-        public ViewHolder(View view) {
+        // Listeners
+        public OnAddQuantityListener onAddQuantityListener;
+        public OnRemoveQuantityListener onRemoveQuantityListener;
+
+        public ViewHolder(View view, OnAddQuantityListener onAddQuantityListener, OnRemoveQuantityListener onRemoveQuantityListener) {
             super(view);
             mView = view;
             itemName = (TextView) view.findViewById(R.id.item_name);
@@ -121,6 +119,12 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             qtyView = (TextView) view.findViewById(R.id.qty);
             removeIcon = (ImageView) view.findViewById(R.id.remove);
             //totalView.setText("$"+total);
+
+            // Load click listeners
+            this.onAddQuantityListener = onAddQuantityListener;
+            addIcon.setOnClickListener(this);
+            this.onRemoveQuantityListener = onRemoveQuantityListener;
+            removeIcon.setOnClickListener(this);
         }
 
         public void bindMenuItem(MenuItem item, int qty) {
@@ -131,19 +135,29 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             priceView.setText("$" + String.valueOf(item.getPrice()));
         }
 
-      /*  @Override
+      @Override
         public void onClick(View view) {
             switch(view.getId()) {
-                case R.id.imageView2:
-                    CheckoutInteractionListener.onRemoveMenuItemClick(getAdapterPosition(), mValues.get(getAdapterPosition()).getName());
+                case R.id.add:
+                    int newQuantity = Integer.parseInt(qtyView.getText().toString()) + 1;
+                    onAddQuantityListener.onAddQuantityClick(getAdapterPosition(), newQuantity);
+                    break;
+                case R.id.remove:
+                    newQuantity = Integer.parseInt(qtyView.getText().toString()) - 1;
+                    onRemoveQuantityListener.onRemoveQuantityClick(getAdapterPosition(), newQuantity);
+                    break;
             }
-        }*/
-
+        }
     }
 
 
-    public interface OnRemoveMenuItemListener {
-        void onRemoveMenuItemClick(int position, String itemName);
+    public interface OnAddQuantityListener {
+        void onAddQuantityClick(int position, int quantity);
     }
+
+    public interface OnRemoveQuantityListener {
+        void onRemoveQuantityClick(int position, int quantity);
+    }
+
 }
 
