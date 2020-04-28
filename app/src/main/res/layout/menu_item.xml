@@ -4,16 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/menuItem"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/darkOverlay"
+    android:padding="4dp"
+    android:layout_marginBottom="4dp">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:adjustViewBounds="true"
-        android:maxWidth="60dp"
-        android:maxHeight="60dp"
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
         android:scaleType="centerInside"
+        android:elevation="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/placeholder_food" />

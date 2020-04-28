@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    android:background="@color/cyan"
+    android:background="@color/blueOrderBackground"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
@@ -11,7 +11,6 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/tableTheme"
         android:src="@drawable/ic_running_order" />
 
     <TextView
@@ -19,10 +18,9 @@
         android:layout_height="wrap_content"
         android:paddingRight="16dp"
         android:paddingLeft="14dp"
-        android:background="@color/tableTheme"
 
         android:text="Quix Order"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/cyan" />
+        android:textColor="@color/white" />
 
 </LinearLayout>
