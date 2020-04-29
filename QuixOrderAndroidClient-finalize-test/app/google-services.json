@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "817610044218",
+    "firebase_url": "https://quixorder-1a19b.firebaseio.com",
+    "project_id": "quixorder-1a19b",
+    "storage_bucket": "quixorder-1a19b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817610044218:android:91d905ea1aaf9a27849603",
+        "android_client_info": {
+          "package_name": "com.example.firebasetest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817610044218-tc8rpn4j1qkodksasgab69m43al6f4tq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.firebasetest",
+            "certificate_hash": "86bfa2832eb967c9e3c5f34ee0f4174b5cc3e64d"
+          }
+        },
+        {
+          "client_id": "817610044218-ph5iqbee8710i8npu7jnopjon5bo2n8t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4Vq_fY-aTtUSknQqjkcZuZtDT6K0cCEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817610044218-ph5iqbee8710i8npu7jnopjon5bo2n8t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817610044218:android:5653414cce8662c8849603",
+        "android_client_info": {
+          "package_name": "com.example.quixorder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817610044218-hhdp9ndi5079f106qtj8p0fl8614kr9v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quixorder",
+            "certificate_hash": "c9d609bdf5f6e3ac90217fd5ab4fca92784d0253"
+          }
+        },
+        {
+          "client_id": "817610044218-044fi5ekjnmtn65o8fhodkrlm4kc9d73.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quixorder",
+            "certificate_hash": "86bfa2832eb967c9e3c5f34ee0f4174b5cc3e64d"
+          }
+        },
+        {
+          "client_id": "817610044218-ph5iqbee8710i8npu7jnopjon5bo2n8t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4Vq_fY-aTtUSknQqjkcZuZtDT6K0cCEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817610044218-ph5iqbee8710i8npu7jnopjon5bo2n8t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
