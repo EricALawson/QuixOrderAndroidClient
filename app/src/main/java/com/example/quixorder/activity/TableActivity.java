@@ -25,11 +25,13 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.quixorder.FormEditor;
 import com.example.quixorder.adapter.CheckoutAdapter;
 import com.example.quixorder.fragment.CheckoutFragment;
 import com.example.quixorder.fragment.DailyTotalFragment;
@@ -37,12 +39,21 @@ import com.example.quixorder.fragment.MenuFragment;
 import com.example.quixorder.R;
 import com.example.quixorder.adapter.MenuAdapter;
 //import com.example.quixorder.fragment.MenuFragment;
+import com.example.quixorder.fragment.PaymentFragment;
+import com.example.quixorder.model.Account;
 import com.example.quixorder.model.MenuItem;
+import com.example.quixorder.model.Order;
+import com.example.quixorder.model.Table;
+import com.example.quixorder.model.TableCall;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
@@ -50,7 +61,10 @@ import com.squareup.picasso.Picasso;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.transform.Result;
 
@@ -60,18 +74,74 @@ public class TableActivity extends AppCompatActivity implements NavigationView.O
     //private MenuFragment.OnListFragmentInteractionListener listen;
     //private CheckoutFragment.CheckoutInteractionListener cListen;
     private DrawerLayout draw;
-
+    //private TableCall current;
+    private Order newOrder;
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
-    //CollectionReference fdList;
+    private CollectionReference callList;
     //List<MenuItem> db = new ArrayList<MenuItem>();
+    private String curr;
+    private String server;
+    private String tableId;
+    private DocumentReference t;
     public List<MenuItem> order = new ArrayList<MenuItem>();
     public List<Integer> quantities = new ArrayList<Integer>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.table);
+
+        //Intent i = getIntent();
+        callList = fb.collection("table_calls");
+
+        curr = getIntent().getStringExtra("username");
+        // Log.d("Table", curr);
+
+        // Query x = fb.collection("accounts").whereEqualTo("username", curr);
+
+        //QuerySnapshot q = x.get().getResult();
+
+        // tableId = q.getDocuments().get(0).getId();
+
+        fb.collection("accounts")
+                .whereEqualTo("username", curr)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("Table", document.getId() + " => " + document.getData());
+                                tableId = document.getId();
+                                t = fb.collection("accounts").document(tableId);
+                                t.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Table current = documentSnapshot.toObject(Table.class);
+                                        server = current.getServer();
+                                    }
+                                });
+                            }
+                        } else {
+                            Log.d("Table", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
+        /*Log.d("Table 1", curr);
+        if(curr.equals("table 1"))
+            Log.d("Table 1", "Table 1 noticed");*/
+
+
 
         Toolbar oToolbar = (Toolbar) findViewById(R.id.order_toolbar);
         setSupportActionBar(oToolbar);
@@ -175,7 +245,6 @@ public class TableActivity extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
-
     // switched to public
     public void getLogout() {
         String p = "1234567";
@@ -242,5 +311,25 @@ public class TableActivity extends AppCompatActivity implements NavigationView.O
     public void callServer()
     {
         Log.d("Call", "Call Server");
+        Map<String, Object> call = new HashMap<>();
+        call.put("table", curr);
+        call.put("server", server);
+        call.put("startTime", new Date());
+        call.put("status", "server called");
+
+        callList.whereEqualTo("table", curr)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if (task.getDocuments().size() != 0) {
+                        Toast.makeText(this, "Server will help soon", Toast.LENGTH_SHORT).show();
+                    } else
+                    {
+                        fb.collection("table_calls").add(call);
+                        Toast.makeText(this, "Server has been called", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("QueryFailed", error.getMessage());
+                });
     }
 }
