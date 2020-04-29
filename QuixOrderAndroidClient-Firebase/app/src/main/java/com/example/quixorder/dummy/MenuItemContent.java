@@ -41,7 +41,7 @@ public class MenuItemContent {
 
     private static MenuItem createMenuItem(int position) {
         double id = position;
-        return new MenuItem(position, "Item " + (position+1), id, position);
+        return new MenuItem("", "ItemPic", "Item " + (position+1), id, "drink");
     }
 
     /*private static String makeDetails(int position) {

@@ -1,26 +1,34 @@
 package com.example.quixorder.model;
 
-//import java.util.UUID;
+public class MenuItem {
+    private final String description;
+    private final String image;
+    private final String name;
+    private final double price;
+    private final String type;
 
-public class MenuItem
-{
-    //private final UUID id;
-    public int id;
-    public String name;
-    public double price;
-    public int pic;
-
-    public MenuItem(int id, String name, double pri, int img)
-    {
-        this.id = id;
-        this.name = name;
-        this.price = pri;
-        this.pic = img;
-
+    public MenuItem() {
+        description = "";
+        image = "";
+        name = "";
+        price = 0;
+        type = "";
     }
 
-    public int getId() {
-        return id;
+    public MenuItem(String description, String image, String name, double price, String type) {
+        this.description = description;
+        this.image = image;
+        this.name = name;
+        this.price = price;
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public String getName() {
@@ -31,6 +39,20 @@ public class MenuItem
         return price;
     }
 
-    public int getImg() { return pic; }
+    public String getType() {
+        return type;
+    }
+
+    @Override
+    public String toString() {
+        return "MenuItem{" +
+                "description='" + description + '\'' +
+                ", image='" + image + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }
+
 

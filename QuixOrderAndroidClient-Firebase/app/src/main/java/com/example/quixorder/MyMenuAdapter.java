@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.quixorder.MenuFragment.OnListFragmentInteractionListener;
 import com.example.quixorder.dummy.DummyContent.DummyItem;
 import com.example.quixorder.model.MenuItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +27,15 @@ public class MyMenuAdapter extends RecyclerView.Adapter<MyMenuAdapter.ViewHolder
     private final List<MenuItem> mValues;
     private final Context c;
     //private final ArrayList<String> menuNames;
-    private final ArrayList menuPics;
+   // private final ArrayList menuPics;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyMenuAdapter(List<MenuItem> items, Context here, OnListFragmentInteractionListener listener,/* ArrayList name,*/ ArrayList imgs) {
+    public MyMenuAdapter(List<MenuItem> items, Context here, OnListFragmentInteractionListener listener){/* ArrayList name,*/// ArrayList imgs) {
         mValues = items;
         c = here;
         mListener = listener;
         //menuNames = name;
-        menuPics = imgs;
+        //menuPics = imgs;
     }
 
     @Override
@@ -49,8 +50,9 @@ public class MyMenuAdapter extends RecyclerView.Adapter<MyMenuAdapter.ViewHolder
       //holder.setData();
         //holder.mItem = mValues.get(position);
         holder.itemName.setText(mValues.get(position).getName());
-        holder.priceView.setText(String.valueOf(mValues.get(position).price));
-        holder.itemPic.setImageResource((int) menuPics.get(position));
+        holder.priceView.setText(String.valueOf(mValues.get(position).getPrice()));
+        holder.bindMenuItem(mValues.get(position));
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,16 +66,14 @@ public class MyMenuAdapter extends RecyclerView.Adapter<MyMenuAdapter.ViewHolder
     }
 
     @Override
-    public int getItemCount() {
-        return mValues.size();
-    }
+    public int getItemCount() { return mValues.size(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView itemName;
         public final ImageView itemPic;
         public final TextView priceView;
-        public MenuItem mItem;
+        //public MenuItem mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -81,6 +81,13 @@ public class MyMenuAdapter extends RecyclerView.Adapter<MyMenuAdapter.ViewHolder
             itemName = (TextView) view.findViewById(R.id.item_name);
             itemPic= (ImageView) view.findViewById(R.id.icon);
             priceView = (TextView) view.findViewById(R.id.price);
+        }
+
+        public void bindMenuItem(MenuItem item)
+        {
+            itemName.setText(item.getName());
+            Picasso.get().load(item.getImage()).into(itemPic);
+            priceView.setText("$"+String.valueOf(item.getPrice()));
         }
 
     }
