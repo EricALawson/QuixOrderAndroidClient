@@ -60,11 +60,25 @@
 
         <EditText
             android:id="@+id/cvc"
-            android:hint="cvc"
             style="@style/EditTextUsername"
+            android:layout_width="124dp"
+            android:layout_height="52dp"
             android:layout_marginTop="16dp"
+            android:hint="cvc"
             app:layout_constraintEnd_toStartOf="@id/guidelineRight"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+            app:layout_constraintTop_toBottomOf="@id/ccNum" />
+
+        <EditText
+            android:id="@+id/expDate"
+            style="@style/EditTextUsername"
+            android:layout_width="124dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:hint="mm/yy"
+            app:layout_constraintEnd_toStartOf="@id/guidelineRight"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@id/ccNum" />
 
