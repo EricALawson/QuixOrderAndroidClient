@@ -14,6 +14,7 @@ import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -70,6 +71,11 @@ public class LoginActivity extends AppCompatActivity {
                                             startActivity(new Intent(LoginActivity.this, OwnerActivity.class).putExtra("username", act.getUsername()) );
                                             break;
                                         case "Customer":
+                                            DocumentSnapshot customer = task.getResult().getDocuments().get(0);
+                                            if (customer.get("server") == null) {
+                                                Toast.makeText(getApplicationContext(), "This table is not assigned to a customer yet", Toast.LENGTH_SHORT).show();
+                                                break;
+                                            }
                                             startActivity(new Intent(LoginActivity.this, TableActivity.class).putExtra("username", act.getUsername()) );
                                             break;
                                         case "Server":

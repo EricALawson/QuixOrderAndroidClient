@@ -9,6 +9,8 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,16 @@ public class Order implements IServerTask {
 
     public Order() {
 
+    }
+
+    public Order(ArrayList<DocumentReference> orderItems, Date startTime, String server, String table) {
+        this.orderItems = orderItems;
+        this.startTime = startTime;
+        cookedTime = null;
+        servedTime = null;
+        this.server = server;
+        this.table = table;
+        status = "cooking";
     }
 
     public Order(DocumentSnapshot snapshot) {
@@ -66,6 +78,10 @@ public class Order implements IServerTask {
 
     public String getDocumentId() {
         return documentId;
+    }
+
+    public ArrayList<DocumentReference> getOrderItemIDs() {
+        return orderItems;
     }
 
     public String getTable() {

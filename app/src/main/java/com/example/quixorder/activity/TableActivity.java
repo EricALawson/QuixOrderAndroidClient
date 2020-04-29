@@ -11,13 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -25,26 +19,17 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.quixorder.FormEditor;
-import com.example.quixorder.adapter.CheckoutAdapter;
 import com.example.quixorder.fragment.CheckoutFragment;
-import com.example.quixorder.fragment.DailyTotalFragment;
 import com.example.quixorder.fragment.MenuFragment;
 import com.example.quixorder.R;
-import com.example.quixorder.adapter.MenuAdapter;
 //import com.example.quixorder.fragment.MenuFragment;
-import com.example.quixorder.fragment.PaymentFragment;
-import com.example.quixorder.model.Account;
 import com.example.quixorder.model.MenuItem;
 import com.example.quixorder.model.Order;
 import com.example.quixorder.model.Table;
-import com.example.quixorder.model.TableCall;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -53,20 +38,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.transform.Result;
 
 public class TableActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MenuFragment.OnListFragmentInteractionListener {
 
@@ -79,8 +58,8 @@ public class TableActivity extends AppCompatActivity implements NavigationView.O
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
     private CollectionReference callList;
     //List<MenuItem> db = new ArrayList<MenuItem>();
-    private String curr;
-    private String server;
+    public String curr;
+    public String server;
     private String tableId;
     private DocumentReference t;
     public List<MenuItem> order = new ArrayList<MenuItem>();

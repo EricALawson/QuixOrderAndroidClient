@@ -22,7 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.quixorder.FormEditor;
+import com.example.quixorder.FormValidator;
 import com.example.quixorder.R;
 import com.example.quixorder.adapter.ItemTypeAdapter;
 import com.example.quixorder.adapter.MenuItemAdapter;
@@ -316,7 +316,7 @@ public class EditMenuFragment
 
     public void onAddItemTypeClick() {
         Log.d("onAddItemTypeClick", "click");
-        if (FormEditor.validateForm(FormEditor.getEditTextViews((ViewGroup) addItemType))) {
+        if (FormValidator.validateForm(FormValidator.getEditTextViews((ViewGroup) addItemType))) {
             // Create ItemType object with text fields
             ItemType itemType = new ItemType(itemTypeName.getText().toString());
 
@@ -332,7 +332,7 @@ public class EditMenuFragment
                             // Update views
                             newItemType.setVisibility(View.VISIBLE);
                             addItemType.setVisibility(View.GONE);
-                            FormEditor.clearForm((ViewGroup) addItemType);
+                            FormValidator.clearForm((ViewGroup) addItemType);
                         }
                     })
                     .addOnFailureListener(error -> {
@@ -345,7 +345,7 @@ public class EditMenuFragment
 
     public void onAddMenuItemClick() {
         Log.d("onAddMenuItemClick", "click");
-        if (FormEditor.validateForm(FormEditor.getEditTextViews((ViewGroup) addMenuItem))) {
+        if (FormValidator.validateForm(FormValidator.getEditTextViews((ViewGroup) addMenuItem))) {
             Log.d("Test", itemTypeAdapter.getSelectedItem().getType());
 
             // Create MenuItem object with text fields
@@ -369,7 +369,7 @@ public class EditMenuFragment
                             newMenuItem.setVisibility(View.VISIBLE);
                             addMenuItem.setVisibility(View.GONE);
                             menuItemIcon.setImageResource(R.drawable.ic_insert_photo);
-                            FormEditor.clearForm((ViewGroup) addMenuItem);
+                            FormValidator.clearForm((ViewGroup) addMenuItem);
                         }
                     })
                     .addOnFailureListener(error -> {

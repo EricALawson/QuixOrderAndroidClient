@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
-public class FormEditor {
+public class FormValidator {
     public static ArrayList<EditText> getEditTextViews(ViewGroup group) {
         ArrayList<EditText> views = new ArrayList<>();
         for (int i = 0; i < group.getChildCount(); i++) {
@@ -33,6 +33,20 @@ public class FormEditor {
         }
         Log.d("validateForm", "true");
         return true;
+    }
+
+    public static boolean validateCreditCard(String number) {
+        if (number.length() == 16 && number.matches("-?\\d+(\\.\\d+)?")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean validateCVC(String number) {
+        if (number.length() == 3 && number.matches("-?\\d+(\\.\\d+)?")) {
+            return true;
+        }
+        return false;
     }
 
     public static void clearForm(ViewGroup group) {

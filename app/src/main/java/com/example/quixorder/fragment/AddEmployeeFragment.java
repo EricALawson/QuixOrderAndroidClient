@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.quixorder.FormEditor;
+import com.example.quixorder.FormValidator;
 import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
 import com.example.quixorder.model.Table;
@@ -54,7 +54,7 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
         public void onClick(View v) {
             CollectionReference accounts = firebase.collection("accounts");
 
-            if (FormEditor.validateForm(FormEditor.getEditTextViews((ViewGroup) view))) {
+            if (FormValidator.validateForm(FormValidator.getEditTextViews((ViewGroup) view))) {
                 // Create Account object with text field values
                 Account account;
                 String type = spinner.getSelectedItem().toString();

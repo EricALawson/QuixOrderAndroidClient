@@ -1,6 +1,5 @@
 package com.example.quixorder.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,13 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.quixorder.FormValidator;
 import com.example.quixorder.R;
 import com.example.quixorder.activity.TableActivity;
 import com.example.quixorder.model.MenuItem;
 import com.example.quixorder.model.Order;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Document;
+
+import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,12 +48,21 @@ public class PaymentFragment extends Fragment {
 
     private EditText cc;
     private EditText cvc;
-    private Button pay;
+    private Button card;
     private Button cash;
+
     private double total;
+    private String table;
+    private String server;
+
+    private List<MenuItem> check;
+    private List<Integer> quantities;
+    private List<DocumentReference> menuItemIDs;
 
     private Order order;
-    private CollectionReference orders = FirebaseFirestore.getInstance().collection("orders");
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private CollectionReference orders = firestore.collection("orders");
+    private CollectionReference payments = firestore.collection("Payment");
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -89,109 +103,95 @@ public class PaymentFragment extends Fragment {
         //getActivity().getActionBar().setTitle("Payment");
         cc = v.findViewById(R.id.ccNum);
         cvc = v.findViewById(R.id.cvc);
-        pay = v.findViewById(R.id.btn_checkout);
+        card = v.findViewById(R.id.btn_checkout);
         cash = v.findViewById(R.id.btn_cash);
 
         //order = new Order();
 
         Bundle x = getArguments();
-        List<MenuItem> check = (ArrayList<MenuItem>)x.getSerializable("check");
-        //List<MenuItem> quantities = (ArrayList<MenuItem>)x.getSerializable("qty");
+        check = (ArrayList<MenuItem>)x.getSerializable("check");
+        quantities = (ArrayList<Integer>)x.getSerializable("qty");
+        menuItemIDs = (ArrayList<DocumentReference>)x.getSerializable("ids");
+        total = Double.valueOf(new DecimalFormat("#.##").format(x.getSerializable("total")));
+        server = ((TableActivity)getActivity()).server;
+        table = ((TableActivity)getActivity()).curr;
 
-        total = 0;
-        for(MenuItem item : check)
-        {
-            total+=item.getPrice();
-        }
-
-
-        pay.setOnClickListener(new View.OnClickListener() {
+        card.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //Log.d("Pay", "Paid with card");
-                if(cc.getText().length() == 16 && cc.getText().toString().matches("-?\\d+(\\.\\d+)?"))
-                {
-                    if(cvc.getText().length() == 3 && cvc.getText().toString().matches("-?\\d+(\\.\\d+)?"))
-                    {
-                        Toast.makeText(getContext(), "Order "+/*TableActivity.newOrder.getDocumentId()*/1+" has been paid", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getContext(), TableActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        //startActivity(new Intent((TableActivity)getActivity(), TableActivity.class));
-                        //getActivity().finish();
-                    }
-                    else
-                    {
-                        Toast.makeText(getContext(), "Invalid cvc number", Toast.LENGTH_SHORT).show();
-                    }
+            public void onClick(View v) {
+                Log.d("onClickListener", "card");
 
+                if (FormValidator.validateCreditCard(cc.getText().toString())) {
+                    if (FormValidator.validateCVC(cvc.getText().toString())) {
+                        Toast.makeText(getContext(), "Order paid in credit", Toast.LENGTH_SHORT).show();
+                        order = getOrder();
+                        addOrder("Card");
+                        return;
+                    }
+                    Toast.makeText(getContext(), "Invalid cvc number", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                else
-                {
-                    Toast.makeText(getContext(), "Invalid CC number", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(getContext(), "Invalid CC number", Toast.LENGTH_SHORT).show();
             }
         });
 
         cash.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Log.d("Cash", "Paid with Cash, send order with cash attribute");
-                  /*  HashMap<String, Object> check = new HashMap<>();
-                    check.put("OrderID", order.getDocumentId());
-                    check.put("receivedTime", new Date());
-                    check.put("total", total);
-                    check.put("type", order.getTable());*/
-                Intent intent = new Intent(getContext(), TableActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                //startActivity(new Intent((TableActivity)getActivity(), TableActivity.class));
-                //FirebaseFirestore.getInstance().collection("order_delays").add(check);
+            public void onClick(View v) {
+                Log.d("onClickListener", "cash");
+
+                Toast.makeText(getContext(), "Payment successful", Toast.LENGTH_SHORT).show();
+                order = getOrder();
+                addOrder("Cash");
+                Toast.makeText(getContext(), "Order paid in cash", Toast.LENGTH_SHORT).show();
             }
         });
-
         return v;
     }
 
-    /*
-    cookedTime April 18, 2020 at 11:02:56 PM UTC-7 (timestamp)
-    documentID 1
-    orderItems 0 /menu_items/9UjLSl36gN6qXEtOiEff
-    servedTime null
-    server "server1"
-    startTime March 10, 2020 at 9:35:00 AM UTC-7
-    status "ready to serve"
-    table "table 1"
-     */
+    public Order getOrder() {
+        ArrayList<DocumentReference> orderItems = new ArrayList<>();
+        Date startTime = new Date();
+        for (int i = 0; i < quantities.size(); i++) {
+            for (int j = 0; j < quantities.get(i); j++) {
+                orderItems.add(menuItemIDs.get(i));
+            }
+        }
+        return new Order(orderItems, startTime, server, table);
+    }
 
-    public void addOrder(Order order)
+    public void addOrder(String type)
     {
         Log.d("Order", "Add Order");
         Map<String, Object> ord = new HashMap<>();
-        ord.put("orderItems", order);
+        ord.put("orderItems", order.getOrderItemIDs());
         ord.put("server", order.getServer());
-        ord.put("startTime", new Date());
-        ord.put("servedTime", null);
-        ord.put("status", "cooking");
         ord.put("table", order.getTable());
+        ord.put("startTime", order.getStartTime());
+        ord.put("servedTime", order.getServedTime());
+        ord.put("cookedTime", order.getCookedTime());
+        ord.put("status", order.getStatus());
 
         if(order != null)
         {
-            orders.add(ord);
+            orders.add(ord).addOnSuccessListener(task -> {
+                addPayment(orders.document(task.getId()), type);
+            })
+            .addOnFailureListener(error -> {
+                Log.e("error", error.getMessage());
+            });
         }
-        /*orders.whereEqualTo("table", curr)
-                .get()
-                .addOnSuccessListener(task -> {
-                    if (task.getDocuments().size() != 0) {
-                        Toast.makeText(this, "Server will help soon", Toast.LENGTH_SHORT).show();
-                    } else
-                    {
-                        fb.collection("table_calls").add(call);
-                        Toast.makeText(this, "Server has been called", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(error -> {
-                    Log.e("QueryFailed", error.getMessage());
-                });*/
+    }
+
+    public void addPayment(DocumentReference orderID, String type) {
+        Log.d("Payment", "Add Payment");
+
+        Map<String, Object> payment = new HashMap<>();
+        payment.put("OrderID", orderID);
+        payment.put("receivedTime", order.getStartTime());
+        payment.put("total", total);
+        payment.put("type", type);
+
+        payments.add(payment);
     }
 }

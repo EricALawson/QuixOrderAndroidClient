@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
@@ -57,6 +58,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -250,56 +252,45 @@ public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQ
     }
 
 
-    public void payCheck()
-    {
-        Log.d("PayCheck", "function entered");
-        AlertDialog.Builder pay = new AlertDialog.Builder(getContext());
-        final EditText card = new EditText(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        card.setLayoutParams(lp);
-        pay.setView(card);
-
-        pay.setTitle("Checkout");
-        pay.setMessage("Enter valid payment information");
-
-        pay.setPositiveButton("", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
-                if(card.getText().length() == 16 && card.getText().toString().matches("-?\\d+(\\.\\d+)?"))
-                {
-                    Toast.makeText(getContext(), "Order "+newOrder.getDocumentId()+" is paid", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(), TableActivity.class));
-                    getActivity().finish();
-                }
-                else
-                {
-                    Toast.makeText(getContext(), "Invalid CC number", Toast.LENGTH_SHORT).show();
-                }
-                pay.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-                pay.show();
+        public void payCheck()
+        {
+            // DialogFragment dialog = (DialogFragment) DialogFragment.instantiate(v.getContext(), "Hello world");
+            //dialog.show(getFragmentManager(), "dialog");
+            if (order == null) {
+                Log.d("No order exists", "No order");
             }
-        });
-    }
 
+            FragmentTransaction f = this.getFragmentManager().beginTransaction();
+            f.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            Fragment frag = new PaymentFragment();
 
-        private void initializeCheckoutList (View v){
-        order = v.findViewById(R.id.checkoutList);
-        // order.setHasFixedSize(true);
+            Bundle bund = new Bundle();
+            bund.putSerializable("check", (Serializable) check);
+            bund.putSerializable("qty", (Serializable) quantities);
+            bund.putSerializable("ids", (Serializable) getMenuItemIDs());
+            bund.putSerializable("total", (Serializable) subTot);
+            frag.setArguments(bund);
+            f.replace(R.id.order_container, frag);
+            f.addToBackStack(null);
+            f.commit();
+        }
 
-        viewModel = ViewModelProviders.of(this).get(OrderListViewModel.class);
-        LiveData<List<Order>> liveData = viewModel.getOrderLiveData();
-        liveData.observe(this, (List<Order> orders) -> {
-            order.setLayoutManager(new LinearLayoutManager(getContext()));
-            order.setAdapter(new OrderListAdapter(orders));
-
-        });
-    }
+        public List<DocumentReference> getMenuItemIDs() {
+            CollectionReference menu_items = firebase.collection("menu_items");
+            List<DocumentReference> menuItemIDs = new ArrayList<>();
+            for (MenuItem item: check) {
+                menu_items.whereEqualTo("name", item.getName())
+                        .get()
+                        .addOnSuccessListener(task -> {
+                            String id = task.getDocuments().get(0).getId();
+                            menuItemIDs.add(menu_items.document(id));
+                        })
+                        .addOnFailureListener(error -> {
+                            Log.d("error", error.getMessage());
+                        });
+            }
+            return menuItemIDs;
+        }
 
         @Override
         public void onAddQuantityClick(int position, int quantity, double price) {
@@ -398,6 +389,9 @@ public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQ
     }*/
 
 
+        public interface payCheck {
+            void changeTitle();
+        }
 
         public interface CheckoutInteractionListener {
             // TODO: Update argument type and name
