@@ -47,27 +47,36 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         viewHolder.taskName.setText("Task " + (i + 1));
 
         if (type.equals("Server")) {
-            if (currentItem.getCookedTime() != null && currentItem.getServedTime() != null) {
+            if (currentItem.getCookedTime() != null) {
                 startTime = currentItem.getCookedTime().getTime();
+            }
+            if (currentItem.getServedTime() != null) {
                 endTime = currentItem.getServedTime().getTime();
             }
         } else if (type.equals("Cook")){
-            if (currentItem.getStartTime() != null && currentItem.getCookedTime() != null) {
+            if (currentItem.getStartTime() != null) {
                 startTime = currentItem.getStartTime().getTime();
+            }
+            if (currentItem.getCookedTime() != null) {
                 endTime = currentItem.getCookedTime().getTime();
             }
         }
 
         totalTime = endTime - startTime;
 
-        if (totalTime != 0) {
+        if (totalTime > 0) {
             viewHolder.startTime.setText(toDate(startTime));
             viewHolder.endTime.setText(toDate(endTime));
             viewHolder.totalTime.setText(toTime(totalTime));
+        } else if (totalTime == 0){
+            viewHolder.startTime.setText("Order has not been cooked");
+            viewHolder.endTime.setText(" ");
+            viewHolder.totalTime.setText(" ");
         } else {
+            String text = type.equals("Cook") ? "Order has not been cooked" : "Order has not been served";
             viewHolder.startTime.setText(toDate(startTime));
-            viewHolder.endTime.setText("incomplete");
-            viewHolder.totalTime.setText("incomplete");
+            viewHolder.endTime.setText(text);
+            viewHolder.totalTime.setText(" ");
         }
     }
 
