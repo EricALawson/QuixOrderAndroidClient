@@ -140,11 +140,13 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             switch(view.getId()) {
                 case R.id.add:
                     int newQuantity = Integer.parseInt(qtyView.getText().toString()) + 1;
-                    onAddQuantityListener.onAddQuantityClick(getAdapterPosition(), newQuantity);
+                    double price = Double.parseDouble(priceView.getText().toString().replace("$", ""));
+                    onAddQuantityListener.onAddQuantityClick(getAdapterPosition(), newQuantity, price);
                     break;
                 case R.id.remove:
                     newQuantity = Integer.parseInt(qtyView.getText().toString()) - 1;
-                    onRemoveQuantityListener.onRemoveQuantityClick(getAdapterPosition(), newQuantity);
+                    price = Double.parseDouble(priceView.getText().toString().replace("$", ""));
+                    onRemoveQuantityListener.onRemoveQuantityClick(getAdapterPosition(), newQuantity, price);
                     break;
             }
         }
@@ -152,11 +154,11 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
 
 
     public interface OnAddQuantityListener {
-        void onAddQuantityClick(int position, int quantity);
+        void onAddQuantityClick(int position, int quantity, double price);
     }
 
     public interface OnRemoveQuantityListener {
-        void onRemoveQuantityClick(int position, int quantity);
+        void onRemoveQuantityClick(int position, int quantity, double price);
     }
 
 }

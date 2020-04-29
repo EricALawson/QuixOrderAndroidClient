@@ -73,7 +73,7 @@ public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQ
         private Button minus;
         private EditText qty;
         private FirebaseFirestore firebase = FirebaseFirestore.getInstance();
-        double subTot = 20;
+        private double subTot;
         //private Button pay;
         private int mColumnCount = 1;
         List<MenuItem> check = new ArrayList<MenuItem>();
@@ -83,6 +83,8 @@ public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQ
         DocumentReference d = firebase.collection("orders").document("Ioy7CfhnnslBKGMgEVQG");
         private Order newOrder;
         //private DrawerLayout draw;
+
+        private TextView sub;
         public static CheckoutFragment newInstance () {
         return new CheckoutFragment();
     }
@@ -107,7 +109,7 @@ public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQ
         setHasOptionsMenu(true);
 
         //pay = v.findViewById(R.id.payBtn);
-        TextView sub = v.findViewById(R.id.sub);
+        sub = v.findViewById(R.id.sub);
 
         sub.setText(String.format("%.2f",subTot));
         //pay.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +176,13 @@ public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQ
         ad = new CheckoutAdapter(check, quantities, listener, this, this);
         order.setAdapter(ad);
         order.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
+        for(int i = 0; i < check.size(); i++)
+        {
+            subTot+= check.get(i).getPrice()*quantities.get(i);
+        }
+
+        sub.setText(String.format("%.2f",subTot));
 
         //initializeCheckoutList(v);
 
@@ -293,7 +302,12 @@ public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQ
     }
 
         @Override
-        public void onAddQuantityClick(int position, int quantity) {
+        public void onAddQuantityClick(int position, int quantity, double price) {
+            // Update subtotal
+            subTot += price;
+            sub.setText(String.format("%.2f",subTot));
+
+            // Update order view
             Log.d("onAddQuantityClick", "" + position);
             quantities.set(position, quantity);
             ad = new CheckoutAdapter(check, quantities, listener, this, this);
@@ -302,7 +316,12 @@ public class CheckoutFragment extends Fragment implements CheckoutAdapter.OnAddQ
         }
 
         @Override
-        public void onRemoveQuantityClick(int position, int quantity) {
+        public void onRemoveQuantityClick(int position, int quantity, double price) {
+            // Update subtotal
+            subTot -= price;
+            sub.setText(String.format("%.2f",subTot));
+
+            // Update order view
             Log.d("onRemoveQuantityClick", "" + position);
             if (quantity != 0) {
                 quantities.set(position, quantity);
