@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
+    tools:context=".activity.LoginActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="24dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guidelineLeft" >
+
+        <FrameLayout style="@style/SpinnerFrame" android:id="@+id/employeeTypeFrameLayout"
+            android:layout_height="46dp" >
+            <Spinner style="@style/Spinner" android:id="@+id/employeeTypeSpinner" />
+        </FrameLayout>
+
+        <FrameLayout style="@style/SpinnerFrame" android:id="@+id/employeeListFrameLayout"
+            android:layout_marginLeft="16dp">
+            <Spinner style="@style/Spinner" android:id="@+id/employeeListSpinner" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/task_item"
+        android:id="@+id/taskListHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/linearlayout"
+        app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
+        app:layout_constraintRight_toLeftOf="@id/guidelineRight"
+        android:layout_marginTop="16dp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/taskList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/taskListHeader"
+        app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
+        app:layout_constraintRight_toLeftOf="@id/guidelineRight"
+        android:layout_marginBottom="16dp"
+        android:scrollbars="vertical" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

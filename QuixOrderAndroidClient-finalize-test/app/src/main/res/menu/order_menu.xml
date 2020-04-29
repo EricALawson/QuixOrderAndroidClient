@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group>
+        <item android:id="@+id/menu"
+            android:title="Back to Menu"
+            android:icon="@drawable/ic_shopping_basket_black_24dp"/>
+        <item android:id="@+id/checkout"
+            android:icon="@drawable/check"
+            android:title="Checkout"/>
+        <item android:id="@+id/logout"
+            android:title="Logout"/>
+
+    </group>
+
+</menu>

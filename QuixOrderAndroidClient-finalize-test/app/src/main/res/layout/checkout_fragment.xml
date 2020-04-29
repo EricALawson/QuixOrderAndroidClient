@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.TableActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="618dp"
+        android:id="@+id/order_container">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/checkoutList"
+            android:layout_width="match_parent"
+            android:layout_height="617dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:context=".fragment.CheckoutFragment"
+            tools:listitem="@layout/order_item">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/orderControl"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/orderItemList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/subTotal"
+            android:layout_width="16dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Subtotal: $"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:id="@+id/sub"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:textSize="40dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/payBtn"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pay" />
+
+    </LinearLayout>
+
+</FrameLayout>

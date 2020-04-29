@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Quix Order</string>
+
+    <!-- Accessibility for people with visual impairment -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- All job titles -->
+    <string-array name="types">
+        <item>Customer</item>
+        <item>Server</item>
+        <item>Cook</item>
+    </string-array>
+
+    <!-- All time filters -->
+    <string-array name="frequencies">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+
+    <!-- All employees with tasks -->
+    <string-array name="employeeTypes">
+        <item>Server</item>
+        <item>Cook</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
