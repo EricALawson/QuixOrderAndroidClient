@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class FormValidator {
@@ -47,6 +49,17 @@ public class FormValidator {
             return true;
         }
         return false;
+    }
+    
+    public static boolean validateDate(String inDate) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("mm/yy");
+            dateFormat.setLenient(false);
+            try {
+                dateFormat.parse(inDate.trim());
+            } catch (ParseException pe) {
+                return false;
+            }
+            return true;
     }
 
     public static void clearForm(ViewGroup group) {
