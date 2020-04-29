@@ -305,7 +305,7 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnAddMenuItemL
 
     @Override
     public void onAddMenuItemClick(int position, MenuItem item) {
-        Toast.makeText(getContext(), "Clicked at "+position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Item added to basket", Toast.LENGTH_SHORT).show();
         List<MenuItem> order = ((TableActivity)getActivity()).order;
         List<Integer> quantities = ((TableActivity) getActivity()).quantities;
 
