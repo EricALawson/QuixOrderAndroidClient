@@ -42,6 +42,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -62,6 +63,7 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
 
     // Declare graph variables
     private BarChart graphView;
+    private TextView xAxisTitle;
 
     // Declare other views
     private TextView textView1;
@@ -82,6 +84,7 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
         frequencySpinner = view.findViewById(R.id.frequencySpinner);
         datePicker = view.findViewById(R.id.datePickerButton);
         graphView = view.findViewById(R.id.graphView);
+        xAxisTitle = view.findViewById(R.id.xAxisTitle);
         textView1 = view.findViewById(R.id.textView1);
 
         // Create frequency picker
@@ -190,7 +193,7 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
                 // Update last entry
                 totals.add(new BarEntry(x, total));
                 labels.add(DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(startCalendar.getTime()));
-
+                xAxisTitle.setText("Date (M/D/YY)");
                 break;
 
             case "Weekly":
@@ -214,6 +217,7 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
                 // Update last entry
                 totals.add(new BarEntry(x, total));
                 labels.add(DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(startCalendar.getTime()));
+                xAxisTitle.setText("Date (M/D/YY)");
                 break;
 
             case "Monthly":
@@ -236,6 +240,7 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
                 // Update last entry
                 totals.add(new BarEntry(x, total));
                 labels.add("" + (startCalendar.get(Calendar.MONTH) + 1) + "/" + startCalendar.get(Calendar.YEAR));
+                xAxisTitle.setText("Date (M/YYYY)");
                 break;
 
             case "Yearly":
@@ -258,6 +263,7 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
                 // Update last entry
                 totals.add(new BarEntry(x, total));
                 labels.add("" + startCalendar.get(Calendar.YEAR));
+                xAxisTitle.setText("Date (YYYY)");
                 break;
         }
 
@@ -270,12 +276,26 @@ public class DailyTotalFragment extends Fragment implements AdapterView.OnItemSe
                 }
                 return labels.get((int) value);
             }
+
+            @Override
+            public String getFormattedValue(float value) {
+                DecimalFormat format = new DecimalFormat("$#.00");
+                if (value == 0) {
+                    return "";
+                }
+                return format.format(value);
+            }
         };
+
         graphView.getXAxis().setValueFormatter(formatter);
 
         // Return data
-        BarData data = new BarData(new BarDataSet(totals, "BarDataSet"));
+        BarDataSet dataset = new BarDataSet(totals, "BarDataSet");
+        dataset.setColor(R.color.purple);
+        BarData data = new BarData(dataset);
         data.setValueTextSize(20);
+        data.setValueFormatter(formatter);
+
         return data;
     }
 

@@ -2,41 +2,58 @@ package com.example.quixorder.model;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.quixorder.adapter.server.IServerTask;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Order {
+public class Order implements IServerTask {
     private String table;
     private Date startTime;
     private Date cookedTime;
     private Date servedTime;
     private ArrayList<DocumentReference> orderItems;
-    private ArrayList<MenuItem> orderMenuItems;
+    public ArrayList<MenuItem> orderMenuItems;
     private String server;
     private MutableLiveData<List<MenuItem>> menuItems;
     private String documentId;
+    private String status;
 
     public Order() {
 
     }
 
+    public Order(ArrayList<DocumentReference> orderItems, Date startTime, String server, String table) {
+        this.orderItems = orderItems;
+        this.startTime = startTime;
+        cookedTime = null;
+        servedTime = null;
+        this.server = server;
+        this.table = table;
+        status = "cooking";
+    }
+
     public Order(DocumentSnapshot snapshot) {
         if(snapshot != null && snapshot.exists()) {
-            table = (String) snapshot.get("table");
-            server = (String) snapshot.get("server");
-            startTime = (Date) snapshot.get("startTime");
-            cookedTime = (Date) snapshot.get("cookedTime");
-            servedTime = (Date) snapshot.get("servedTime");
+            table = snapshot.getString("table");
+            server = snapshot.getString("server");
+            status = snapshot.getString("status");
+            Timestamp startTS = snapshot.getTimestamp("startTime");
+            if (startTS != null) startTime = startTS.toDate();
+            Timestamp servedTS = snapshot.getTimestamp("servedTime");
+            if (servedTime != null) servedTime = servedTS.toDate();
+            Timestamp cookedTS = snapshot.getTimestamp("cookedTime");
+            if (cookedTime != null) cookedTime = cookedTS.toDate();
 
+            //noinspection unchecked
             orderItems = (ArrayList<DocumentReference>) snapshot.get("orderItems");
             menuItems = new MutableLiveData<>();
             menuItems.setValue(new ArrayList<>());
@@ -46,15 +63,11 @@ public class Order {
             orderMenuItems = new ArrayList<MenuItem>();
             for (int orderItemCount = 0; orderItemCount < orderItems.size(); orderItemCount++) {
                 DocumentReference doc = orderItems.get(orderItemCount);
-                final int index = orderItemCount;
-                doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        MenuItem item = documentSnapshot.toObject(MenuItem.class);
-                        Log.d("Order: MenuItem", "item created: " + item.toString());
-                        orderMenuItems.add(item);
-                        menuItems.setValue(orderMenuItems);
-                    }
+                doc.get().addOnSuccessListener(documentSnapshot -> {
+                    MenuItem item = documentSnapshot.toObject(MenuItem.class);
+                    Log.d("Order: MenuItem", "item created: " + item.toString());
+                    orderMenuItems.add(item);
+                    menuItems.setValue(orderMenuItems);
                 });
             }
 
@@ -65,6 +78,10 @@ public class Order {
 
     public String getDocumentId() {
         return documentId;
+    }
+
+    public ArrayList<DocumentReference> getOrderItemIDs() {
+        return orderItems;
     }
 
     public String getTable() {
@@ -87,8 +104,16 @@ public class Order {
         return server;
     }
 
+    public List<MenuItem> getOrderItems(){ return orderMenuItems; }
+
     public MutableLiveData<List<MenuItem>> getMenuItems() {
         return menuItems;
     }
 
+    public String getStatus() { return status; }
+
+    @Override
+    public int getType() {
+        return IServerTask.ORDER;
+    }
 }

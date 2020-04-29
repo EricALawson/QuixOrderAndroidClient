@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.quixorder.FormValidator;
 import com.example.quixorder.R;
 import com.example.quixorder.model.Account;
 import com.example.quixorder.model.Table;
@@ -53,43 +54,47 @@ public class AddEmployeeFragment extends Fragment implements AdapterView.OnItemS
         public void onClick(View v) {
             CollectionReference accounts = firebase.collection("accounts");
 
-            // Create Account object with text field values
-            Account account;
-            String type = spinner.getSelectedItem().toString();
-            String username = usernameInput.getText().toString();
-            String password = passwordInput.getText().toString();
+            if (FormValidator.validateForm(FormValidator.getEditTextViews((ViewGroup) view))) {
+                // Create Account object with text field values
+                Account account;
+                String type = spinner.getSelectedItem().toString();
+                String username = usernameInput.getText().toString();
+                String password = passwordInput.getText().toString();
 
-            // Create account based on type
-            switch (type) {
-                case "Table":
-                    account = new Table(username, password);
-                    break;
-                default:
-                    account = new Account(type, username, password);
+                // Create account based on type
+                switch (type) {
+                    case "Table":
+                        account = new Table(username, password);
+                        break;
+                    default:
+                        account = new Account(type, username, password);
+                }
+
+                // Query accounts collection for a username
+                Log.d("QueryAccounts", account.getUsername());
+                accounts.whereEqualTo("username", account.getUsername())
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (!task.isSuccessful()) {
+                                Log.e("QueryFailed", task.getException().getMessage());
+                            } else if (task.getResult().size() != 0) {
+                                Toast.makeText(getActivity(), "username already exists", Toast.LENGTH_SHORT).show();
+                            } else {
+
+                                // Add account to accounts collection
+                                Log.d("AddAccount", account.getUsername());
+                                accounts.add(account)
+                                        .addOnFailureListener(output -> {
+                                            Log.e("AddFailed", output.getMessage());
+                                        })
+                                        .addOnSuccessListener(output -> {
+                                            Toast.makeText(getActivity(), "account created", Toast.LENGTH_SHORT).show();
+                                        });
+                            }
+                        });
+            } else {
+                Toast.makeText(getContext(), "There is an invalid field", Toast.LENGTH_SHORT).show();
             }
-
-            // Query accounts collection for a username
-            Log.d("QueryAccounts", account.getUsername());
-            accounts.whereEqualTo("username", account.getUsername())
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (!task.isSuccessful()) {
-                            Log.e("QueryFailed", task.getException().getMessage());
-                        } else if (task.getResult().size() != 0) {
-                            Toast.makeText(getActivity(), "username already exists", Toast.LENGTH_SHORT).show();
-                        } else {
-
-                            // Add account to accounts collection
-                            Log.d("AddAccount", account.getUsername());
-                            accounts.add(account)
-                                    .addOnFailureListener(output -> {
-                                        Log.e("AddFailed", output.getMessage());
-                                    })
-                                    .addOnSuccessListener(output -> {
-                                        Toast.makeText(getActivity(), "account created", Toast.LENGTH_SHORT).show();
-                                    });
-                        }
-                    });
         }
     };
 

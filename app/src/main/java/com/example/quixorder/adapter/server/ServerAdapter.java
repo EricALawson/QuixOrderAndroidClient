@@ -1,4 +1,4 @@
-package com.example.quixorder.adapter;
+package com.example.quixorder.adapter.server;
 
 import android.app.Activity;
 
@@ -11,10 +11,10 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.quixorder.R;
+import com.example.quixorder.adapter.TableAdapter;
 import com.example.quixorder.model.Account;
 import com.example.quixorder.model.Table;
 import com.google.firebase.firestore.CollectionReference;
@@ -54,7 +54,6 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
         viewHolder.tableAccounts = accounts.whereEqualTo("server", currentItem.getUsername());
 
         // Set views
-        viewHolder.imageView.setImageResource(R.drawable.ic_assign_table_blk);
         viewHolder.textView1.setText(currentItem.getUsername());
 
         // Set listeners
@@ -105,7 +104,6 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView cardView;
         private RecyclerView tableView;
-        private ImageView imageView;
         private TextView textView1;
 
         private RecyclerView.Adapter tableAdapter;
@@ -116,7 +114,6 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
             super(itemView);
             cardView = itemView.findViewById(R.id.cardView);
             tableView = itemView.findViewById(R.id.tableView);
-            imageView = itemView.findViewById(R.id.imageView1);
             textView1 = itemView.findViewById(R.id.textView1);
         }
 

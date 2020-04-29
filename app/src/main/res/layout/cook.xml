@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#535053"
+    android:background="@drawable/bg_login"
+    android:paddingBottom="30dp"
     android:visibility="visible">
 
     <androidx.constraintlayout.widget.Guideline
@@ -12,26 +12,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="24dp"
-        />
+        app:layout_constraintGuide_begin="24dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="24dp"
-        />
+        app:layout_constraintGuide_end="24dp" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@drawable/et_bg"
+        android:background="@drawable/bg_edit_text"
         android:hint="Cook"
         android:inputType="textEmailAddress"
-        android:padding="16dp"
+        android:padding="10dp"
         android:textColorHint="@color/loginFormDetails"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guidelineRight"
@@ -44,7 +42,6 @@
         android:id="@+id/orderItems"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg_login"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/lOut"
         app:layout_constraintLeft_toRightOf="@id/guidelineLeft"
@@ -55,13 +52,14 @@
         android:id="@+id/lOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="552dp"
-        android:background="#09F3DD"
-        android:text="Logout"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="Log out"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/orderItems" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

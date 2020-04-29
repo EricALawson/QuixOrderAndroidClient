@@ -3,24 +3,26 @@ package com.example.quixorder.activity;
 import androidx.lifecycle.LiveData;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Intent;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.quixorder.OrderListAdapter;
 import com.example.quixorder.OrderListViewModel;
+import com.example.quixorder.adapter.cook.OrderListAdapter;
 import com.example.quixorder.R;
 import com.example.quixorder.model.Order;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 public class CookActivity extends AppCompatActivity {
     private RecyclerView orderList;
     private OrderListViewModel viewModel;
+    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
 
     @Override
@@ -37,6 +39,7 @@ public class CookActivity extends AppCompatActivity {
         orderList.setHasFixedSize(true);
 
         viewModel = ViewModelProviders.of(this).get(OrderListViewModel.class);
+        viewModel.setQuery( firestore.collection("orders").whereEqualTo("status", "cooking") );
         LiveData<List<Order>> liveData = viewModel.getOrderLiveData();
         liveData.observe(this, (List<Order> orders)-> {
             orderList.setLayoutManager(new LinearLayoutManager(this));
@@ -46,13 +49,6 @@ public class CookActivity extends AppCompatActivity {
     }
 
 
-    private OnClickListener logOut = new OnClickListener() {
-
-        @Override
-        public void onClick(View view)
-        {
-            startActivity(new Intent(CookActivity.this, LoginActivity.class));
-        }
-    };
+    private OnClickListener logOut = view -> startActivity(new Intent(CookActivity.this, LoginActivity.class));
 
 }

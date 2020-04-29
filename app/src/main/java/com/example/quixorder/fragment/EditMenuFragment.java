@@ -20,9 +20,9 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.quixorder.FormValidator;
 import com.example.quixorder.R;
 import com.example.quixorder.adapter.ItemTypeAdapter;
 import com.example.quixorder.adapter.MenuItemAdapter;
@@ -38,9 +38,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Document;
-
-import java.net.URI;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -319,7 +316,7 @@ public class EditMenuFragment
 
     public void onAddItemTypeClick() {
         Log.d("onAddItemTypeClick", "click");
-        if (validateForm(getEditTextViews((ViewGroup) addItemType))) {
+        if (FormValidator.validateForm(FormValidator.getEditTextViews((ViewGroup) addItemType))) {
             // Create ItemType object with text fields
             ItemType itemType = new ItemType(itemTypeName.getText().toString());
 
@@ -335,7 +332,7 @@ public class EditMenuFragment
                             // Update views
                             newItemType.setVisibility(View.VISIBLE);
                             addItemType.setVisibility(View.GONE);
-                            clearForm((ViewGroup) addItemType);
+                            FormValidator.clearForm((ViewGroup) addItemType);
                         }
                     })
                     .addOnFailureListener(error -> {
@@ -348,7 +345,7 @@ public class EditMenuFragment
 
     public void onAddMenuItemClick() {
         Log.d("onAddMenuItemClick", "click");
-        if (validateForm(getEditTextViews((ViewGroup) addMenuItem))) {
+        if (FormValidator.validateForm(FormValidator.getEditTextViews((ViewGroup) addMenuItem))) {
             Log.d("Test", itemTypeAdapter.getSelectedItem().getType());
 
             // Create MenuItem object with text fields
@@ -371,7 +368,8 @@ public class EditMenuFragment
                             // Update views
                             newMenuItem.setVisibility(View.VISIBLE);
                             addMenuItem.setVisibility(View.GONE);
-                            clearForm((ViewGroup) addMenuItem);
+                            menuItemIcon.setImageResource(R.drawable.ic_insert_photo);
+                            FormValidator.clearForm((ViewGroup) addMenuItem);
                         }
                     })
                     .addOnFailureListener(error -> {
@@ -416,6 +414,7 @@ public class EditMenuFragment
 
     @Override
     public void onClick(View view) {
+        Log.d("test", Integer.toString(view.getId()));
         switch(view.getId()) {
             case R.id.newItemType:
                 Log.d("onNewItemTypeClick", "click");
@@ -444,46 +443,5 @@ public class EditMenuFragment
                 onAddMenuItemClick();
                 break;
         }
-    }
-
-    public ArrayList<EditText> getEditTextViews(ViewGroup group) {
-        ArrayList<EditText> views = new ArrayList<>();
-        for (int i = 0; i < group.getChildCount(); i++) {
-            View view = group.getChildAt(i);
-            if (view instanceof ViewGroup) {
-                views.addAll(getEditTextViews((ViewGroup) view));
-                continue;
-            }
-            if (view instanceof EditText) {
-                views.add((EditText) view);
-            }
-        }
-
-        return views;
-    }
-
-    public boolean validateForm(ArrayList<EditText> views) {
-        for (EditText view : views) {
-            if (view.getText().toString().equals("")) {
-                Log.d("validateForm", "false");
-                return false;
-            }
-        }
-        Log.d("validateForm", "true");
-        return true;
-    }
-
-    public void clearForm(ViewGroup group) {
-        for (int i = 0; i < group.getChildCount(); i++) {
-            View view = group.getChildAt(i);
-            if (view instanceof ViewGroup) {
-                clearForm((ViewGroup) view);
-                continue;
-            }
-            if (view instanceof EditText) {
-                ((EditText) view).getText().clear();
-            }
-        }
-        menuItemIcon.setImageResource(R.drawable.ic_insert_photo);
     }
 }

@@ -19,6 +19,13 @@ public class Payment {
         type = "";
     }
 
+    public Payment(DocumentReference orderID, Date receivedTime, double total, String type) {
+        this.orderID = orderID;
+        this.receivedTime = receivedTime;
+        this.total = total;
+        this.type = type;
+    }
+
     public DocumentReference getOrderID() {
         return orderID;
     }

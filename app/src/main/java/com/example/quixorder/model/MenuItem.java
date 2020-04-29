@@ -1,10 +1,14 @@
 package com.example.quixorder.model;
 
-public class MenuItem {
+import androidx.annotation.NonNull;
+
+public class MenuItem
+{
     private final String description;
     private final String image;
     private final String name;
     private final double price;
+    //private final int qty;
     private final String type;
 
     public MenuItem() {
@@ -12,14 +16,16 @@ public class MenuItem {
         image = "";
         name = "";
         price = 0;
+        //qty = 0;
         type = "";
     }
 
-    public MenuItem(String description, String image, String name, double price, String type) {
+    public MenuItem(String description, String image, String name, double price,/* int quantity,*/ String type) {
         this.description = description;
         this.image = image;
         this.name = name;
         this.price = price;
+        //this.qty = quantity;
         this.type = type;
     }
 
@@ -39,10 +45,16 @@ public class MenuItem {
         return price;
     }
 
+    /*public int getQty()
+    {
+        return qty;
+    }*/
+
     public String getType() {
         return type;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "MenuItem{" +
@@ -50,6 +62,7 @@ public class MenuItem {
                 ", image='" + image + '\'' +
                 ", name='" + name + '\'' +
                 ", price=" + price +
+                //", qty="+ qty +
                 ", type='" + type + '\'' +
                 '}';
     }
