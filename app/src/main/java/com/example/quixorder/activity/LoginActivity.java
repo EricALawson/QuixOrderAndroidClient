@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                                         case "Customer":
                                             DocumentSnapshot customer = task.getResult().getDocuments().get(0);
                                             if (customer.get("server") == null) {
-                                                Toast.makeText(getApplicationContext(), "This table is not assigned to a customer yet", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), "This table is not assigned to a server yet", Toast.LENGTH_SHORT).show();
                                                 break;
                                             }
                                             startActivity(new Intent(LoginActivity.this, TableActivity.class).putExtra("username", act.getUsername()) );
