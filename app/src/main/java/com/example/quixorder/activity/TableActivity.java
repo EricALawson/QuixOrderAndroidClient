@@ -316,8 +316,9 @@ public class TableActivity extends AppCompatActivity implements NavigationView.O
         call.put("server", server);
         call.put("startTime", new Date());
         call.put("status", "server called");
+        call.put("servedTime", null);
 
-        callList.whereEqualTo("table", curr)
+        callList.whereEqualTo("table", curr).whereEqualTo("servedTime", null)
                 .get()
                 .addOnSuccessListener(task -> {
                     if (task.getDocuments().size() != 0) {
