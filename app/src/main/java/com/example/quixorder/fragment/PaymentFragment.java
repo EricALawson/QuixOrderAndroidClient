@@ -128,6 +128,11 @@ public class PaymentFragment extends Fragment {
                         Toast.makeText(getContext(), "Order paid in credit", Toast.LENGTH_SHORT).show();
                         order = getOrder();
                         addOrder("Card");
+                        
+                        // Switch to menu fragment
+                        Intent intent = new Intent(getActivity(), TableActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
                         return;
                     }
                     Toast.makeText(getContext(), "Invalid cvc number", Toast.LENGTH_SHORT).show();
