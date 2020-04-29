@@ -1,8 +1,10 @@
 package com.example.quixorder.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -140,10 +142,14 @@ public class PaymentFragment extends Fragment {
             public void onClick(View v) {
                 Log.d("onClickListener", "cash");
 
-                Toast.makeText(getContext(), "Payment successful", Toast.LENGTH_SHORT).show();
                 order = getOrder();
                 addOrder("Cash");
                 Toast.makeText(getContext(), "Order paid in cash", Toast.LENGTH_SHORT).show();
+
+                // Switch to menu fragment
+                Intent intent = new Intent(getActivity(), TableActivity.class);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
         return v;
@@ -193,5 +199,6 @@ public class PaymentFragment extends Fragment {
         payment.put("type", type);
 
         payments.add(payment);
+
     }
 }
